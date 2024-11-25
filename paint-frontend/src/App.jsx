@@ -8,6 +8,7 @@ function App() {
   const [selectedShape, setSelectedShape] = useState("freehand");
   const [firstColor, setFirstColor] = useState("#000000");
   const [secondColor, setSecondColor] = useState("#FFFFFF");
+  const [lineWidth, setLineWidth] = useState(1);
   return (
     <div className="main-screen">
       <Toolbar
@@ -17,11 +18,15 @@ function App() {
         setPrimaryColor={setFirstColor}
         secondaryColor={secondColor}
         setSecondaryColor={setSecondColor}
+
+        lineWidth={lineWidth}
+        setLineWidth={setLineWidth}
       />
       <Canvas
         selectedShape={selectedShape}
         firstColor={firstColor}
         secondColor={secondColor}
+        width={lineWidth}
       />
     </div>
   );
