@@ -14,11 +14,10 @@ function App() {
       <Toolbar
         selectedTool={selectedShape}
         setSelectedTool={setSelectedShape}
-        primaryColor={firstColor}
-        setPrimaryColor={setFirstColor}
-        secondaryColor={secondColor}
-        setSecondaryColor={setSecondColor}
-
+        fillColor={firstColor}
+        setFillColor={setFirstColor}
+        strokeColor={secondColor}
+        setStrokeColor={setSecondColor}
         lineWidth={lineWidth}
         setLineWidth={setLineWidth}
       />
