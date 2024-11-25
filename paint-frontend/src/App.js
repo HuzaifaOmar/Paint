@@ -1,5 +1,6 @@
 import "./App.css";
 import Canvas from "./components/Canvas";
+import Canvas1 from "./components/Canvas1";
 import ToolBar from "./components/ToolBar";
 import React, { useState } from "react";
 import "./styles/main.css";
