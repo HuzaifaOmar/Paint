@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Stage, Layer, Line, Rect, Circle } from "react-konva";
 
-const Canvas = ({ selectedShape, firstColor, secondColor }) => {
+const Canvas1 = ({ selectedShape, firstColor, secondColor }) => {
   const stageRef = useRef();
   const [dots, setDots] = useState([]);
   const [lines, setLines] = useState([]);
@@ -166,4 +166,4 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
   );
 };
 
-export default Canvas;
+export default Canvas1;
