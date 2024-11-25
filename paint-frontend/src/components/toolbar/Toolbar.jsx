@@ -24,8 +24,11 @@ const Toolbar = ({
   setFillColor,
   strokeColor,
   setStrokeColor,
+  lineWidth,
+  setLineWidth
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
 
   const tools = [
     { id: "freehand", icon: faPaintBrush, label: "Freehand" },
@@ -53,6 +56,11 @@ const Toolbar = ({
     return renderIcon(tool);
   };
 
+  const handleLineWidthSelection = (width) => {
+    setLineWidth(width);
+    setIsLineWidthDropdownOpen(false);
+  };
+
   return (
     <div className="toolbar">
       {/* Custom Dropdown for Tool Selection */}
@@ -78,6 +86,30 @@ const Toolbar = ({
               >
                 {renderIcon(tool)}
                 <span>{tool.label}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div
+        className="toolbar-dropdown-container"
+        onClick={() => setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)}
+      >
+        <div className="toolbar-dropdown-selected"><span style={{fontSize:(lineWidth+7) ,display:"flex"}}><FontAwesomeIcon icon={faCircle} /></span></div>
+        <FontAwesomeIcon
+          icon={faCaretDown}
+          className="toolbar-dropdown-toggle"
+        />
+        {isLineWidthDropdownOpen && (
+          <ul className="toolbar-dropdown-list">
+            {[1,3,5,7,9,].map((width) => (
+              <li
+                className="toolbar-dropdown-item"
+                onClick={() => handleLineWidthSelection(width)}
+                style={{fontSize:(width+7),justifyContent:"center"}}
+              >
+                <FontAwesomeIcon icon={faCircle} />
               </li>
             ))}
           </ul>
