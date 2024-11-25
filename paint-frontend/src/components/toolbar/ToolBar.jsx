@@ -3,11 +3,8 @@ import "./../../styles/ToolBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEraser,
-  faFillDrip,
   faRotateLeft,
   faRotateRight,
-  faUpDownLeftRight,
-  faRotate,
   faDownload,
   faUpload,
   faPaintBrush,
@@ -74,9 +71,7 @@ const Toolbar = () => {
         className="toolbar-dropdown-container"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        <div className="toolbar-dropdown-selected">
-          {getSelectedToolIcon()}
-        </div>
+        <div className="toolbar-dropdown-selected">{getSelectedToolIcon()}</div>
         <FontAwesomeIcon
           icon={faCaretDown}
           className="toolbar-dropdown-toggle"
@@ -175,4 +170,3 @@ const Toolbar = () => {
 };
 
 export default Toolbar;
-
