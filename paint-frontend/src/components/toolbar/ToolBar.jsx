@@ -17,10 +17,7 @@ import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 
-const Toolbar = () => {
-  const [selectedTool, setSelectedTool] = useState("freehand");
-  const [primaryColor, setPrimaryColor] = useState("#000000");
-  const [secondaryColor, setSecondaryColor] = useState("#FFFFFF");
+const Toolbar = ({selectedTool,setSelectedTool,primaryColor,setPrimaryColor,secondaryColor,setSecondaryColor}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const tools = [

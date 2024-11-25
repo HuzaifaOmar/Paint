@@ -1,6 +1,6 @@
 import "./App.css";
 import Canvas from "./components/Canvas";
-import ToolBar from "./components/toolbar/ToolBar";
+import Toolbar from "./components/toolbar/Toolbar";
 import React, { useState } from "react";
 import "./styles/main.css";
 
@@ -10,13 +10,13 @@ function App() {
   const [secondColor, setSecondColor] = useState("#FFFFFF");
   return (
     <div className="main-screen">
-      <ToolBar
-        selectedShape={selectedShape}
-        setSelectedShape={setSelectedShape}
-        firstColor={firstColor}
-        setFirstColor={setFirstColor}
-        secondColor={secondColor}
-        setSecondColor={setSecondColor}
+      <Toolbar
+        selectedTool={selectedShape}
+        setSelectedTool={setSelectedShape}
+        primaryColor={firstColor}
+        setPrimaryColor={setFirstColor}
+        secondaryColor={secondColor}
+        setSecondaryColor={setSecondColor}
       />
       <Canvas
         selectedShape={selectedShape}
