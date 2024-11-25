@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Stage, Layer, Line, Rect, Circle } from "react-konva";
+import { Stage, Layer, Line, Rect, Circle, Ellipse } from "react-konva";
 
 const Canvas = ({ selectedShape, firstColor, secondColor }) => {
   const stageRef = useRef();
@@ -17,11 +17,9 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
     startY.current = pos.y;
     isDrawing.current = true;
     
-    if (selectedShape === "freehand") {
+    if (selectedShape === "freehand" || selectedShape === "line") {
       setLines([...lines, { points: [pos.x, pos.y], firstColor, lineWidth }]);
-    } else if (selectedShape === "line") {
-      setLines([...lines, { points: [pos.x, pos.y], firstColor, lineWidth }]);
-    } else if (selectedShape === "rectangle") {
+    } else if (selectedShape === "rectangle" || selectedShape === "square") {
       setShapes([
         ...shapes,
         {
@@ -32,6 +30,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
           height: 0,
           firstColor,
           lineWidth,
+          secondColor
         },
       ]);
     } else if (selectedShape === "circle") {
@@ -44,6 +43,21 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
           radius: 0,
           firstColor,
           lineWidth,
+          secondColor
+        },
+      ]);
+    } else if (selectedShape === "ellipse") {
+      setShapes([
+        ...shapes,
+        {
+          type: "ellipse",
+          x: pos.x,
+          y: pos.y,
+          radiusX: 0,
+          radiusY: 0,
+          firstColor,
+          lineWidth,
+          secondColor
         },
       ]);
     } else return;
@@ -69,12 +83,28 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
       lastShape.width = pos.x - lastShape.x;
       lastShape.height = pos.y - lastShape.y;
       setShapes(newShapes);
+    } else if (selectedShape === "square") {
+      const newShapes = [...shapes];
+      const lastShape = newShapes[newShapes.length - 1];
+      let wid = pos.x - lastShape.x;
+      let hit = pos.y - lastShape.y;
+      lastShape.width = Math.min(wid, hit);
+      lastShape.height = Math.min(wid, hit);
+      setShapes(newShapes);
     } else if (selectedShape === "circle") {
       const newShapes = [...shapes];
       const lastShape = newShapes[newShapes.length - 1];
       const dx = pos.x - lastShape.x;
       const dy = pos.y - lastShape.y;
       lastShape.radius = Math.sqrt(dx * dx + dy * dy);
+      setShapes(newShapes);
+    } else if (selectedShape === "ellipse") {
+      const newShapes = [...shapes];
+      const lastShape = newShapes[newShapes.length - 1];
+      const dx = pos.x - lastShape.x;
+      const dy = pos.y - lastShape.y;
+      lastShape.radiusX = Math.abs(dx);
+      lastShape.radiusY = Math.abs(dy);
       setShapes(newShapes);
     }
   };
@@ -134,7 +164,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
             />
           ))}
           {shapes.map((shape, i) => {
-            if (shape.type === "rectangle") {
+            if (shape.type === "rectangle" || shape.type === "square") {
               return (
                 <Rect
                   key={i}
@@ -144,6 +174,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
                   height={shape.height}
                   stroke={shape.firstColor}
                   strokeWidth={shape.lineWidth}
+                  fill={shape.secondColor}
                 />
               );
             } else if (shape.type === "circle") {
@@ -155,6 +186,20 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
                   radius={shape.radius}
                   stroke={shape.firstColor}
                   strokeWidth={shape.lineWidth}
+                  fill={shape.secondColor}
+                />
+              );
+            } else if (shape.type === "ellipse") {
+              return (
+                <Ellipse
+                  key={i}
+                  x={shape.x}
+                  y={shape.y}
+                  radiusX={shape.radiusX}
+                  radiusY={shape.radiusY}
+                  stroke={shape.firstColor}
+                  strokeWidth={shape.lineWidth}
+                  fill={shape.secondColor}
                 />
               );
             }
