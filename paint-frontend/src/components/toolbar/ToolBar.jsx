@@ -20,13 +20,13 @@ import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 
-const ToolBar = () => {
-  const [selectedShape, setSelectedShape] = useState("freehand");
-  const [firstColor, setFirstColor] = useState("#000000");
-  const [secondColor, setSecondColor] = useState("#FFFFFF");
+const Toolbar = () => {
+  const [selectedTool, setSelectedTool] = useState("freehand");
+  const [primaryColor, setPrimaryColor] = useState("#000000");
+  const [secondaryColor, setSecondaryColor] = useState("#FFFFFF");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const shapes = [
+  const tools = [
     {
       id: "freehand",
       icon: faPaintBrush,
@@ -46,36 +46,36 @@ const ToolBar = () => {
     { id: "ellipse", icon: EllipseIcon, type: "custom", label: "Ellipse" },
   ];
 
-  const handleShapeSelection = (shapeId) => {
-    setSelectedShape(shapeId);
+  const handleToolSelection = (toolId) => {
+    setSelectedTool(toolId);
     setIsDropdownOpen(false);
   };
 
-  const renderIcon = (shape) => {
-    if (shape.type === "fontawesome") {
-      return <FontAwesomeIcon icon={shape.icon} />;
-    } else if (shape.type === "custom") {
-      const IconComponent = shape.icon;
+  const renderIcon = (tool) => {
+    if (tool.type === "fontawesome") {
+      return <FontAwesomeIcon icon={tool.icon} />;
+    } else if (tool.type === "custom") {
+      const IconComponent = tool.icon;
       return <IconComponent />;
     }
     return null;
   };
 
-  const getSelectedShapeIcon = () => {
-    const shape = shapes.find((s) => s.id === selectedShape);
-    if (!shape) return <FontAwesomeIcon icon={faPaintBrush} />;
-    return renderIcon(shape);
+  const getSelectedToolIcon = () => {
+    const tool = tools.find((t) => t.id === selectedTool);
+    if (!tool) return <FontAwesomeIcon icon={faPaintBrush} />;
+    return renderIcon(tool);
   };
 
   return (
     <div className="toolbar">
-      {/* Custom Dropdown for Shape Selection */}
+      {/* Custom Dropdown for Tool Selection */}
       <div
         className="toolbar-dropdown-container"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <div className="toolbar-dropdown-selected">
-          {getSelectedShapeIcon()}
+          {getSelectedToolIcon()}
         </div>
         <FontAwesomeIcon
           icon={faCaretDown}
@@ -83,14 +83,14 @@ const ToolBar = () => {
         />
         {isDropdownOpen && (
           <ul className="toolbar-dropdown-list">
-            {shapes.map((shape) => (
+            {tools.map((tool) => (
               <li
-                key={shape.id}
+                key={tool.id}
                 className="toolbar-dropdown-item"
-                onClick={() => handleShapeSelection(shape.id)}
+                onClick={() => handleToolSelection(tool.id)}
               >
-                {renderIcon(shape)}
-                <span>{shape.label}</span>
+                {renderIcon(tool)}
+                <span>{tool.label}</span>
               </li>
             ))}
           </ul>
@@ -101,7 +101,7 @@ const ToolBar = () => {
       <div className="toolbar-button-container">
         <div
           className="toolbar-button"
-          onClick={() => alert("Eraser clicked")}
+          onClick={() => console.log("Eraser clicked")}
           title="Eraser"
         >
           <FontAwesomeIcon icon={faEraser} />
@@ -112,16 +112,16 @@ const ToolBar = () => {
       <input
         type="color"
         className="toolbar-color-input"
-        value={firstColor}
-        onChange={(e) => setFirstColor(e.target.value)}
+        value={primaryColor}
+        onChange={(e) => setPrimaryColor(e.target.value)}
         title="First Color"
       />
 
       <input
         type="color"
         className="toolbar-color-input"
-        value={secondColor}
-        onChange={(e) => setSecondColor(e.target.value)}
+        value={secondaryColor}
+        onChange={(e) => setSecondaryColor(e.target.value)}
         title="Second Color"
       />
 
@@ -130,40 +130,7 @@ const ToolBar = () => {
       <div className="toolbar-button-container">
         <div
           className="toolbar-button"
-          onClick={() => alert("Fill color set to: " + secondColor)}
-          title="Fill Color"
-        >
-          <FontAwesomeIcon icon={faFillDrip} />
-        </div>
-        <div className="toolbar-label">Fill Color</div>
-      </div>
-
-      <div className="toolbar-button-container">
-        <div
-          className="toolbar-button"
-          onClick={() => alert("Move action")}
-          title="Move"
-        >
-          <FontAwesomeIcon icon={faUpDownLeftRight} />
-        </div>
-        <div className="toolbar-label">Move</div>
-      </div>
-
-      <div className="toolbar-button-container">
-        <div
-          className="toolbar-button"
-          onClick={() => alert("Rotate action")}
-          title="Rotate"
-        >
-          <FontAwesomeIcon icon={faRotate} />
-        </div>
-        <div className="toolbar-label">Rotate</div>
-      </div>
-
-      <div className="toolbar-button-container">
-        <div
-          className="toolbar-button"
-          onClick={() => alert("Undo action")}
+          onClick={() => console.log("Undo action")}
           title="Undo"
         >
           <FontAwesomeIcon icon={faRotateLeft} />
@@ -174,7 +141,7 @@ const ToolBar = () => {
       <div className="toolbar-button-container">
         <div
           className="toolbar-button"
-          onClick={() => alert("Redo action")}
+          onClick={() => console.log("Redo action")}
           title="Redo"
         >
           <FontAwesomeIcon icon={faRotateRight} />
@@ -185,7 +152,7 @@ const ToolBar = () => {
       <div className="toolbar-button-container">
         <div
           className="toolbar-button"
-          onClick={() => alert("Save action")}
+          onClick={() => console.log("Save action")}
           title="Save"
         >
           <FontAwesomeIcon icon={faDownload} />
@@ -196,7 +163,7 @@ const ToolBar = () => {
       <div className="toolbar-button-container">
         <div
           className="toolbar-button"
-          onClick={() => alert("Load action")}
+          onClick={() => console.log("Load action")}
           title="Load"
         >
           <FontAwesomeIcon icon={faUpload} />
@@ -207,4 +174,5 @@ const ToolBar = () => {
   );
 };
 
-export default ToolBar;
+export default Toolbar;
+
