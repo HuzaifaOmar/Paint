@@ -12,7 +12,7 @@ public class Square implements Shapes {
     String secondColor;
     int lineWidth;
     double side;
-
+    String shapeType;
     public Square(JSONObject json) {
         this.shapeId = json.getInt("shapeId");
         this.xEnd = json.getDouble("xEnd");
@@ -22,6 +22,7 @@ public class Square implements Shapes {
         this.firstColor = json.getString("firstColor");
         this.secondColor = json.getString("secondColor");
         this.lineWidth = json.getInt("lineWidth");
+        this.shapeType = json.getString("shapetype");
     }
     @Override
     public void DemensionCalculate() {
@@ -43,7 +44,8 @@ public class Square implements Shapes {
         json.put("yStart", this.yStart);
         json.put("firstColor", this.firstColor);
         json.put("secondColor", this.secondColor);
-        json.put("lineWidth", this.lineWidth);
+        json.put("lineWidth", this.lineWidth);  
+        json.put("shapetype", this.shapeType);
         return json;
     }
 }

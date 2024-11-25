@@ -11,6 +11,7 @@ public class Line implements Shapes {
     double yEnd;
     String firstColor;
     int lineWidth;
+    String shapeType;
 
     public Line(JSONObject json) {
         this.shapeId = json.getInt("shapeId");
@@ -18,6 +19,9 @@ public class Line implements Shapes {
         this.yStart = json.getDouble("yStart");
         this.xEnd = json.getDouble("xEnd");
         this.yEnd = json.getDouble("yEnd");
+        this.firstColor = json.getString("firstColor");
+        this.lineWidth = json.getInt("lineWidth");      
+        this.shapeType = json.getString("shapetype");
     }
 
     @Override
@@ -37,6 +41,7 @@ public class Line implements Shapes {
         json.put("points", new JSONArray().put(this.xStart).put(this.yStart).put(this.xEnd).put(this.yEnd));
         json.put("firstColor", this.firstColor);
         json.put("lineWidth", this.lineWidth);
+        json.put("shapetype", this.shapeType);
         return json;
     }
 

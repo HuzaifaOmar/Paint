@@ -33,7 +33,7 @@ public class ShapesController {
                 shape = new ShapeFactory().getShape(request.getString("shapetype"), request);
                 shapeId++;  
             }else{
-                shape= shapesList.get(request.getInt("shapeId")-1);
+                shape= shapesList.get(request.getInt("shapeId"));
                 shape.setEndPoints(request.getDouble("xEnd"), request.getDouble("yEnd"));
             }
 

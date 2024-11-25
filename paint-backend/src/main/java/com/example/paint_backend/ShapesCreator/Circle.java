@@ -13,6 +13,7 @@ public class Circle implements Shapes  {
     String secondColor;
     int lineWidth;
     double radius;
+    String shapeType;
 
     public Circle(JSONObject json) {
         this.shapeId = json.getInt("shapeId");
@@ -22,7 +23,8 @@ public class Circle implements Shapes  {
         this.yStart = json.getDouble("yStart");
         this.firstColor = json.getString("firstColor");
         this.secondColor = json.getString("secondColor");
-        this.lineWidth = json.getInt("lineWidth");
+        this.lineWidth = json.getInt("lineWidth");  
+        this.shapeType = json.getString("shapetype");
     }
     @Override
     public void setEndPoints( double xEnd, double yEnd){
@@ -42,7 +44,8 @@ public class Circle implements Shapes  {
         json.put("yStart", this.yStart);
         json.put("firstColor", this.firstColor);
         json.put("secondColor", this.secondColor);
-        json.put("lineWidth", this.lineWidth);
+        json.put("lineWidth", this.lineWidth);  
+        json.put("shapetype", this.shapeType);
         return json;
     }
 }

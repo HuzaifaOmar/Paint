@@ -13,6 +13,7 @@ public class Rectangle implements Shapes {
     int lineWidth;
     double length;
     double width;
+    String shapeType;
 
     public Rectangle(JSONObject json) {
         this.shapeId = json.getInt("shapeId");
@@ -22,7 +23,8 @@ public class Rectangle implements Shapes {
         this.yStart = json.getDouble("yStart");
         this.firstColor = json.getString("firstColor");
         this.secondColor = json.getString("secondColor");
-        this.lineWidth = json.getInt("lineWidth");
+        this.lineWidth = json.getInt("lineWidth");  
+        this.shapeType = json.getString("shapetype");
     }
     @Override
     public void DemensionCalculate() {
@@ -45,6 +47,7 @@ public class Rectangle implements Shapes {
         json.put("firstColor", this.firstColor);
         json.put("secondColor", this.secondColor);
         json.put("lineWidth", this.lineWidth);
+        json.put("shapetype", this.shapeType);
         return json;
     }
 }

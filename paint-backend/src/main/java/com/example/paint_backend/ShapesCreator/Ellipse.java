@@ -13,7 +13,7 @@ public class Ellipse implements Shapes {
     double radiusX;
     double radiusY;
     int shapeId;
-
+    String shapeType;
     public Ellipse(JSONObject json) {
         this.shapeId = json.getInt("shapeId");
         this.xEnd = json.getDouble("xEnd");
@@ -22,7 +22,8 @@ public class Ellipse implements Shapes {
         this.yStart = json.getDouble("yStart");
         this.firstColor = json.getString("firstColor");
         this.secondColor = json.getString("secondColor");
-        this.lineWidth = json.getInt("lineWidth");
+        this.lineWidth = json.getInt("lineWidth");      
+        this.shapeType = json.getString("shapetype");
     }
     @Override
     public void DemensionCalculate() {
@@ -44,7 +45,8 @@ public class Ellipse implements Shapes {
         json.put("yStart", this.yStart);
         json.put("firstColor", this.firstColor);
         json.put("secondColor", this.secondColor);
-        json.put("lineWidth", this.lineWidth);
+        json.put("lineWidth", this.lineWidth);  
+        json.put("shapetype", this.shapeType);
         return json;
     }
 }
