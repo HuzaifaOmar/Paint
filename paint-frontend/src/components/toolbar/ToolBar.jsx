@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./../styles/ToolBar.css";
+import "./../../styles/ToolBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEraser,
@@ -14,8 +14,11 @@ import {
   faRulerHorizontal,
   faSquare,
   faCircle,
-  faCaretDown, // Added down caret icon
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
+import EllipseIcon from "./icons/ellipse.jsx";
+import TriangleIcon from "./icons/triangle.jsx";
+import RectangleIcon from "./icons/rectangle.jsx";
 
 const ToolBar = () => {
   const [selectedShape, setSelectedShape] = useState("freehand");
@@ -24,10 +27,23 @@ const ToolBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const shapes = [
-    { id: "freehand", icon: faPaintBrush, label: "Freehand" },
-    { id: "line", icon: faRulerHorizontal, label: "Line" },
-    { id: "rectangle", icon: faSquare, label: "Rectangle" },
-    { id: "circle", icon: faCircle, label: "Circle" },
+    {
+      id: "freehand",
+      icon: faPaintBrush,
+      type: "fontawesome",
+      label: "Freehand",
+    },
+    { id: "line", icon: faRulerHorizontal, type: "fontawesome", label: "Line" },
+    { id: "square", icon: faSquare, type: "fontawesome", label: "Square" },
+    { id: "circle", icon: faCircle, type: "fontawesome", label: "Circle" },
+    {
+      id: "rectangle",
+      icon: RectangleIcon,
+      type: "custom",
+      label: "Rectangle",
+    },
+    { id: "triangle", icon: TriangleIcon, type: "custom", label: "Triangle" },
+    { id: "ellipse", icon: EllipseIcon, type: "custom", label: "Ellipse" },
   ];
 
   const handleShapeSelection = (shapeId) => {
@@ -35,9 +51,20 @@ const ToolBar = () => {
     setIsDropdownOpen(false);
   };
 
+  const renderIcon = (shape) => {
+    if (shape.type === "fontawesome") {
+      return <FontAwesomeIcon icon={shape.icon} />;
+    } else if (shape.type === "custom") {
+      const IconComponent = shape.icon;
+      return <IconComponent />;
+    }
+    return null;
+  };
+
   const getSelectedShapeIcon = () => {
     const shape = shapes.find((s) => s.id === selectedShape);
-    return shape ? shape.icon : faPaintBrush;
+    if (!shape) return <FontAwesomeIcon icon={faPaintBrush} />;
+    return renderIcon(shape);
   };
 
   return (
@@ -48,7 +75,7 @@ const ToolBar = () => {
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <div className="toolbar-dropdown-selected">
-          <FontAwesomeIcon icon={getSelectedShapeIcon()} />
+          {getSelectedShapeIcon()}
         </div>
         <FontAwesomeIcon
           icon={faCaretDown}
@@ -62,7 +89,7 @@ const ToolBar = () => {
                 className="toolbar-dropdown-item"
                 onClick={() => handleShapeSelection(shape.id)}
               >
-                <FontAwesomeIcon icon={shape.icon} />
+                {renderIcon(shape)}
                 <span>{shape.label}</span>
               </li>
             ))}
