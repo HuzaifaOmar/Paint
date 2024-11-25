@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Stage, Layer, Line, Rect, Circle, Ellipse } from "react-konva";
 
-const Canvas = ({ selectedShape, firstColor, secondColor }) => {
+const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
   const stageRef = useRef();
   const [dots, setDots] = useState([]);
   const [lines, setLines] = useState([]);
   const [shapes, setShapes] = useState([]);
   const isDrawing = useRef(false);
-  const lineWidth = 2;
+  const lineWidth = width;
   const startX = useRef(0);
   const startY = useRef(0);
 
@@ -60,6 +60,19 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
           secondColor
         },
       ]);
+    } else if (selectedShape === "triangle") {
+      setShapes([
+        ...shapes,
+        {
+          type: "triangle",
+          x: pos.x,
+          y: pos.y,
+          points: [pos.x, pos.y, pos.x, pos.y, pos.x, pos.y],
+          firstColor,
+          lineWidth,
+          secondColor
+        },
+      ]);
     } else return;
   };
 
@@ -86,10 +99,9 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
     } else if (selectedShape === "square") {
       const newShapes = [...shapes];
       const lastShape = newShapes[newShapes.length - 1];
-      let wid = pos.x - lastShape.x;
-      let hit = pos.y - lastShape.y;
-      lastShape.width = Math.min(wid, hit);
-      lastShape.height = Math.min(wid, hit);
+      const size = Math.min(pos.x - lastShape.x, pos.y - lastShape.y);
+      lastShape.width = size;
+      lastShape.height = size;
       setShapes(newShapes);
     } else if (selectedShape === "circle") {
       const newShapes = [...shapes];
@@ -105,6 +117,17 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
       const dy = pos.y - lastShape.y;
       lastShape.radiusX = Math.abs(dx);
       lastShape.radiusY = Math.abs(dy);
+      setShapes(newShapes);
+    } else if (selectedShape === "triangle") {
+      const newShapes = [...shapes];
+      const lastShape = newShapes[newShapes.length - 1];
+      const dx = pos.x - lastShape.x;
+      const dy = pos.y - lastShape.y;
+      lastShape.points = [
+        startX.current, startY.current,
+        startX.current + dx, startY.current,
+        startX.current + dx / 2, startY.current + dy
+      ];
       setShapes(newShapes);
     }
   };
@@ -200,6 +223,17 @@ const Canvas = ({ selectedShape, firstColor, secondColor }) => {
                   stroke={shape.firstColor}
                   strokeWidth={shape.lineWidth}
                   fill={shape.secondColor}
+                />
+              );
+            } else if (shape.type === "triangle") {
+              return (
+                <Line
+                  key={i}
+                  points={shape.points}
+                  stroke={shape.firstColor}
+                  strokeWidth={shape.lineWidth}
+                  fill={shape.secondColor}
+                  closed
                 />
               );
             }

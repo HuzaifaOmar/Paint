@@ -17,8 +17,9 @@ import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 
-const Toolbar = ({selectedTool,setSelectedTool,primaryColor,setPrimaryColor,secondaryColor,setSecondaryColor}) => {
+const Toolbar = ({ selectedTool, setSelectedTool, primaryColor, setPrimaryColor, secondaryColor, setSecondaryColor, lineWidth, setLineWidth }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
 
   const tools = [
     {
@@ -61,6 +62,11 @@ const Toolbar = ({selectedTool,setSelectedTool,primaryColor,setPrimaryColor,seco
     return renderIcon(tool);
   };
 
+  const handleLineWidthSelection = (width) => {
+    setLineWidth(width);
+    setIsLineWidthDropdownOpen(false);
+  };
+
   return (
     <div className="toolbar">
       {/* Custom Dropdown for Tool Selection */}
@@ -83,6 +89,31 @@ const Toolbar = ({selectedTool,setSelectedTool,primaryColor,setPrimaryColor,seco
               >
                 {renderIcon(tool)}
                 <span>{tool.label}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Dropdown for Line Width Selection */}
+      <div
+        className="toolbar-dropdown-container"
+        onClick={() => setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)}
+      >
+        <div className="toolbar-dropdown-selected">{lineWidth}</div>
+        <FontAwesomeIcon
+          icon={faCaretDown}
+          className="toolbar-dropdown-toggle"
+        />
+        {isLineWidthDropdownOpen && (
+          <ul className="toolbar-dropdown-list">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((width) => (
+              <li
+                key={width}
+                className="toolbar-dropdown-item"
+                onClick={() => handleLineWidthSelection(width)}
+              >
+                {width}
               </li>
             ))}
           </ul>
