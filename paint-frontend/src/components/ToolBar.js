@@ -17,10 +17,14 @@ import {
   faCaretDown, // Added down caret icon
 } from "@fortawesome/free-solid-svg-icons";
 
-const ToolBar = () => {
-  const [selectedShape, setSelectedShape] = useState("freehand");
-  const [firstColor, setFirstColor] = useState("#000000");
-  const [secondColor, setSecondColor] = useState("#FFFFFF");
+const ToolBar = ({
+  selectedShape,
+  setSelectedShape,
+  firstColor,
+  setFirstColor,
+  secondColor,
+  setSecondColor,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const shapes = [
