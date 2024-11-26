@@ -1,28 +1,32 @@
-.toolbar-container {
-  width: 50%;
-  transition: transform 0.3s ease;
-  position:absolute;
-  z-index:3
-}
-
-.toolbar-container.hidden {
-  transform: translateY(-65%);
-}
-
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-around;
   height: 50px;
-  width: 100%;
+  width: 50%;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.toolbar.hidden {
+  transform: translateY(-110%);
+}
+.toolbar-toggle.hidden {
+  transform: translate(-50%, -225%);
 }
 
 .toolbar-toggle {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
   background: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 50%;
@@ -33,12 +37,16 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin: 5px auto;
+  transition: background-color 0.3s;
+  transition: transform 0.3s ease;
+  z-index: 1;
 }
 
 .toolbar-toggle:hover {
   background-color: #e0e0e0;
 }
+
+/* Existing styles remain the same */
 .toolbar-dropdown-container {
   position: relative;
   cursor: pointer;
