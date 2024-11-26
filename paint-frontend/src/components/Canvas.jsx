@@ -1,5 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Stage, Layer, Line, Rect, Circle, Ellipse } from "react-konva";
+import { Line, Stage, Layer } from "react-konva";
+import Freehand from "./shapes/Freehand.jsx";
+import Rectangle from "./shapes/Rectangle.jsx";
+import Square from "./shapes/Square.jsx";
+import Triangle from "./shapes/Triangle.jsx";
+import LineDraw from "./shapes/Line.jsx";
+import EllipseDraw from "./shapes/Ellipse.jsx";
+import CircleDraw from "./shapes/Circle.jsx";
 
 const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
   const stageRef = useRef();
@@ -137,6 +144,27 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
     }
   };
 
+  const renderShape = (shape, index) => {
+    switch (shape.type) {
+      case "freehand":
+        return <Freehand shape={shape} index={index} />;
+      case "line":
+        return <LineDraw shape={shape} index={index} />;
+      case "rectangle":
+        return <Rectangle shape={shape} index={index} />;
+      case "square":
+        return <Square shape={shape} index={index} />;
+      case "circle":
+        return <CircleDraw shape={shape} index={index} />;
+      case "ellipse":
+        return <EllipseDraw shape={shape} index={index} />;
+      case "triangle":
+        return <Triangle shape={shape} index={index} />;
+      default:
+        return null;
+    }
+  };
+
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
@@ -165,8 +193,8 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
       />
     ));
 
-    setDots(newDots); // Set the generated dots into state
-  }, []); // Empty array means this runs once on component mount
+    setDots(newDots);
+  }, []);
 
   return (
     <div className="canvas-container">
@@ -179,76 +207,9 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
         onMouseUp={handleMouseUp}
       >
         <Layer>{dots}</Layer>
-        <Layer>
-          {shapes.map((shape, i) => {
-            if (shape.type === "freehand" || shape.type === "line") {
-              return (
-                <Line
-                  key={i}
-                  points={shape.points}
-                  stroke={shape.firstColor}
-                  strokeWidth={shape.lineWidth}
-                  tension={0.5}
-                  lineCap="round"
-                  lineJoin="round"
-                />
-              );
-            } else if (shape.type === "rectangle" || shape.type === "square") {
-              return (
-                <Rect
-                  key={i}
-                  x={shape.x}
-                  y={shape.y}
-                  width={shape.width}
-                  height={shape.height}
-                  stroke={shape.firstColor}
-                  strokeWidth={shape.lineWidth}
-                  fill={shape.secondColor}
-                />
-              );
-            } else if (shape.type === "circle") {
-              return (
-                <Circle
-                  key={i}
-                  x={shape.x}
-                  y={shape.y}
-                  radius={shape.radius}
-                  stroke={shape.firstColor}
-                  strokeWidth={shape.lineWidth}
-                  fill={shape.secondColor}
-                />
-              );
-            } else if (shape.type === "ellipse") {
-              return (
-                <Ellipse
-                  key={i}
-                  x={shape.x}
-                  y={shape.y}
-                  radiusX={shape.radiusX}
-                  radiusY={shape.radiusY}
-                  stroke={shape.firstColor}
-                  strokeWidth={shape.lineWidth}
-                  fill={shape.secondColor}
-                />
-              );
-            } else if (shape.type === "triangle") {
-              return (
-                <Line
-                  key={i}
-                  points={shape.points}
-                  stroke={shape.firstColor}
-                  strokeWidth={shape.lineWidth}
-                  fill={shape.secondColor}
-                  closed
-                />
-              );
-            }
-            return null;
-          })}
-        </Layer>
+        <Layer>{shapes.map((shape, i) => renderShape(shape, i))}</Layer>
       </Stage>
     </div>
   );
 };
-
 export default Canvas;
