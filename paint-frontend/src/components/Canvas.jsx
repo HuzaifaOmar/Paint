@@ -107,8 +107,15 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
       setShapes(newShapes);
     } else if (selectedShape === "square") {
       const newShapes = [...shapes];
+      let size = 0
       const lastShape = newShapes[newShapes.length - 1];
-      const size = Math.min(pos.x - lastShape.x, pos.y - lastShape.y);
+      if ((lastShape.x-pos.x)>0 &&(lastShape.y-pos.y)>0){
+       size = Math.min(lastShape.x-pos.x, lastShape.y-pos.y);
+      }
+      else{
+       size = Math.min(pos.x - lastShape.x, pos.y - lastShape.y);
+      }
+      // size = Math.min(pos.x - lastShape.x, pos.y - lastShape.y);
       lastShape.width = size;
       lastShape.height = size;
       setShapes(newShapes);
@@ -200,7 +207,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
     <div className="canvas-container">
       <Stage
         width={window.innerWidth}
-        height={window.innerHeight - 47}
+        height={window.innerHeight}
         ref={stageRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
