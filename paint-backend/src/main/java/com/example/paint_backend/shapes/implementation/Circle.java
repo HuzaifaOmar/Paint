@@ -19,8 +19,8 @@ public class Circle implements Shape {
     String fillColor;
     String strokeColor;
 
-    public Circle(Map<String, Object> attributes) {
-        this.shapeId = (int) attributes.get("shapeId");
+    public Circle(int shapeId, Map<String, Object> attributes) {
+        this.shapeId = shapeId;
         this.xStart = (double) attributes.get("xStart");
         this.yStart = (double) attributes.get("yStart");
         this.fillColor = (String) attributes.get("fillColor");
@@ -37,6 +37,7 @@ public class Circle implements Shape {
     private Double calculateDiameter(double xStart, double yStart, double xEnd, double yEnd) {
         return Math.sqrt((xEnd - xStart) * (xEnd - xStart) + (yEnd - yStart) * (yEnd - yStart));
     }
+
     @Override
     public void DimensionCalculate() {
         this.radius = calculateDiameter(xStart, yStart, xEnd, yEnd) / 2;
@@ -56,14 +57,13 @@ public class Circle implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("radius", radius);
-        attributes.put("x", x);
-        attributes.put("y", y);
-        attributes.put("fill", fillColor);
-        attributes.put("stroke", strokeColor);
-        attributes.put("strokeWidth", lineWidth);
-        return attributes;
+        return Map.of(
+                "radius", radius,
+                "x", x,
+                "y", y,
+                "fill", fillColor,
+                "stroke", strokeColor,
+                "strokeWidth", lineWidth);
     }
 }
 

@@ -18,8 +18,8 @@ public class Ellipse implements Shape {
     double radiusX;
     double radiusY;
 
-    public Ellipse(Map<String, Object> attributes) {
-        this.shapeId = (int) attributes.get("shapeId");
+    public Ellipse(int shapeId, Map<String, Object> attributes) {
+        this.shapeId = shapeId;
         this.x = (double) attributes.get("xStart");
         this.y = (double) attributes.get("yStart");
         this.fillColor = (String) attributes.get("fillColor");
@@ -52,15 +52,13 @@ public class Ellipse implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("radiusX", radiusX);
-        attributes.put("radiusY", radiusY);
-        attributes.put("x", x);
-        attributes.put("y", y);
-        attributes.put("fill", fillColor);
-        attributes.put("stroke", strokeColor);
-        attributes.put("strokeWidth", lineWidth);
-
-        return attributes;
+        return Map.of(
+                "radiusX", radiusX,
+                "radiusY", radiusY,
+                "x", x,
+                "y", y,
+                "fill", fillColor,
+                "stroke", strokeColor,
+                "strokeWidth", lineWidth);
     }
 }

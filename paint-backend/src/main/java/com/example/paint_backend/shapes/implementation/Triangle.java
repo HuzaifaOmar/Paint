@@ -1,39 +1,39 @@
 package com.example.paint_backend.shapes.implementation;
 
 import com.example.paint_backend.shapes.Shape;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-
-public class Rectangle implements Shape {
+public class Triangle implements Shape {
     int shapeId;
-    double xEnd;
-    double yEnd;
     double xStart;
     double yStart;
+    double xEnd;
+    double yEnd;
+    List<Double> points;
     String fillColor;
     String strokeColor;
     double lineWidth;
-    double length;
-    double width;
-    String shapeType;
 
-    public Rectangle(int shapeId, Map<String, Object> attributes) {
+    public Triangle(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
         this.xStart = (double) attributes.get("xStart");
         this.yStart = (double) attributes.get("yStart");
         this.fillColor = (String) attributes.get("fillColor");
-        this.strokeColor = (String) attributes.get("strokeColor");
         this.lineWidth = (double) attributes.get("lineWidth");
+        this.strokeColor = (String) attributes.get("strokeColor");
     }
 
     @Override
     public void DimensionCalculate() {
-        this.length = Math.abs(xEnd - xStart);
-        this.width = Math.abs(yEnd - yStart);
+        points.add(this.xStart);
+        points.add(this.yStart);
+        points.add(this.xEnd);
+        points.add(this.yStart);
+        points.add((this.xEnd + this.xStart) / 2);
+        points.add(this.yEnd);
     }
 
     @Override
@@ -42,7 +42,6 @@ public class Rectangle implements Shape {
         this.yEnd = yEnd;
     }
 
-
     @Override
     public int getShapeId() {
         return shapeId;
@@ -50,16 +49,13 @@ public class Rectangle implements Shape {
 
     @Override
     public String getShapeType() {
-        return shapeType;
+        return "triangle";
     }
 
     @Override
     public Map<String, Object> getAttributes() {
         return Map.of(
-                "length", this.length,
-                "width", this.width,
-                "x", this.xStart + this.length / 2,
-                "y", this.yStart + this.width / 2,
+                "points", this.points,
                 "fill", this.fillColor,
                 "stroke", this.strokeColor,
                 "strokeWidth", this.lineWidth);

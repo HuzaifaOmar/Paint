@@ -18,10 +18,9 @@ public class Square implements Shape {
     String strokeColor;
     double lineWidth;
     double side;
-    String shapeType;
 
-    public Square(Map<String, Object> attributes) {
-        this.shapeId = (int) attributes.get("shapeId");
+    public Square(int shapeId, Map<String, Object> attributes) {
+        this.shapeId = shapeId;
         this.xEnd = (double) attributes.get("xEnd");
         this.yEnd = (double) attributes.get("yEnd");
         this.xStart = (double) attributes.get("xStart");
@@ -56,15 +55,11 @@ public class Square implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("shapeId", this.shapeId);
-        attributes.put("side", this.side);
-        attributes.put("x", this.xStart + this.side / 2);
-        attributes.put("y", this.yStart + this.side / 2);
-        attributes.put("fill", this.fillColor);
-        attributes.put("stroke", this.strokeColor);
-        attributes.put("strokeWidth", this.lineWidth);
-
-        return attributes;
+        return Map.of("side", this.side,
+                "x", this.xStart + this.side / 2,
+                "y", this.yStart + this.side / 2,
+                "fill", this.fillColor,
+                "stroke", this.strokeColor,
+                "strokeWidth", this.lineWidth);
     }
 }

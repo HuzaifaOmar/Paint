@@ -4,7 +4,10 @@ import com.example.paint_backend.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Line implements Shape {
@@ -17,8 +20,8 @@ public class Line implements Shape {
     String fillColor;
     double lineWidth;
 
-    public Line(Map<String, Object> attributes) {
-        this.shapeId = (int) attributes.get("shapeId");
+    public Line(int shapeId, Map<String, Object> attributes) {
+        this.shapeId = shapeId;
         this.xStart = (double) attributes.get("xStart");
         this.yStart = (double) attributes.get("yStart");
         this.xEnd = (double) attributes.get("xEnd");
@@ -51,17 +54,12 @@ public class Line implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        ArrayList<Double> points = new ArrayList<>();
-        points.add(this.xStart);
-        points.add(this.yStart);
-        points.add(this.xEnd);
-        points.add(this.yEnd);
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("shapeId", shapeId);
-        attributes.put("points", points);
-        attributes.put("fill", fillColor);
-        attributes.put("strokeWidth", lineWidth);
+        List<Double> points = Stream.of(this.xStart, this.yStart, this.xEnd, this.yEnd)
+                .toList();
 
-        return attributes;
+        return Map.of(
+                "points", points,
+                "fill", fillColor,
+                "strokeWidth", lineWidth);
     }
 }
