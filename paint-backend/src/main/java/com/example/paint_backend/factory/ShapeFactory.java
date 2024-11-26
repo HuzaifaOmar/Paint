@@ -12,16 +12,14 @@ import java.util.Map;
 
 public class ShapeFactory {
 
-    // Factory method to create objects based on the input
-    public Shape getShape(String shapeType, Map<String, Object> attributes) {
+    public Shape getShape(String shapeType, int shapeId, Map<String, Object> attributes) {
         return switch (shapeType.toLowerCase()) {
-            case "circle" -> new Circle(attributes);
-            case "rectangle" -> new Rectangle(attributes);
-            case "square" -> new Square(attributes);
-            case "ellipse" -> new Ellipse(attributes);
-            case "line" -> new Line(attributes);
-            // case "triangle":
-            //     return new Triangle(json);
+            case "circle" -> new Circle(shapeId, attributes);
+            case "rectangle" -> new Rectangle(shapeId, attributes);
+            case "square" -> new Square(shapeId, attributes);
+            case "ellipse" -> new Ellipse(shapeId, attributes);
+            case "line" -> new Line(shapeId, attributes);
+            case "triangle" -> new Triangle(shapeId, attributes);
             default -> throw new InvalidShapeTypeException("invalid shape type");
         };
     }

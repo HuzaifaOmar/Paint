@@ -35,7 +35,7 @@ public class ShapesController {
         Map<String, Object> attributes = shapeRequest.getAttributes();
         attributes.put("shapeId", shapeIdCounter);
 
-        Shape shape = new ShapeFactory().getShape(shapeType, attributes);
+        Shape shape = new ShapeFactory().getShape(shapeType, shapeIdCounter, attributes);
         shapeIdCounter++;
 
         shape.DimensionCalculate();
