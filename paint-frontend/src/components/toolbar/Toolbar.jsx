@@ -12,7 +12,7 @@ import {
   faRulerHorizontal,
   faSquare,
   faCircle,
-  faCaretDown as faDropdown,
+  faArrowPointer
 } from "@fortawesome/free-solid-svg-icons";
 import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
@@ -35,6 +35,7 @@ const Toolbar = ({
   const [isToolbarHidden, setIsToolbarHidden] = useState(false);
 
   const tools = [
+    { id: "pointer", icon: faArrowPointer, label: "Pointer" },
     { id: "freehand", icon: faPaintBrush, label: "Freehand" },
     { id: "line", icon: faRulerHorizontal, label: "Line" },
     { id: "square", icon: faSquare, label: "Square" },
@@ -64,16 +65,19 @@ const Toolbar = ({
   };
 
   return (
-    <div className={`toolbar-container ${isToolbarHidden ? "hidden" : ""}`}>
-      <div className="toolbar">
+    <>
+      <div className={`toolbar ${isToolbarHidden ? "hidden" : ""}`}>
         {/* Tool Selection Dropdown */}
         <div
           className="toolbar-dropdown-container"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          onClick={() => {
+            setIsDropdownOpen(!isDropdownOpen)
+            setIsLineWidthDropdownOpen(false)
+          }}
         >
           <div className="toolbar-dropdown-selected">{getSelectedToolIcon()}</div>
           <FontAwesomeIcon
-            icon={faDropdown}
+            icon={faCaretDown}
             className="toolbar-dropdown-toggle"
           />
           {isDropdownOpen && (
@@ -94,11 +98,12 @@ const Toolbar = ({
             </ul>
           )}
         </div>
-
-        {/* Line Width Dropdown */}
         <div
           className="toolbar-dropdown-container"
-          onClick={() => setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)}
+          onClick={() => {
+            setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)
+            setIsDropdownOpen(false)
+          }}
         >
           <div className="toolbar-dropdown-selected">
             <span
@@ -179,12 +184,16 @@ const Toolbar = ({
 
       {/* Hide/Show Button */}
       <button
-        className="toolbar-toggle"
-        onClick={() => setIsToolbarHidden(!isToolbarHidden)}
+        className={`toolbar-toggle ${isToolbarHidden ? "hidden" : ""}`}
+        onClick={()=>{
+          setIsToolbarHidden(!isToolbarHidden)
+          setIsLineWidthDropdownOpen(false)
+          setIsDropdownOpen(false)
+        }}
       >
         <FontAwesomeIcon icon={isToolbarHidden ? faCaretDown : faCaretUp} />
       </button>
-    </div>
+    </>
   );
 };
 
