@@ -1,15 +1,43 @@
+.toolbar-container {
+  width: 50%;
+  transition: transform 0.3s ease;
+  position:absolute;
+  z-index:3
+}
+
+.toolbar-container.hidden {
+  transform: translateY(-65%);
+}
+
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 35px;
-  width: 100vw;
+  height: 50px;
+  width: 100%;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
+}
+
+.toolbar-toggle {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 5px auto;
+}
+
+.toolbar-toggle:hover {
+  background-color: #e0e0e0;
 }
 .toolbar-dropdown-container {
   position: relative;
