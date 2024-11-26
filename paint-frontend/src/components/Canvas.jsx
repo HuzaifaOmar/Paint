@@ -4,7 +4,6 @@ import { Stage, Layer, Line, Rect, Circle, Ellipse } from "react-konva";
 const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
   const stageRef = useRef();
   const [dots, setDots] = useState([]);
-  const [lines, setLines] = useState([]);
   const [shapes, setShapes] = useState([]);
   const isDrawing = useRef(false);
   const lineWidth = width;
@@ -16,9 +15,12 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
     startX.current = pos.x;
     startY.current = pos.y;
     isDrawing.current = true;
-    
+
     if (selectedShape === "freehand" || selectedShape === "line") {
-      setLines([...lines, { points: [pos.x, pos.y], firstColor, lineWidth }]);
+      setShapes([
+        ...shapes,
+        { type: selectedShape, points: [pos.x, pos.y], firstColor, lineWidth },
+      ]);
     } else if (selectedShape === "rectangle" || selectedShape === "square") {
       setShapes([
         ...shapes,
@@ -30,7 +32,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
           height: 0,
           firstColor,
           lineWidth,
-          secondColor
+          secondColor,
         },
       ]);
     } else if (selectedShape === "circle") {
@@ -43,7 +45,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
           radius: 0,
           firstColor,
           lineWidth,
-          secondColor
+          secondColor,
         },
       ]);
     } else if (selectedShape === "ellipse") {
@@ -57,7 +59,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
           radiusY: 0,
           firstColor,
           lineWidth,
-          secondColor
+          secondColor,
         },
       ]);
     } else if (selectedShape === "triangle") {
@@ -70,7 +72,7 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
           points: [pos.x, pos.y, pos.x, pos.y, pos.x, pos.y],
           firstColor,
           lineWidth,
-          secondColor
+          secondColor,
         },
       ]);
     } else return;
@@ -79,17 +81,17 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
   const handleMouseMove = () => {
     if (!isDrawing.current) return;
     const pos = stageRef.current.getPointerPosition();
-    
+
     if (selectedShape === "freehand") {
-      const newLines = [...lines];
+      const newLines = [...shapes];
       const lastLine = newLines[newLines.length - 1];
       lastLine.points = lastLine.points.concat([pos.x, pos.y]);
-      setLines(newLines);
+      setShapes(newLines);
     } else if (selectedShape === "line") {
-      const newLines = [...lines];
+      const newLines = [...shapes];
       const lastLine = newLines[newLines.length - 1];
       lastLine.points = [startX.current, startY.current, pos.x, pos.y];
-      setLines(newLines);
+      setShapes(newLines);
     } else if (selectedShape === "rectangle") {
       const newShapes = [...shapes];
       const lastShape = newShapes[newShapes.length - 1];
@@ -124,9 +126,12 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
       const dx = pos.x - lastShape.x;
       const dy = pos.y - lastShape.y;
       lastShape.points = [
-        startX.current, startY.current,
-        startX.current + dx, startY.current,
-        startX.current + dx / 2, startY.current + dy
+        startX.current,
+        startY.current,
+        startX.current + dx,
+        startY.current,
+        startX.current + dx / 2,
+        startY.current + dy,
       ];
       setShapes(newShapes);
     }
@@ -175,19 +180,20 @@ const Canvas = ({ selectedShape, firstColor, secondColor, width }) => {
       >
         <Layer>{dots}</Layer>
         <Layer>
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke={line.firstColor}
-              strokeWidth={line.lineWidth}
-              tension={0.5}
-              lineCap="round"
-              lineJoin="round"
-            />
-          ))}
           {shapes.map((shape, i) => {
-            if (shape.type === "rectangle" || shape.type === "square") {
+            if (shape.type === "freehand" || shape.type === "line") {
+              return (
+                <Line
+                  key={i}
+                  points={shape.points}
+                  stroke={shape.firstColor}
+                  strokeWidth={shape.lineWidth}
+                  tension={0.5}
+                  lineCap="round"
+                  lineJoin="round"
+                />
+              );
+            } else if (shape.type === "rectangle" || shape.type === "square") {
               return (
                 <Rect
                   key={i}
