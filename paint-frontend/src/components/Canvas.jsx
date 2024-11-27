@@ -102,7 +102,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
       };
       let tempId = currentShapeId.current;
       const response = await axios.put(
-        `${API_BASE_URL}/update/${currentShapeId.current}`,
+        `${API_BASE_URL}/finalize/${currentShapeId.current}`,
         updateRequest
       );
 
