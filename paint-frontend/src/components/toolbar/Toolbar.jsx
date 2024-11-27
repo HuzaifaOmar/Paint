@@ -30,6 +30,8 @@ const Toolbar = ({
   setStrokeColor,
   lineWidth,
   setLineWidth,
+  eraserOn,
+  setEraserOn,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
@@ -53,6 +55,10 @@ const Toolbar = ({
     }
     return <FontAwesomeIcon icon={tool.icon} />;
   };
+
+  const toggleEraser=()=>{
+    setEraserOn(!eraserOn)
+  }
 
   const getSelectedToolIcon = () => {
     const tool = tools.find((t) => t.id === selectedTool);
@@ -119,7 +125,7 @@ const Toolbar = ({
           />
           {isLineWidthDropdownOpen && (
             <ul className="toolbar-dropdown-list">
-              {[1, 3, 5, 7, 9].map((width) => (
+              {[2, 3, 5, 7, 9].map((width) => (
                 <li
                   key={width}
                   className="toolbar-dropdown-item"
@@ -138,10 +144,11 @@ const Toolbar = ({
 
         {/* Buttons */}
         <ToolbarButton
-          icon={<FontAwesomeIcon icon={faEraser} />}
-          onClick={() => console.log("Eraser clicked")}
+          icon={<FontAwesomeIcon icon={faEraser}/>}
+          onClick={toggleEraser}
           title="Eraser"
           label="Eraser"
+          clicked={eraserOn}
         />
         <input
           type="color"

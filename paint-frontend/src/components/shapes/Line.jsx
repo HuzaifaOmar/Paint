@@ -1,7 +1,7 @@
 import React from "react";
 import { Line } from "react-konva";
 
-const LineDraw = ({ shape, draggable, onDragEnd }) => (
+const LineDraw = ({ shape, draggable, onDragEnd,onClick}) => (
   <Line
     key={shape.shapeId}
     points={[...shape.points]}
@@ -11,6 +11,7 @@ const LineDraw = ({ shape, draggable, onDragEnd }) => (
     lineJoin="round"
     draggable={draggable}
     onDragEnd={onDragEnd}
+    onClick={onClick}
   />
 );
 

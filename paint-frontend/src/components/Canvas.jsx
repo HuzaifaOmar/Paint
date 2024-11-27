@@ -11,7 +11,7 @@ import CircleDraw from "./shapes/Circle.jsx";
 
 const API_BASE_URL = "http://localhost:8080/shapes";
 
-const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
+const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) => {
   const stageRef = useRef();
   const [dots, setDots] = useState([]);
   const [shapes, setShapes] = useState([]);
@@ -20,8 +20,10 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   const startY = useRef(0);
   const currentShapeId = useRef(null);
 
+
+
   const handleMouseDown = async () => {
-    if (selectedShape === "pointer") return;
+    if (selectedShape === "pointer"||eraserOn) return;
     console.log("1")
     const pos = stageRef.current.getPointerPosition();
     startX.current = pos.x;
@@ -57,7 +59,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   };
 
   const handleMouseMove = async () => {
-    if (!isDrawing.current || !currentShapeId.current || selectedShape === "pointer") return;
+    if (!isDrawing.current || !currentShapeId.current || selectedShape === "pointer"||eraserOn) return;
     console.log("2")
     const pos = stageRef.current.getPointerPosition();
     try {
@@ -92,7 +94,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   };
 
   const handleMouseUp = async () => {
-    if (!currentShapeId.current || selectedShape === "pointer") return;
+    if (!currentShapeId.current || selectedShape === "pointer"||eraserOn) return;
     console.log("3")
     try {
       const finalizeRequest = {
@@ -111,7 +113,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         const shapeIndex = newShapes.findIndex(
           (s) => s.shapeId === tempId
         );
-
+        console.log(shapes);
+        
         if (shapeIndex !== -1) {
           newShapes[shapeIndex] = {
             ...newShapes[shapeIndex],
@@ -129,6 +132,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   };
 
   const handleDragEnd = async (e, shape) => {
+    if(eraserOn)return
     console.log("4")
     const pos = e.target.position();
     try {
@@ -162,13 +166,23 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
     }
   };
 
-  const renderShape = (shape, index) => {
-    const draggable = selectedShape === "pointer";
+  const handleShapeClick = async(e) => {
+    console.log(e.target);
+    if(eraserOn){
+      setShapes(shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId))
+      await axios.put(
+        `${API_BASE_URL}/erase/${shapes[e.target.index].shapeId}`);
+    }
+  };
+
+  const renderShape = (shape) => {
+    const draggable = (selectedShape === "pointer"&&!eraserOn);
     const shapeProps = {
       key: shape.shapeId,
       shape: shape,
-      draggable: draggable,
+      draggable: (draggable),
       onDragEnd: (e) => handleDragEnd(e, shape),
+      onClick:(e)=>handleShapeClick(e)
     };
 
     switch (shape.type) {
