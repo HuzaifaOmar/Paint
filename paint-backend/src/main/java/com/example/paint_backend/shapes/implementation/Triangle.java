@@ -46,6 +46,12 @@ public class Triangle implements Shape {
         this.yEnd = yEnd;
     }
 
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        this.xStart = xStart;
+        this.yStart = yStart;
+    }
+
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.example.paint_backend.dto.MoveRequest;
 import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.dto.ShapeFinalizeRequest;
 import com.example.paint_backend.dto.ShapeRequest;
@@ -76,6 +77,22 @@ public class ShapesController {
         if (request.getFillColor() != null && request.getStrokeColor() != null) {
             shape.setFillColor(request.getFillColor());
             shape.setStrokeColor(request.getStrokeColor());
+        } else {
+            throw new MissingRequiredParametersException("missing attributes");
+        }
+        return ResponseEntity.ok(new ShapeDTO(shape));
+    }
+
+    @PutMapping("/move/{shapeId}")
+    public ResponseEntity<ShapeDTO> move(
+            @PathVariable int shapeId,
+            @RequestBody MoveRequest request) {
+        System.out.println("new move request");
+
+        Shape shape = findShapeById(shapeId);
+
+        if (request.getXStart() != null && request.getYStart() != null) {
+            shape.setStartPoints(request.getXStart(), request.getYStart());
         } else {
             throw new MissingRequiredParametersException("missing attributes");
         }

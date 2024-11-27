@@ -24,7 +24,7 @@ public class Square implements Shape {
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        //! initially the square is just a point
+        // ! initially the square is just a point
         this.xEnd = xStart;
         this.yEnd = yStart;
     }
@@ -46,6 +46,13 @@ public class Square implements Shape {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
     }
+
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        this.xStart = xStart;
+        this.yStart = yStart;
+    }
+
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
     }

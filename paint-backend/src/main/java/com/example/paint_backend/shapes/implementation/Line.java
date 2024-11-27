@@ -2,12 +2,10 @@ package com.example.paint_backend.shapes.implementation;
 
 import com.example.paint_backend.shapes.Shape;
 
-
 import java.util.List;
 import java.util.Map;
 
 import java.util.stream.Stream;
-
 
 public class Line implements Shape {
 
@@ -38,6 +36,11 @@ public class Line implements Shape {
         this.yEnd = yEnd;
     }
 
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        return;
+    }
+
     public void setFillColor(String fillColor) {
         return;
     }
@@ -45,7 +48,6 @@ public class Line implements Shape {
     public void setStrokeColor(String strokeColor) {
         return;
     }
-
 
     @Override
     public int getShapeId() {
@@ -59,7 +61,9 @@ public class Line implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        List<Double> points = Stream.of(this.xStart, this.yStart, this.xEnd == null ? this.xStart : this.xEnd, this.yEnd == null ? this.yStart : yEnd)
+        List<Double> points = Stream
+                .of(this.xStart, this.yStart, this.xEnd == null ? this.xStart : this.xEnd,
+                        this.yEnd == null ? this.yStart : yEnd)
                 .toList();
 
         return Map.of(
