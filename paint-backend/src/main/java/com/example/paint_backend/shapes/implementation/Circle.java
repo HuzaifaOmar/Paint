@@ -2,7 +2,6 @@ package com.example.paint_backend.shapes.implementation;
 
 import com.example.paint_backend.shapes.Shape;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Circle implements Shape {
@@ -24,7 +23,7 @@ public class Circle implements Shape {
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        //! initially the circle is just a point
+        // ! initially the circle is just a point
         this.xEnd = x;
         this.yEnd = y;
 
@@ -34,6 +33,14 @@ public class Circle implements Shape {
     public void setEndPoints(double xEnd, double yEnd) {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
+    }
+
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    public void setStrokeColor(String strokeColor) {
+        this.strokeColor = strokeColor;
     }
 
     @Override
@@ -62,4 +69,3 @@ public class Circle implements Shape {
                 "strokeWidth", strokeWidth);
     }
 }
-

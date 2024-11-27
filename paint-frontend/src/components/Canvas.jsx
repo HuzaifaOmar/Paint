@@ -32,8 +32,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         attributes: {
           xStart: pos.x,
           yStart: pos.y,
-          fillColor: fillColor,
-          strokeColor: strokeColor,
+          fillColor: ((selectedShape==="line"||selectedShape==="freehand")?(fillColor):(fillColor+"6F")),
+          strokeColor: ((selectedShape==="line"||selectedShape==="freehand")?(strokeColor):(strokeColor+"6F")),
           strokeWidth: lineWidth,
         },
       };
@@ -70,12 +70,13 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         updateRequest
       );
       console.log(response.data);
+      
       setShapes((prevShapes) => {
         const newShapes = [...prevShapes];
         const shapeIndex = newShapes.findIndex(
           (s) => s.shapeId === currentShapeId.current
         );
-
+        
         if (shapeIndex !== -1) {
           newShapes[shapeIndex] = {
             ...newShapes[shapeIndex],
@@ -92,11 +93,45 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
 
   const handleMouseUp = async () => {
     if (!currentShapeId.current) return;
+    try {
+      const updateRequest = {
+        fillColor:fillColor,
+        strokeColor:strokeColor
+      };
+      let tempId=currentShapeId.current;
+      const response = await axios.put(
+        `${API_BASE_URL}/update/${currentShapeId.current}`,
+        updateRequest
+      );
+      
+      setShapes((prevShapes) => {
+        const newShapes = [...prevShapes];
+        
+        const shapeIndex = newShapes.findIndex(
+          (s) => s.shapeId ===tempId
+        );
+        
+        if (shapeIndex !== -1) {
+          newShapes[shapeIndex] = {
+            ...newShapes[shapeIndex],
+            ...response.data.attributes,
+          };
+        }
+
+        return newShapes;
+      });
+      // console.log(shapes);
+    } catch (error) {
+      console.error("Error updating shape:", error);
+    }
     isDrawing.current = false;
     currentShapeId.current = null;
   };
 
+
+
   const renderShape = (shape, index) => {
+    
     switch (shape.type) {
       case "freehand":
         return <Freehand shape={shape} />;

@@ -1,9 +1,9 @@
 package com.example.paint_backend.shapes.implementation;
 
 import com.example.paint_backend.shapes.Shape;
-import org.json.JSONObject;
 
-import java.util.HashMap;
+
+
 import java.util.Map;
 
 public class Ellipse implements Shape {
@@ -39,6 +39,13 @@ public class Ellipse implements Shape {
         this.yEnd = yEnd;
     }
 
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    public void setStrokeColor(String strokeColor) {
+        this.strokeColor = strokeColor;
+    }
 
     @Override
     public int getShapeId() {

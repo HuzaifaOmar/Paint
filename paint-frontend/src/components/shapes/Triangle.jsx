@@ -7,7 +7,7 @@ const Triangle = ({ shape }) => (
     points={shape.points}
     fill={shape.fill}
     stroke={shape.stroke}
-    strokeWidth={shape.storkeWidth}
+    strokeWidth={shape.strokeWidth}
     closed
   />
 );
