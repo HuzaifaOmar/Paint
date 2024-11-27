@@ -13,6 +13,7 @@ import {
   faSquare,
   faCircle,
   faArrowPointer,
+  faCopy, // Import the copy icon
 } from "@fortawesome/free-solid-svg-icons";
 import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
@@ -179,6 +180,12 @@ const Toolbar = ({
           onClick={() => console.log("Load action")}
           title="Load"
           label="Load"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faCopy} />}
+          onClick={() => console.log("Copy action")}
+          title="Copy"
+          label="Copy"
         />
       </div>
 
