@@ -1,12 +1,10 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.exception.MissingRequiredParametersException;
 import com.example.paint_backend.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class FreeHandLine implements Shape {
     int shapeId;
@@ -19,8 +17,8 @@ public class FreeHandLine implements Shape {
         this.fillColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
         this.points = new ArrayList<>(
-                List.of(((Number) attributes.get("xStart")).doubleValue(), ((Number) attributes.get("yStart")).doubleValue())
-        );
+                List.of(((Number) attributes.get("xStart")).doubleValue(),
+                        ((Number) attributes.get("yStart")).doubleValue()));
     }
 
     @Override
@@ -32,6 +30,14 @@ public class FreeHandLine implements Shape {
     public void setEndPoints(double xEnd, double yEnd) {
         this.points.add(xEnd);
         this.points.add(yEnd);
+    }
+
+    public void setFillColor(String fillColor) {
+        return;
+    }
+
+    public void setStrokeColor(String strokeColor) {
+        return;
     }
 
     @Override
@@ -49,7 +55,6 @@ public class FreeHandLine implements Shape {
         return Map.of(
                 "points", points,
                 "strokeColor", fillColor,
-                "strokeWidth", strokeWidth
-        );
+                "strokeWidth", strokeWidth);
     }
 }

@@ -2,11 +2,10 @@ package com.example.paint_backend.shapes.implementation;
 
 import com.example.paint_backend.shapes.Shape;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 import java.util.stream.Stream;
 
 
@@ -37,6 +36,14 @@ public class Line implements Shape {
     public void setEndPoints(double xEnd, double yEnd) {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
+    }
+
+    public void setFillColor(String fillColor) {
+        return;
+    }
+
+    public void setStrokeColor(String strokeColor) {
+        return;
     }
 
 

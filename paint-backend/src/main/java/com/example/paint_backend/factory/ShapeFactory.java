@@ -3,7 +3,7 @@ package com.example.paint_backend.factory;
 import com.example.paint_backend.exception.InvalidShapeTypeException;
 import com.example.paint_backend.shapes.*;
 import com.example.paint_backend.shapes.implementation.*;
-import org.json.JSONObject;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

@@ -3,7 +3,7 @@ package com.example.paint_backend.shapes.implementation;
 import com.example.paint_backend.shapes.Shape;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +46,14 @@ public class Triangle implements Shape {
         this.yEnd = yEnd;
     }
 
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    public void setStrokeColor(String strokeColor) {
+        this.strokeColor = strokeColor;
+    }
+
     @Override
     public int getShapeId() {
         return shapeId;
@@ -55,7 +63,6 @@ public class Triangle implements Shape {
     public String getShapeType() {
         return "triangle";
     }
-
 
     @Override
     public Map<String, Object> getAttributes() {

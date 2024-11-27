@@ -53,11 +53,16 @@ public class ShapesController {
         System.out.println("new update request");
 
         Shape shape = findShapeById(shapeId);
-
-        if (request.getXEnd() == null || request.getYEnd() == null)
-            throw new MissingRequiredParametersException("Both xEnd and yEnd are required for shape update.");
-        shape.setEndPoints(request.getXEnd(), request.getYEnd());
-        shape.DimensionCalculate();
+        
+        if (request.getXEnd() != null && request.getYEnd() != null) {
+            shape.setEndPoints(request.getXEnd(), request.getYEnd());
+            shape.DimensionCalculate();
+        } else if (request.getFillColor() != null && request.getStrokeColor() != null) {
+            shape.setFillColor(request.getFillColor());
+            shape.setStrokeColor(request.getStrokeColor());
+        } else {
+            throw new MissingRequiredParametersException("missing attributes");
+        }
 
         return ResponseEntity.ok(new ShapeDTO(shape));
     }
