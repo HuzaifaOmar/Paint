@@ -31,6 +31,10 @@ public class FreeHandLine implements Shape {
         this.points.add(xEnd);
         this.points.add(yEnd);
     }
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        return;
+    }
 
     public void setFillColor(String fillColor) {
         return;

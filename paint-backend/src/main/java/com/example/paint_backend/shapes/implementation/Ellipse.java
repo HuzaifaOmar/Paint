@@ -9,8 +9,8 @@ import java.util.Map;
 public class Ellipse implements Shape {
     double xEnd;
     double yEnd;
-    double x;
-    double y;
+    double xStart;
+    double yStart;
     double strokeWidth;
     String fillColor;
     String strokeColor;
@@ -21,25 +21,30 @@ public class Ellipse implements Shape {
 
     public Ellipse(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
-        this.x = ((Number) attributes.get("xStart")).doubleValue();
-        this.y = ((Number) attributes.get("yStart")).doubleValue();
+        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
+        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        this.xEnd=this.x;
-        this.yEnd=this.y;
+        this.xEnd=this.xStart;
+        this.yEnd=this.yStart;
     }
 
     @Override
     public void DimensionCalculate() {
-        this.radiusX = Math.abs(xEnd - x);
-        this.radiusY = Math.abs(yEnd - y);
+        this.radiusX = Math.abs(xEnd - xStart);
+        this.radiusY = Math.abs(yEnd - yStart);
     }
 
     @Override
     public void setEndPoints(double xEnd, double yEnd) {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
+    }
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        this.xStart = xStart;
+        this.yStart = yStart;
     }
 
     public void setFillColor(String fillColor) {
@@ -65,8 +70,8 @@ public class Ellipse implements Shape {
         return Map.of(
                 "radiusX", radiusX,
                 "radiusY", radiusY,
-                "x", x,
-                "y", y,
+                "x", xStart,
+                "y", yStart,
                 "fill", fillColor,
                 "stroke", strokeColor,
                 "strokeWidth", strokeWidth);

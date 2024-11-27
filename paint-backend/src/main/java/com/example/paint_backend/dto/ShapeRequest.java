@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class ShapeRequest {
     private String shapeType;
-    private int shapeId;
-    private Map<String, Object> attributes; //* Shape-specific attributes
+    // private int shapeId;
+    private Map<String, Object> attributes; // * Shape-specific attributes
 
     public String getShapeType() {
         return shapeType;

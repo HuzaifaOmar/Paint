@@ -4,7 +4,6 @@ import com.example.paint_backend.shapes.Shape;
 
 import java.util.Map;
 
-
 public class Rectangle implements Shape {
     int shapeId;
     double xEnd;
@@ -26,7 +25,7 @@ public class Rectangle implements Shape {
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        //! initially the rectangle is just a point
+        // ! initially the rectangle is just a point
         this.xEnd = xStart;
         this.yEnd = yStart;
     }
@@ -54,6 +53,13 @@ public class Rectangle implements Shape {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
     }
+
+    @Override
+    public void setStartPoints(double xStart, double yStart) {
+        this.xStart = xStart;
+        this.yStart = yStart;
+    }
+
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
     }
@@ -61,7 +67,6 @@ public class Rectangle implements Shape {
     public void setStrokeColor(String strokeColor) {
         this.strokeColor = strokeColor;
     }
-
 
     @Override
     public int getShapeId() {

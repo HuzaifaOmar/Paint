@@ -22,7 +22,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
 
   const handleMouseDown = async () => {
     if (selectedShape === "pointer") return;
-
+    console.log("1")
     const pos = stageRef.current.getPointerPosition();
     startX.current = pos.x;
     startY.current = pos.y;
@@ -58,9 +58,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
 
   const handleMouseMove = async () => {
     if (!isDrawing.current || !currentShapeId.current || selectedShape === "pointer") return;
-
+    console.log("2")
     const pos = stageRef.current.getPointerPosition();
-
     try {
       const updateRequest = {
         xEnd: pos.x,
@@ -94,16 +93,16 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
 
   const handleMouseUp = async () => {
     if (!currentShapeId.current || selectedShape === "pointer") return;
-
+    console.log("3")
     try {
-      const updateRequest = {
+      const finalizeRequest = {
         fillColor: fillColor,
         strokeColor: strokeColor
       };
       let tempId = currentShapeId.current;
       const response = await axios.put(
-        `${API_BASE_URL}/update/${currentShapeId.current}`,
-        updateRequest
+        `${API_BASE_URL}/finalize/${currentShapeId.current}`,
+        finalizeRequest
       );
 
       setShapes((prevShapes) => {
@@ -130,16 +129,17 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   };
 
   const handleDragEnd = async (e, shape) => {
+    console.log("4")
     const pos = e.target.position();
     try {
-      const updateRequest = {
+      const moveRequest = {
         xStart: pos.x,
         yStart: pos.y,
       };
-      console.log("updateRequest json", JSON.stringify(updateRequest));
+      console.log("moveRequest json", JSON.stringify(moveRequest));
       const response = await axios.put(
-        `${API_BASE_URL}/update/${shape.shapeId}`,
-        updateRequest
+        `${API_BASE_URL}/move/${shape.shapeId}`,
+        moveRequest
       );
       console.log("api response data", response.data);
       
