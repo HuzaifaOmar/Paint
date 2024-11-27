@@ -21,6 +21,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   const currentShapeId = useRef(null);
 
   const handleMouseDown = async () => {
+    if (selectedShape === "pointer") return;
+
     const pos = stageRef.current.getPointerPosition();
     startX.current = pos.x;
     startY.current = pos.y;
@@ -32,8 +34,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         attributes: {
           xStart: pos.x,
           yStart: pos.y,
-          fillColor: ((selectedShape==="line"||selectedShape==="freehand")?(fillColor):(fillColor+"6F")),
-          strokeColor: ((selectedShape==="line"||selectedShape==="freehand")?(strokeColor):(strokeColor+"6F")),
+          fillColor: ((selectedShape === "line" || selectedShape === "freehand") ? fillColor : fillColor + "6F"),
+          strokeColor: ((selectedShape === "line" || selectedShape === "freehand") ? strokeColor : strokeColor + "6F"),
           strokeWidth: lineWidth,
         },
       };
@@ -55,7 +57,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
   };
 
   const handleMouseMove = async () => {
-    if (!isDrawing.current || !currentShapeId.current) return;
+    if (!isDrawing.current || !currentShapeId.current || selectedShape === "pointer") return;
 
     const pos = stageRef.current.getPointerPosition();
 
@@ -70,13 +72,13 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         updateRequest
       );
       console.log(response.data);
-      
+
       setShapes((prevShapes) => {
         const newShapes = [...prevShapes];
         const shapeIndex = newShapes.findIndex(
           (s) => s.shapeId === currentShapeId.current
         );
-        
+
         if (shapeIndex !== -1) {
           newShapes[shapeIndex] = {
             ...newShapes[shapeIndex],
@@ -85,32 +87,32 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         }
         return newShapes;
       });
-      // console.log(shapes);
     } catch (error) {
       console.error("Error updating shape:", error);
     }
   };
 
   const handleMouseUp = async () => {
-    if (!currentShapeId.current) return;
+    if (!currentShapeId.current || selectedShape === "pointer") return;
+
     try {
       const updateRequest = {
-        fillColor:fillColor,
-        strokeColor:strokeColor
+        fillColor: fillColor,
+        strokeColor: strokeColor
       };
-      let tempId=currentShapeId.current;
+      let tempId = currentShapeId.current;
       const response = await axios.put(
         `${API_BASE_URL}/update/${currentShapeId.current}`,
         updateRequest
       );
-      
+
       setShapes((prevShapes) => {
         const newShapes = [...prevShapes];
-        
+
         const shapeIndex = newShapes.findIndex(
-          (s) => s.shapeId ===tempId
+          (s) => s.shapeId === tempId
         );
-        
+
         if (shapeIndex !== -1) {
           newShapes[shapeIndex] = {
             ...newShapes[shapeIndex],
@@ -120,7 +122,6 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
 
         return newShapes;
       });
-      // console.log(shapes);
     } catch (error) {
       console.error("Error updating shape:", error);
     }
@@ -128,26 +129,63 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
     currentShapeId.current = null;
   };
 
+  const handleDragEnd = async (e, shape) => {
+    const pos = e.target.position();
+    try {
+      const updateRequest = {
+        xStart: pos.x,
+        yStart: pos.y,
+      };
 
+      const response = await axios.put(
+        `${API_BASE_URL}/update/${shape.shapeId}`,
+        updateRequest
+      );
+      setShapes((prevShapes) => {
+        const newShapes = [...prevShapes];
+        const shapeIndex = newShapes.findIndex(
+          (s) => s.shapeId === shape.shapeId
+        );
+
+        if (shapeIndex !== -1) {
+          newShapes[shapeIndex] = {
+            ...newShapes[shapeIndex],
+            ...response.data.attributes,
+            xStart: pos.x,
+            yStart: pos.y,
+          };
+        }
+        return newShapes;
+      });
+    } catch (error) {
+      console.error("Error updating shape position:", error);
+    }
+  };
 
   const renderShape = (shape, index) => {
-    
+    const draggable = selectedShape === "pointer";
+    const shapeProps = {
+      key: shape.shapeId,
+      shape: shape,
+      draggable: draggable,
+      onDragEnd: (e) => handleDragEnd(e, shape),
+    };
+
     switch (shape.type) {
       case "freehand":
-        return <Freehand shape={shape} />;
+        return <Freehand {...shapeProps} />;
       case "line":
-        // console.log(shape);
-        return <LineDraw shape={shape} />;
+        return <LineDraw {...shapeProps} />;
       case "rectangle":
-        return <Rectangle shape={shape} />;
+        return <Rectangle {...shapeProps} />;
       case "square":
-        return <Square shape={shape} />;
+        return <Square {...shapeProps} />;
       case "circle":
-        return <CircleDraw shape={shape} />;
+        return <CircleDraw {...shapeProps} />;
       case "ellipse":
-        return <EllipseDraw shape={shape} />;
+        return <EllipseDraw {...shapeProps} />;
       case "triangle":
-        return <Triangle shape={shape} />;
+        return <Triangle {...shapeProps} />;
       default:
         return null;
     }
@@ -196,4 +234,5 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
     </div>
   );
 };
+
 export default Canvas;

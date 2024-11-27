@@ -1,7 +1,7 @@
 import React from "react";
 import { Circle } from "react-konva";
 
-const CircleDraw = ({ shape }) => (
+const CircleDraw = ({ shape, draggable, onDragEnd }) => (
   <Circle
     key={shape.shapeId}
     x={shape.x}
@@ -10,6 +10,8 @@ const CircleDraw = ({ shape }) => (
     fill={shape.fill}
     stroke={shape.stroke}
     strokeWidth={shape.strokeWidth}
+    draggable={draggable}
+    onDragEnd={onDragEnd}
   />
 );
 
