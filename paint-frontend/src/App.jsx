@@ -9,6 +9,7 @@ function App() {
   const [fillColor, setFillColor] = useState("#F0F0F0");
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [lineWidth, setLineWidth] = useState(1.0);
+  const [eraserOn,setEraserOn]=useState(false)
   return (
     <div className="main-screen">
       <Toolbar
@@ -20,12 +21,15 @@ function App() {
         setStrokeColor={setStrokeColor}
         lineWidth={lineWidth}
         setLineWidth={setLineWidth}
+        eraserOn={eraserOn}
+        setEraserOn={setEraserOn}
       />
       <Canvas
         selectedShape={selectedShape}
         fillColor={fillColor}
         strokeColor={strokeColor}
         lineWidth={lineWidth}
+        eraserOn={eraserOn}
       />
     </div>
   );

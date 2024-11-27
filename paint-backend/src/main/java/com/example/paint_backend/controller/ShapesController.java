@@ -99,6 +99,17 @@ public class ShapesController {
         return ResponseEntity.ok(new ShapeDTO(shape));
     }
 
+    @PutMapping("/erase/{shapeId}")
+    public void eraseShape(@PathVariable int shapeId) {
+        System.out.println("new erase request");
+        try {
+            Shape shape = findShapeById(shapeId);
+            shapesList.remove(shape);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     private Shape findShapeById(int shapeId) {
         return shapesList.stream()
                 .filter(shape -> shape.getShapeId() == shapeId)
