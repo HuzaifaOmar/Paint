@@ -125,6 +125,10 @@
   background-color: #e0e0e0;
   transform: scale(1.1);
 }
+.toolbar-button.clicked {
+  background-color: #e0e0e0;
+  transform: scale(1.1);
+}
 
 .toolbar-label {
   font-size: 12px;
@@ -132,6 +136,9 @@
   color: #555;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
+}
+.toolbar-label.clicked {
+  opacity: 1;
 }
 
 .toolbar-button-container:hover .toolbar-label {
