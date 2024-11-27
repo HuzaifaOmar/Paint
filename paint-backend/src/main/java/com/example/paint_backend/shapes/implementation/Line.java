@@ -13,21 +13,19 @@ import java.util.stream.Stream;
 public class Line implements Shape {
 
     int shapeId;
-    double xStart;
-    double yStart;
-    double xEnd;
-    double yEnd;
-    String fillColor;
-    double lineWidth;
+    Double xStart;
+    Double yStart;
+    Double xEnd;
+    Double yEnd;
+    String strokeColor;
+    double strokeWidth;
 
     public Line(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
-        this.xStart = (double) attributes.get("xStart");
-        this.yStart = (double) attributes.get("yStart");
-        this.xEnd = (double) attributes.get("xEnd");
-        this.yEnd = (double) attributes.get("yEnd");
-        this.fillColor = (String) attributes.get("fillColor");
-        this.lineWidth = (double) attributes.get("lineWidth");
+        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
+        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
+        this.strokeColor = (String) attributes.get("strokeColor");
+        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
     }
 
     @Override
@@ -54,12 +52,12 @@ public class Line implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        List<Double> points = Stream.of(this.xStart, this.yStart, this.xEnd, this.yEnd)
+        List<Double> points = Stream.of(this.xStart, this.yStart, this.xEnd == null ? this.xStart : this.xEnd, this.yEnd == null ? this.yStart : yEnd)
                 .toList();
 
         return Map.of(
                 "points", points,
-                "fill", fillColor,
-                "strokeWidth", lineWidth);
+                "stroke", strokeColor,
+                "strokeWidth", strokeWidth);
     }
 }

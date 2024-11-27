@@ -1,16 +1,16 @@
 import React from "react";
 import { Ellipse } from "react-konva";
 
-const EllipseDraw = ({ shape, index }) => (
+const EllipseDraw = ({ shape }) => (
   <Ellipse
-    key={index}
+    key={shape.shapeId}
     x={shape.x}
     y={shape.y}
     radiusX={shape.radiusX}
     radiusY={shape.radiusY}
-    stroke={shape.firstColor}
-    strokeWidth={shape.lineWidth}
-    fill={shape.secondColor}
+    fill={shape.fill}
+    stroke={shape.stroke}
+    strokeWidth={shape.strokeWidth}
   />
 );
 

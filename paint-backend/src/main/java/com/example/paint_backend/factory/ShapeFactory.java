@@ -20,6 +20,7 @@ public class ShapeFactory {
             case "ellipse" -> new Ellipse(shapeId, attributes);
             case "line" -> new Line(shapeId, attributes);
             case "triangle" -> new Triangle(shapeId, attributes);
+            case "freehand" -> new FreeHandLine(shapeId, attributes);
             default -> throw new InvalidShapeTypeException("invalid shape type");
         };
     }

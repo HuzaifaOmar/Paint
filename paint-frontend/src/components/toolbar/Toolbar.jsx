@@ -25,7 +25,7 @@ const Toolbar = ({
   strokeColor,
   setStrokeColor,
   lineWidth,
-  setLineWidth
+  setLineWidth,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
@@ -96,18 +96,22 @@ const Toolbar = ({
         className="toolbar-dropdown-container"
         onClick={() => setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)}
       >
-        <div className="toolbar-dropdown-selected"><span style={{fontSize:(lineWidth+7) ,display:"flex"}}><FontAwesomeIcon icon={faCircle} /></span></div>
+        <div className="toolbar-dropdown-selected">
+          <span style={{ fontSize: lineWidth + 7, display: "flex" }}>
+            <FontAwesomeIcon icon={faCircle} />
+          </span>
+        </div>
         <FontAwesomeIcon
           icon={faCaretDown}
           className="toolbar-dropdown-toggle"
         />
         {isLineWidthDropdownOpen && (
           <ul className="toolbar-dropdown-list">
-            {[1,3,5,7,9,].map((width) => (
+            {[1.0, 3.0, 5.0, 7.0, 9.0].map((width) => (
               <li
                 className="toolbar-dropdown-item"
                 onClick={() => handleLineWidthSelection(width)}
-                style={{fontSize:(width+7),justifyContent:"center"}}
+                style={{ fontSize: width + 7, justifyContent: "center" }}
               >
                 <FontAwesomeIcon icon={faCircle} />
               </li>
@@ -142,28 +146,28 @@ const Toolbar = ({
 
       <div className="spacer"></div>
 
-      <ToolbarButton 
+      <ToolbarButton
         icon={<FontAwesomeIcon icon={faRotateLeft} />}
         onClick={() => console.log("Undo action")}
         title="Undo"
         label="Undo"
       />
 
-      <ToolbarButton 
+      <ToolbarButton
         icon={<FontAwesomeIcon icon={faRotateRight} />}
         onClick={() => console.log("Redo action")}
         title="Redo"
         label="Redo"
       />
 
-      <ToolbarButton 
+      <ToolbarButton
         icon={<FontAwesomeIcon icon={faDownload} />}
         onClick={() => console.log("Save action")}
         title="Save"
         label="Save"
       />
 
-      <ToolbarButton 
+      <ToolbarButton
         icon={<FontAwesomeIcon icon={faUpload} />}
         onClick={() => console.log("Load action")}
         title="Load"

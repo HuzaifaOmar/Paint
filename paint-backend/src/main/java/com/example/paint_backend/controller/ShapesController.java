@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/shapes")
+@CrossOrigin(origins = "http://localhost:3000") // Allow CORS for this specific endpoint
 public class ShapesController {
 
     int shapeIdCounter = 1;
@@ -40,7 +41,7 @@ public class ShapesController {
 
         shape.DimensionCalculate();
         shapesList.add(shape);
-
+        System.out.println("returning shape");
         ShapeDTO response = new ShapeDTO(shape);
         return ResponseEntity.ok(response);
     }

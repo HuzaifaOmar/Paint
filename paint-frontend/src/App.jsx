@@ -6,26 +6,26 @@ import "./styles/main.css";
 
 function App() {
   const [selectedShape, setSelectedShape] = useState("freehand");
-  const [firstColor, setFirstColor] = useState("#000000");
-  const [secondColor, setSecondColor] = useState("#FFFFFF");
-  const [lineWidth, setLineWidth] = useState(1);
+  const [fillColor, setFillColor] = useState("#F0F0F0");
+  const [strokeColor, setStrokeColor] = useState("#000000");
+  const [lineWidth, setLineWidth] = useState(1.0);
   return (
     <div className="main-screen">
       <Toolbar
         selectedTool={selectedShape}
         setSelectedTool={setSelectedShape}
-        fillColor={firstColor}
-        setFillColor={setFirstColor}
-        strokeColor={secondColor}
-        setStrokeColor={setSecondColor}
+        fillColor={fillColor}
+        setFillColor={setFillColor}
+        strokeColor={strokeColor}
+        setStrokeColor={setStrokeColor}
         lineWidth={lineWidth}
         setLineWidth={setLineWidth}
       />
       <Canvas
         selectedShape={selectedShape}
-        firstColor={firstColor}
-        secondColor={secondColor}
-        width={lineWidth}
+        fillColor={fillColor}
+        strokeColor={strokeColor}
+        lineWidth={lineWidth}
       />
     </div>
   );
