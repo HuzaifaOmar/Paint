@@ -167,12 +167,15 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) =
   };
 
   const handleShapeClick = async(e) => {
-    setShapes(shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId))
-    await axios.put(
-      `${API_BASE_URL}/erase/${shapes[e.target.index].shapeId}`);
+    console.log(e.target);
+    if(eraserOn){
+      setShapes(shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId))
+      await axios.put(
+        `${API_BASE_URL}/erase/${shapes[e.target.index].shapeId}`);
+    }
   };
 
-  const renderShape = (shape, index) => {
+  const renderShape = (shape) => {
     const draggable = (selectedShape === "pointer"&&!eraserOn);
     const shapeProps = {
       key: shape.shapeId,
