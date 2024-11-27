@@ -136,11 +136,13 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
         xStart: pos.x,
         yStart: pos.y,
       };
-
+      console.log("updateRequest json", JSON.stringify(updateRequest));
       const response = await axios.put(
         `${API_BASE_URL}/update/${shape.shapeId}`,
         updateRequest
       );
+      console.log("api response data", response.data);
+      
       setShapes((prevShapes) => {
         const newShapes = [...prevShapes];
         const shapeIndex = newShapes.findIndex(
@@ -151,8 +153,6 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
           newShapes[shapeIndex] = {
             ...newShapes[shapeIndex],
             ...response.data.attributes,
-            xStart: pos.x,
-            yStart: pos.y,
           };
         }
         return newShapes;

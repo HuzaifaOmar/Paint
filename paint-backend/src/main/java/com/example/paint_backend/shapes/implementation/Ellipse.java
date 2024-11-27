@@ -18,6 +18,7 @@ public class Ellipse implements Shape {
     double radiusX;
     double radiusY;
 
+
     public Ellipse(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
         this.x = ((Number) attributes.get("xStart")).doubleValue();
@@ -25,6 +26,8 @@ public class Ellipse implements Shape {
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
+        this.xEnd=this.x;
+        this.yEnd=this.y;
     }
 
     @Override
