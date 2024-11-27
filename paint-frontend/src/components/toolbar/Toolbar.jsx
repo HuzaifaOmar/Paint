@@ -12,7 +12,7 @@ import {
   faRulerHorizontal,
   faSquare,
   faCircle,
-  faArrowPointer
+  faArrowPointer,
 } from "@fortawesome/free-solid-svg-icons";
 import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
@@ -71,11 +71,13 @@ const Toolbar = ({
         <div
           className="toolbar-dropdown-container"
           onClick={() => {
-            setIsDropdownOpen(!isDropdownOpen)
-            setIsLineWidthDropdownOpen(false)
+            setIsDropdownOpen(!isDropdownOpen);
+            setIsLineWidthDropdownOpen(false);
           }}
         >
-          <div className="toolbar-dropdown-selected">{getSelectedToolIcon()}</div>
+          <div className="toolbar-dropdown-selected">
+            {getSelectedToolIcon()}
+          </div>
           <FontAwesomeIcon
             icon={faCaretDown}
             className="toolbar-dropdown-toggle"
@@ -101,14 +103,12 @@ const Toolbar = ({
         <div
           className="toolbar-dropdown-container"
           onClick={() => {
-            setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen)
-            setIsDropdownOpen(false)
+            setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen);
+            setIsDropdownOpen(false);
           }}
         >
           <div className="toolbar-dropdown-selected">
-            <span
-              style={{ fontSize: lineWidth + 7, display: "flex" }}
-            >
+            <span style={{ fontSize: lineWidth + 7, display: "flex" }}>
               <FontAwesomeIcon icon={faCircle} />
             </span>
           </div>
@@ -185,10 +185,10 @@ const Toolbar = ({
       {/* Hide/Show Button */}
       <button
         className={`toolbar-toggle ${isToolbarHidden ? "hidden" : ""}`}
-        onClick={()=>{
-          setIsToolbarHidden(!isToolbarHidden)
-          setIsLineWidthDropdownOpen(false)
-          setIsDropdownOpen(false)
+        onClick={() => {
+          setIsToolbarHidden(!isToolbarHidden);
+          setIsLineWidthDropdownOpen(false);
+          setIsDropdownOpen(false);
         }}
       >
         <FontAwesomeIcon icon={isToolbarHidden ? faCaretDown : faCaretUp} />

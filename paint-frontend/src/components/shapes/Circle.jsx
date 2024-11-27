@@ -1,15 +1,15 @@
 import React from "react";
 import { Circle } from "react-konva";
 
-const CircleDraw = ({ shape, index }) => (
+const CircleDraw = ({ shape }) => (
   <Circle
-    key={index}
+    key={shape.shapeId}
     x={shape.x}
     y={shape.y}
     radius={shape.radius}
-    stroke={shape.firstColor}
-    strokeWidth={shape.lineWidth}
-    fill={shape.secondColor}
+    fill={shape.fill}
+    stroke={shape.stroke}
+    strokeWidth={shape.strokeWidth}
   />
 );
 

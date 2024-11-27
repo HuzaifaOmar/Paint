@@ -1,13 +1,13 @@
 import React from "react";
 import { Line } from "react-konva";
 
-const Triangle = ({ shape, index }) => (
+const Triangle = ({ shape }) => (
   <Line
-    key={index}
+    key={shape.shapeId}
     points={shape.points}
-    stroke={shape.firstColor}
-    strokeWidth={shape.lineWidth}
-    fill={shape.secondColor}
+    fill={shape.fill}
+    stroke={shape.stroke}
+    strokeWidth={shape.storkeWidth}
     closed
   />
 );

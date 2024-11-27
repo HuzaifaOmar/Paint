@@ -11,7 +11,7 @@ public class Ellipse implements Shape {
     double yEnd;
     double x;
     double y;
-    double lineWidth;
+    double strokeWidth;
     String fillColor;
     String strokeColor;
     int shapeId;
@@ -20,11 +20,11 @@ public class Ellipse implements Shape {
 
     public Ellipse(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
-        this.x = (double) attributes.get("xStart");
-        this.y = (double) attributes.get("yStart");
+        this.x = ((Number) attributes.get("xStart")).doubleValue();
+        this.y = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
-        this.lineWidth = (double) attributes.get("lineWidth");
+        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
     }
 
     @Override
@@ -59,6 +59,6 @@ public class Ellipse implements Shape {
                 "y", y,
                 "fill", fillColor,
                 "stroke", strokeColor,
-                "strokeWidth", lineWidth);
+                "strokeWidth", strokeWidth);
     }
 }

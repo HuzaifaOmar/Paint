@@ -7,34 +7,41 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Square implements Shape {
     int shapeId;
     double xEnd;
     double yEnd;
     double xStart;
     double yStart;
+    double x;
+    double y;
     String fillColor;
     String strokeColor;
-    double lineWidth;
-    double side;
+    double strokeWidth;
+    double side = 0;
 
     public Square(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
-        this.xEnd = (double) attributes.get("xEnd");
-        this.yEnd = (double) attributes.get("yEnd");
-        this.xStart = (double) attributes.get("xStart");
-        this.yStart = (double) attributes.get("yStart");
+        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
+        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
-        this.lineWidth = (int) attributes.get("lineWidth");
+        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
+        //! initially the square is just a point
+        this.xEnd = xStart;
+        this.yEnd = yStart;
     }
 
     @Override
     public void DimensionCalculate() {
-        double length = Math.abs(xEnd - xStart);
-        double width = Math.abs(yEnd - yStart);
-        this.side = Math.min(length, width);
+        this.side = Math.abs(Math.min(xEnd - xStart, yEnd - yStart));
+        if (xEnd < xStart || yEnd < yStart) {
+            x = xStart - this.side;
+            y = yStart - this.side;
+        } else {
+            x = Math.min(xStart, xEnd);
+            y = Math.min(yStart, yEnd);
+        }
     }
 
     @Override
@@ -55,11 +62,12 @@ public class Square implements Shape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return Map.of("side", this.side,
-                "x", this.xStart + this.side / 2,
-                "y", this.yStart + this.side / 2,
+        return Map.of(
+                "side", this.side,
+                "x", this.x,
+                "y", this.y,
                 "fill", this.fillColor,
                 "stroke", this.strokeColor,
-                "strokeWidth", this.lineWidth);
+                "strokeWidth", this.strokeWidth);
     }
 }

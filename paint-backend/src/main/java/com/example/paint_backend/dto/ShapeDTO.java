@@ -13,7 +13,7 @@ public class ShapeDTO {
     public ShapeDTO(Shape shape) {
         this.shapeId = shape.getShapeId();
         this.shapeType = shape.getShapeType();
-        this.attributes = shape.getAttributes();  // Shape attributes like position, dimensions, etc.
+        this.attributes = shape.getAttributes();
     }
 
     // Getters and setters

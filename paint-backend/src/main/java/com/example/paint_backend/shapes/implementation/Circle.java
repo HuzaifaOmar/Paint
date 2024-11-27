@@ -10,22 +10,24 @@ public class Circle implements Shape {
 
     double xEnd;
     double yEnd;
-    double xStart;
-    double yStart;
     double x;
     double y;
-    double lineWidth;
+    double strokeWidth;
     double radius;
     String fillColor;
     String strokeColor;
 
     public Circle(int shapeId, Map<String, Object> attributes) {
         this.shapeId = shapeId;
-        this.xStart = (double) attributes.get("xStart");
-        this.yStart = (double) attributes.get("yStart");
+        this.x = ((Number) attributes.get("xStart")).doubleValue();
+        this.y = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
-        this.lineWidth = (double) attributes.get("lineWidth");
+        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
+        //! initially the circle is just a point
+        this.xEnd = x;
+        this.yEnd = y;
+
     }
 
     @Override
@@ -34,15 +36,9 @@ public class Circle implements Shape {
         this.yEnd = yEnd;
     }
 
-    private Double calculateDiameter(double xStart, double yStart, double xEnd, double yEnd) {
-        return Math.sqrt((xEnd - xStart) * (xEnd - xStart) + (yEnd - yStart) * (yEnd - yStart));
-    }
-
     @Override
     public void DimensionCalculate() {
-        this.radius = calculateDiameter(xStart, yStart, xEnd, yEnd) / 2;
-        this.x = xStart + radius;
-        this.y = yStart + radius;
+        this.radius = Math.sqrt((x - xEnd) * (x - xEnd) + (y - yEnd) * (y - yEnd));
     }
 
     @Override
@@ -63,7 +59,7 @@ public class Circle implements Shape {
                 "y", y,
                 "fill", fillColor,
                 "stroke", strokeColor,
-                "strokeWidth", lineWidth);
+                "strokeWidth", strokeWidth);
     }
 }
 
