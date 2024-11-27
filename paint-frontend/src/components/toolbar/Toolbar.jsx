@@ -125,7 +125,7 @@ const Toolbar = ({
           />
           {isLineWidthDropdownOpen && (
             <ul className="toolbar-dropdown-list">
-              {[1, 3, 5, 7, 9].map((width) => (
+              {[2, 3, 5, 7, 9].map((width) => (
                 <li
                   key={width}
                   className="toolbar-dropdown-item"
