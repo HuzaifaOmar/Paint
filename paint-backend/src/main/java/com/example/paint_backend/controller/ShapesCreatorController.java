@@ -5,6 +5,8 @@ import com.example.paint_backend.dto.shape_creation_dto.ShapeFinalizeRequest;
 import com.example.paint_backend.dto.shape_creation_dto.ShapeRequest;
 import com.example.paint_backend.dto.shape_creation_dto.ShapeUpdateRequest;
 import com.example.paint_backend.service.ShapeCreationService;
+import com.example.paint_backend.shapes.Shape;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +45,16 @@ public class ShapesCreatorController {
         ShapeDTO finalizedShape = shapeService.finalizeShape(shapeId, request);
         return ResponseEntity.ok(finalizedShape);
     }
+
+    // @PutMapping("/erase/{shapeId}")
+    // public void eraseShape(@PathVariable int shapeId) {
+    //     System.out.println("new erase request");
+    //     try {
+    //         Shape shape = findShapeById(shapeId);
+    //         shapesList.remove(shape);
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //     }
+    // }
 
 }
