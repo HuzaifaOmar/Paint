@@ -12,15 +12,15 @@ import java.util.Map;
 
 public class ShapeFactory {
 
-    public Shape getShape(String shapeType, int shapeId, Map<String, Object> attributes) {
+    public Shape getShape(String shapeType, Map<String, Object> attributes) {
         return switch (shapeType.toLowerCase()) {
-            case "circle" -> new Circle(shapeId, attributes);
-            case "rectangle" -> new Rectangle(shapeId, attributes);
-            case "square" -> new Square(shapeId, attributes);
-            case "ellipse" -> new Ellipse(shapeId, attributes);
-            case "line" -> new Line(shapeId, attributes);
-            case "triangle" -> new Triangle(shapeId, attributes);
-            case "freehand" -> new FreeHandLine(shapeId, attributes);
+            case "circle" -> new Circle(attributes);
+            case "rectangle" -> new Rectangle(attributes);
+            case "square" -> new Square(attributes);
+            case "ellipse" -> new Ellipse(attributes);
+            case "line" -> new Line(attributes);
+            case "triangle" -> new Triangle(attributes);
+            case "freehand" -> new FreeHandLine(attributes);
             default -> throw new InvalidShapeTypeException("invalid shape type");
         };
     }

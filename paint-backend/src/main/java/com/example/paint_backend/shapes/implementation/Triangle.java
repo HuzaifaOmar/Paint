@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Triangle implements Shape {
-    int shapeId;
+    Long shapeId;
     double xStart;
     double yStart;
     Double xEnd;
@@ -18,8 +18,7 @@ public class Triangle implements Shape {
     String strokeColor;
     double strokeWidth;
 
-    public Triangle(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Triangle(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
@@ -60,9 +59,25 @@ public class Triangle implements Shape {
         this.strokeColor = strokeColor;
     }
 
+    //TODO: implement this
     @Override
-    public int getShapeId() {
+    public Double getX() {
+        return x;
+    }
+
+    @Override
+    public Double getY() {
+        return y;
+    }
+
+    @Override
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override

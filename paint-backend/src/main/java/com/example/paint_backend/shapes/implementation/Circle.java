@@ -5,19 +5,18 @@ import com.example.paint_backend.shapes.Shape;
 import java.util.Map;
 
 public class Circle implements Shape {
-    int shapeId;
+    Long shapeId;
 
-    double xEnd;
-    double yEnd;
-    double xStart;
-    double yStart;
-    double strokeWidth;
-    double radius;
-    String fillColor;
-    String strokeColor;
+    private double xEnd;
+    private double yEnd;
+    private double xStart;
+    private double yStart;
+    private final double strokeWidth;
+    private double radius;
+    private String fillColor;
+    private String strokeColor;
 
-    public Circle(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Circle(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
@@ -57,8 +56,23 @@ public class Circle implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Double getX() {
+        return xStart;
+    }
+
+    @Override
+    public Double getY() {
+        return yStart;
+    }
+
+    @Override
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override

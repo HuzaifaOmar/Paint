@@ -1,4 +1,4 @@
-package com.example.paint_backend.dto;
+package com.example.paint_backend.dto.shape_creation_dto;
 
 import java.util.Map;
 

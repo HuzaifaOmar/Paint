@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 public class FreeHandLine implements Shape {
-    int shapeId;
+    Long shapeId;
     List<Double> points;
     String fillColor;
     double strokeWidth;
 
-    public FreeHandLine(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public FreeHandLine(Map<String, Object> attributes) {
         this.fillColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
         this.points = new ArrayList<>(
@@ -26,11 +25,23 @@ public class FreeHandLine implements Shape {
 
     }
 
+    //TODO: implement moving for line or make another interface for Movable
+    @Override
+    public Double getXStart() {
+        return 0.0;
+    }
+
+    @Override
+    public Double getYStart() {
+        return 0.0;
+    }
+
     @Override
     public void setEndPoints(double xEnd, double yEnd) {
         this.points.add(xEnd);
         this.points.add(yEnd);
     }
+
     @Override
     public void setStartPoints(double xStart, double yStart) {
         return;
@@ -45,8 +56,13 @@ public class FreeHandLine implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override
