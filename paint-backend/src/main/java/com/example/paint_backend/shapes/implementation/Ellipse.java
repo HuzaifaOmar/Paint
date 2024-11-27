@@ -3,7 +3,6 @@ package com.example.paint_backend.shapes.implementation;
 import com.example.paint_backend.shapes.Shape;
 
 
-
 import java.util.Map;
 
 public class Ellipse implements Shape {
@@ -14,20 +13,19 @@ public class Ellipse implements Shape {
     double strokeWidth;
     String fillColor;
     String strokeColor;
-    int shapeId;
+    Long shapeId;
     double radiusX;
     double radiusY;
 
 
-    public Ellipse(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Ellipse(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        this.xEnd=this.xStart;
-        this.yEnd=this.yStart;
+        this.xEnd = this.xStart;
+        this.yEnd = this.yStart;
     }
 
     @Override
@@ -37,10 +35,21 @@ public class Ellipse implements Shape {
     }
 
     @Override
+    public Double getX() {
+        return xStart;
+    }
+
+    @Override
+    public Double getY() {
+        return yStart;
+    }
+
+    @Override
     public void setEndPoints(double xEnd, double yEnd) {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
     }
+
     @Override
     public void setStartPoints(double xStart, double yStart) {
         this.xStart = xStart;
@@ -56,8 +65,13 @@ public class Ellipse implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override

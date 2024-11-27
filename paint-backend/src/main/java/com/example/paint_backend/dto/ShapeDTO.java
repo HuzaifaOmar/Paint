@@ -5,7 +5,7 @@ import com.example.paint_backend.shapes.Shape;
 import java.util.Map;
 
 public class ShapeDTO {
-    private int shapeId;
+    private Long shapeId;
     private String shapeType;
     private Map<String, Object> attributes;
 
@@ -17,11 +17,11 @@ public class ShapeDTO {
     }
 
     // Getters and setters
-    public int getShapeId() {
+    public Long getShapeId() {
         return shapeId;
     }
 
-    public void setShapeId(int shapeId) {
+    public void setShapeId(Long shapeId) {
         this.shapeId = shapeId;
     }
 

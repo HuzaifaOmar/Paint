@@ -5,7 +5,7 @@ import com.example.paint_backend.shapes.Shape;
 import java.util.Map;
 
 public class Rectangle implements Shape {
-    int shapeId;
+    Long shapeId;
     double xEnd;
     double yEnd;
     double xStart;
@@ -18,8 +18,7 @@ public class Rectangle implements Shape {
     double height;
     double width;
 
-    public Rectangle(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Rectangle(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
@@ -49,6 +48,16 @@ public class Rectangle implements Shape {
     }
 
     @Override
+    public Double getX() {
+        return x;
+    }
+
+    @Override
+    public Double getY() {
+        return y;
+    }
+
+    @Override
     public void setEndPoints(double xEnd, double yEnd) {
         this.xEnd = xEnd;
         this.yEnd = yEnd;
@@ -69,8 +78,13 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override

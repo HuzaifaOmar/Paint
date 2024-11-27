@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class Line implements Shape {
 
-    int shapeId;
+    Long shapeId;
     Double xStart;
     Double yStart;
     Double xEnd;
@@ -17,8 +17,7 @@ public class Line implements Shape {
     String strokeColor;
     double strokeWidth;
 
-    public Line(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Line(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.strokeColor = (String) attributes.get("strokeColor");
@@ -28,6 +27,17 @@ public class Line implements Shape {
     @Override
     public void DimensionCalculate() {
 
+    }
+
+    //TODO: implement moving for line or make another interface for Movable
+    @Override
+    public Double getXStart() {
+        return 0.0;
+    }
+
+    @Override
+    public Double getYStart() {
+        return 0.0;
     }
 
     @Override
@@ -50,8 +60,13 @@ public class Line implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override

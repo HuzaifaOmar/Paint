@@ -5,7 +5,7 @@ import com.example.paint_backend.shapes.Shape;
 import java.util.Map;
 
 public class Square implements Shape {
-    int shapeId;
+    Long shapeId;
     double xEnd;
     double yEnd;
     double xStart;
@@ -17,8 +17,7 @@ public class Square implements Shape {
     double strokeWidth;
     double side = 0;
 
-    public Square(int shapeId, Map<String, Object> attributes) {
-        this.shapeId = shapeId;
+    public Square(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
         this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
@@ -62,8 +61,23 @@ public class Square implements Shape {
     }
 
     @Override
-    public int getShapeId() {
+    public Double getX() {
+        return x;
+    }
+
+    @Override
+    public Double getY() {
+        return y;
+    }
+
+    @Override
+    public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public void setShapeId(Long id) {
+        this.shapeId = id;
     }
 
     @Override
