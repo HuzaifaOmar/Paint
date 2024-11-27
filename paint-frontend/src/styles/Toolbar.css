@@ -2,15 +2,51 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 35px;
-  width: 100vw;
+  height: 50px;
+  width: 50%;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: fixed;
+  top: 0;
+  transition: transform 0.3s ease;
+  z-index: 1;
 }
+
+.toolbar.hidden {
+  transform: translateY(-110%);
+}
+.toolbar-toggle.hidden {
+  transform: translate(-50%, -225%);
+}
+
+.toolbar-toggle {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.toolbar-toggle:hover {
+  background-color: #e0e0e0;
+}
+
+/* Existing styles remain the same */
 .toolbar-dropdown-container {
   position: relative;
   cursor: pointer;

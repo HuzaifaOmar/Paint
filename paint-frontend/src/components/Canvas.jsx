@@ -149,7 +149,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth }) => {
     <div className="canvas-container">
       <Stage
         width={window.innerWidth}
-        height={window.innerHeight - 47}
+        height={window.innerHeight}
         ref={stageRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
