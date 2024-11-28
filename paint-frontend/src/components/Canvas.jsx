@@ -15,11 +15,14 @@ import CircleDraw from "./shapes/Circle.jsx";
 const API_BASE_URL = "http://localhost:8080/api/shapes";
 
 const Canvas = ({
-  selectedShape,
+  selectedTool,
   fillColor,
   strokeColor,
   lineWidth,
   eraserOn,
+  setFillColor,
+  setStrokeColor,
+  setLineWidth
 }) => {
   const stageRef = useRef();
   const [dots] = useState(() =>
@@ -31,12 +34,15 @@ const Canvas = ({
   const startX = useRef(0);
   const startY = useRef(0);
   const currentShapeId = useRef(null);
+  const [selectedShap,setSelectedShape]=useState(null)
 
   const handleMouseDown = async (e) => {
     if (eraserOn) return;
     else if (selectedShape === ShapeType.POINTER) {
+
       if (e.target === stageRef.current) {
         setSelectedNode(null);
+        setSelectedShape(null)
       }
       return;
     }
@@ -48,17 +54,17 @@ const Canvas = ({
 
     try {
       const shapeRequest = {
-        shapeType: selectedShape,
+        shapeType: selectedTool,
         attributes: {
           xStart: pos.x,
           yStart: pos.y,
           fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
-            selectedShape
+            selectedTool
           )
             ? fillColor
             : fillColor + "6F",
           strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
-            selectedShape
+            selectedTool
           )
             ? strokeColor
             : strokeColor + "6F",
@@ -72,7 +78,7 @@ const Canvas = ({
       setShapes((prevShapes) => [
         ...prevShapes,
         {
-          type: selectedShape,
+          type: selectedTool,
           shapeId: response.data.shapeId,
           ...response.data.attributes,
         },
@@ -86,7 +92,7 @@ const Canvas = ({
     if (
       !isDrawing.current ||
       !currentShapeId.current ||
-      selectedShape === ShapeType.POINTER ||
+      selectedTool === ShapeType.POINTER ||
       eraserOn
     )
       return;
@@ -126,7 +132,7 @@ const Canvas = ({
   const handleMouseUp = async () => {
     if (
       !currentShapeId.current ||
-      selectedShape === ShapeType.POINTER ||
+      selectedTool === ShapeType.POINTER ||
       eraserOn
     )
       return;
@@ -249,11 +255,24 @@ const Canvas = ({
       );
     } else if (selectedShape === ShapeType.POINTER) {
       setSelectedNode(e.target);
+      setFillColor(shapes[e.target.index].fill)
+      setStrokeColor(shapes[e.target.index].stroke)
+      setLineWidth(shapes[e.target.index].strokeWidth)
+      setSelectedShape(shapes[e.target.index])
     }
   };
+  useEffect(()=>{
+    if(selectedShap!==null){
+      console.log(fillColor);
+      console.log(selectedShap)
+      selectedShap.fill=fillColor
+      selectedShap.stroke=strokeColor
+      selectedShap.strokeWidth=lineWidth
+    }
+  },[fillColor,strokeColor,lineWidth,selectedShap])  
 
   const renderShape = (shape) => {
-    const draggable = selectedShape === ShapeType.POINTER && !eraserOn;
+    const draggable = selectedTool === ShapeType.POINTER && !eraserOn;
     const shapeProps = {
       shape: shape,
       draggable: draggable,
