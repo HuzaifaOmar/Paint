@@ -21,9 +21,9 @@ public class Ellipse extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double x, double y) {
-        this.xStart = x;
-        this.yStart = y;
+    public void moveTo(double newX, double newY) {
+        this.xStart = newX;
+        this.yStart = newY;
     }
 
     @Override

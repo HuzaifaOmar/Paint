@@ -33,9 +33,9 @@ public class Rectangle extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public void moveTo(double newX, double newY) {
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override

@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 @Getter
 public class MoveRequest {
-    @JsonProperty("deltaX")
-    private Double deltaX;
+    @JsonProperty("x")
+    private Double x;
 
-    @JsonProperty("deltaY")
-    private Double deltaY;
+    @JsonProperty("y")
+    private Double y;
 
 }

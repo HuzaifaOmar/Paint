@@ -8,6 +8,8 @@ import com.example.paint_backend.shapes.AbstractShape;
 
 public class Triangle extends AbstractShape {
     private List<Double> points;
+    private Double x;
+    private Double y;
 
     public Triangle(Map<String, Object> attributes) {
         super(attributes);
@@ -18,8 +20,7 @@ public class Triangle extends AbstractShape {
         points = new ArrayList<>();
         points.add(this.xStart);
         points.add(this.yStart);
-        if (this.xEnd == null || this.yEnd == null)
-            return;
+        if (this.xEnd == null || this.yEnd == null) return;
         points.add(this.xEnd);
         points.add(this.yStart);
         points.add((this.xEnd + this.xStart) / 2);
@@ -27,14 +28,9 @@ public class Triangle extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double x, double y) {
-        double xDiff = x - this.xStart;
-        double yDiff = y - this.yStart;
-
-        for (int i = 0; i < points.size(); i += 2) {
-            points.set(i, points.get(i) + xDiff);
-            points.set(i + 1, points.get(i + 1) + yDiff);
-        }
+    public void moveTo(double newX, double newY) {
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -54,10 +50,19 @@ public class Triangle extends AbstractShape {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return Map.of(
-                "points", this.points,
+        Map<String, Object> attributes = new java.util.HashMap<>(Map.of(
+                "points", points,
                 "fill", this.fillColor,
-                "stroke", this.strokeColor,
-                "strokeWidth", this.strokeWidth);
+                "stroke", strokeColor,
+                "strokeWidth", strokeWidth
+        ));
+
+        if (x != null) {
+            attributes.put("x", x);
+        }
+        if (y != null) {
+            attributes.put("y", y);
+        }
+        return attributes;
     }
 }
