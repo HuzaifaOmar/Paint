@@ -1,5 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Line, Stage, Layer } from "react-konva";
+import React, { useRef, useState } from "react";
+import { Stage, Layer } from "react-konva";
+import { ShapeType } from "../constants/shapes";
+import { generateDottedBackground } from "../utils/backgroundGenerator";
+
 import axios from "axios";
 import Freehand from "./shapes/Freehand.jsx";
 import Rectangle from "./shapes/Rectangle.jsx";
@@ -19,7 +22,9 @@ const Canvas = ({
   eraserOn,
 }) => {
   const stageRef = useRef();
-  const [dots, setDots] = useState([]);
+  const [dots] = useState(() =>
+    generateDottedBackground(window.innerWidth, window.innerHeight)
+  );
   const [shapes, setShapes] = useState([]);
   const isDrawing = useRef(false);
   const startX = useRef(0);
@@ -27,7 +32,7 @@ const Canvas = ({
   const currentShapeId = useRef(null);
 
   const handleMouseDown = async () => {
-    if (selectedShape === "pointer" || eraserOn) return;
+    if (selectedShape === ShapeType.POINTER || eraserOn) return;
     console.log("in handleMouseDown fun");
     const pos = stageRef.current.getPointerPosition();
     startX.current = pos.x;
@@ -40,14 +45,16 @@ const Canvas = ({
         attributes: {
           xStart: pos.x,
           yStart: pos.y,
-          fillColor:
-            selectedShape === "line" || selectedShape === "freehand"
-              ? fillColor
-              : fillColor + "6F",
-          strokeColor:
-            selectedShape === "line" || selectedShape === "freehand"
-              ? strokeColor
-              : strokeColor + "6F",
+          fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
+            selectedShape
+          )
+            ? fillColor
+            : fillColor + "6F",
+          strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
+            selectedShape
+          )
+            ? strokeColor
+            : strokeColor + "6F",
           strokeWidth: lineWidth,
         },
       };
@@ -72,7 +79,7 @@ const Canvas = ({
     if (
       !isDrawing.current ||
       !currentShapeId.current ||
-      selectedShape === "pointer" ||
+      selectedShape === ShapeType.POINTER ||
       eraserOn
     )
       return;
@@ -110,7 +117,11 @@ const Canvas = ({
   };
 
   const handleMouseUp = async () => {
-    if (!currentShapeId.current || selectedShape === "pointer" || eraserOn)
+    if (
+      !currentShapeId.current ||
+      selectedShape === ShapeType.POINTER ||
+      eraserOn
+    )
       return;
     console.log("in handleMouseUp fun");
     try {
@@ -197,9 +208,8 @@ const Canvas = ({
   };
 
   const renderShape = (shape) => {
-    const draggable = selectedShape === "pointer" && !eraserOn;
+    const draggable = selectedShape === ShapeType.POINTER && !eraserOn;
     const shapeProps = {
-      key: shape.shapeId,
       shape: shape,
       draggable: draggable,
       onDragEnd: (e) => handleDragEnd(e, shape),
@@ -209,51 +219,24 @@ const Canvas = ({
     };
 
     switch (shape.type) {
-      case "freehand":
+      case ShapeType.FREEHAND:
         return <Freehand {...shapeProps} />;
-      case "line":
+      case ShapeType.LINE:
         return <LineDraw {...shapeProps} />;
-      case "rectangle":
+      case ShapeType.RECTANGLE:
         return <Rectangle {...shapeProps} />;
-      case "square":
+      case ShapeType.SQUARE:
         return <Square {...shapeProps} />;
-      case "circle":
+      case ShapeType.CIRCLE:
         return <CircleDraw {...shapeProps} />;
-      case "ellipse":
+      case ShapeType.ELLIPSE:
         return <EllipseDraw {...shapeProps} />;
-      case "triangle":
+      case ShapeType.TRIANGLE:
         return <Triangle {...shapeProps} />;
       default:
         return null;
     }
   };
-
-  useEffect(() => {
-    const stageWidth = window.innerWidth;
-    const stageHeight = window.innerHeight;
-
-    const dotSpacing = 50;
-    const dotRadius = 1.5;
-
-    const dottedPattern = [];
-
-    for (let x = 7; x < stageWidth; x += dotSpacing) {
-      for (let y = 7; y < stageHeight; y += dotSpacing) {
-        dottedPattern.push([x, y]);
-      }
-    }
-
-    const newDots = dottedPattern.map((coord, index) => (
-      <Line
-        key={`dot-${index}`}
-        points={[coord[0], coord[1], coord[0] + dotRadius, coord[1]]}
-        stroke="gray"
-        strokeWidth={1.5}
-      />
-    ));
-
-    setDots(newDots);
-  }, []);
 
   return (
     <div className="canvas-container">
