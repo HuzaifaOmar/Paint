@@ -1,13 +1,14 @@
-
 package com.example.paint_backend.dto.command_requests;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class MoveRequest {
+@Setter
+public class TransformRequest {
     private Double x;
     private Double y;
+    private Double scaleX;
+    private Double scaleY;
+    private Double rotation;
 }

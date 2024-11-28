@@ -5,11 +5,11 @@ import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
 
 
-public class EarseShapesCommand implements ShapeCommand  {
+public class EraseShapesCommand implements ShapeCommand  {
     private final Shape shape;
     private final ShapeRepository shapeRepository;
 
-    public EarseShapesCommand(Shape shape , ShapeRepository shapeRepository) {
+    public EraseShapesCommand(Shape shape , ShapeRepository shapeRepository) {
         this.shape = shape;
         this.shapeRepository = shapeRepository;
     }

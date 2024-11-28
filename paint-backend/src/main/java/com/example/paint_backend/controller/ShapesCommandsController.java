@@ -1,5 +1,6 @@
 package com.example.paint_backend.controller;
 
+import com.example.paint_backend.dto.command_requests.TransformRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,12 +32,21 @@ public class ShapesCommandsController {
         ShapeDTO movedShape = shapeService.moveShape(shapeId, request);
         return ResponseEntity.ok(movedShape);
     }
+
+    @PutMapping("{shapeId}/transform")
+    public ResponseEntity<ShapeDTO> transformShape(@PathVariable Long shapeId, @RequestBody TransformRequest request) {
+        System.out.println("Received transform request for shape ID: " + shapeId);
+        ShapeDTO transformedShape = shapeService.transformShape(shapeId, request);
+        return ResponseEntity.ok(transformedShape);
+    }
+
     @DeleteMapping("{shapeId}/erase")
     public ResponseEntity<String> eraseShape(@PathVariable Long shapeId) {
         System.out.println("Received erase request for shape ID: " + shapeId);
         String erasedShape = shapeService.eraseShape(shapeId);
         return ResponseEntity.ok(erasedShape);
     }
+
 
     @PutMapping("{shapeId}/recolor")
     public ResponseEntity<ShapeDTO> recolorShape(@PathVariable Long shapeId, @RequestBody String newFillColor) {

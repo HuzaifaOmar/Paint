@@ -1,27 +1,14 @@
 package com.example.paint_backend.dto.shape_creation_request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ShapeUpdateRequest {
     @JsonProperty("xEnd")
     private Double xEnd;
-
     @JsonProperty("yEnd")
     private Double yEnd;
-
-    public Double getXEnd() {
-        return xEnd;
-    }
-
-    public void setXEnd(Double xEnd) {
-        this.xEnd = xEnd;
-    }
-
-    public Double getYEnd() {
-        return yEnd;
-    }
-
-    public void setYEnd(Double yEnd) {
-        this.yEnd = yEnd;
-    }
 }

@@ -1,29 +1,83 @@
 package com.example.paint_backend.shapes;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
-public interface Shape {
-    void dimensionCalculate();
+public abstract class Shape {
+    @Setter
+    @Getter
+    protected Long shapeId;
+    @Setter
+    @Getter
+    protected String fillColor;
+    @Getter
+    @Setter
+    protected String strokeColor;
+    protected Double strokeWidth;
+    protected Double xStart;
+    protected Double yStart;
+    protected Double xEnd;
+    protected Double yEnd;
+    protected Double x;
+    protected Double y;
+    @Getter
+    protected Double scaleX = 1.0;
+    @Getter
+    protected Double scaleY = 1.0;
+    @Getter
+    protected Double rotation = 0.0;
 
-    Double getX();
+    // Common constructor for all shapes
+    public Shape(Map<String, Object> attributes) {
+        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
+        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
+        this.fillColor = (String) attributes.get("fillColor");
+        this.strokeColor = (String) attributes.get("strokeColor");
+        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
 
-    Double getY();
+        //! Initialize end points to start points by default
+        this.xEnd = this.xStart;
+        this.yEnd = this.yStart;
+    }
 
-    void setEndPoints(double xEnd, double yEnd);
+    // Default implementations for common methods
+    public void moveTo(Double deltaX, Double deltaY) {
+        this.xStart += deltaX;
+        this.yStart += deltaY;
+        dimensionCalculate();
+    }
 
-    void setFillColor(String fillColor);
+    public void transform(Double x, Double y, Double scaleX, Double scaleY, Double rotation) {
+        this.x = x;
+        this.y = y;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        this.rotation = rotation;
+    }
 
-    void setStrokeColor(String Stroke);
-    void moveTo(double x, double y);
-    Long getShapeId();
+    public void setEndPoints(Double xEnd, Double yEnd) {
+        this.xEnd = xEnd;
+        this.yEnd = yEnd;
+    }
 
-    String getFillColor();
+    public abstract void dimensionCalculate();
 
-    String getStrokeColor();
+    public Double getX() {
+        return xStart;
+    }
 
-    void setShapeId(Long id);
+    public Double getY() {
+        return yStart;
+    }
 
-    String getShapeType();
+    public String getShapeType() {
+        return "";
+    }
 
-    Map<String, Object> getAttributes();
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 }

@@ -8,6 +8,7 @@ const LineDraw = ({
   onClick,
   x,
   y,
+  onTransformEnd,
 }) => (
   <Line
     {...(x !== undefined && { x })} // Only add x if it's provided
@@ -20,6 +21,7 @@ const LineDraw = ({
     lineJoin="round"
     draggable={draggable}
     onDragEnd={onDragEnd}
+    onTransformEnd={onTransformEnd}
     onClick={onClick}
   />
 );

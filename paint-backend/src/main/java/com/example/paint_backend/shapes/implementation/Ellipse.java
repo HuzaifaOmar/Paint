@@ -4,11 +4,11 @@ import java.util.Map;
 
 import java.util.Map;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
-public class Ellipse extends AbstractShape {
-    private double radiusX;
-    private double radiusY;
+public class Ellipse extends Shape {
+    private Double radiusX;
+    private Double radiusY;
 
     public Ellipse(Map<String, Object> attributes) {
         super(attributes);
@@ -21,7 +21,7 @@ public class Ellipse extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.xStart = newX;
         this.yStart = newY;
     }
@@ -38,6 +38,9 @@ public class Ellipse extends AbstractShape {
                 "radiusY", radiusY,
                 "x", xStart,
                 "y", yStart,
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "fill", fillColor,
                 "stroke", strokeColor,
                 "strokeWidth", strokeWidth);

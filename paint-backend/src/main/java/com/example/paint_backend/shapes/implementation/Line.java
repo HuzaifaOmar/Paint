@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
 //TODO: implement moving for line or make another interface for Movable
-public class Line extends AbstractShape {
+public class Line extends Shape {
     private Double x;
     private Double y;
 
@@ -21,7 +21,7 @@ public class Line extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.x = newX;
         this.y = newY;
     }
@@ -40,6 +40,9 @@ public class Line extends AbstractShape {
                 .toList();
 
         Map<String, Object> attributes = new java.util.HashMap<>(Map.of(
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "points", points,
                 "stroke", strokeColor,
                 "strokeWidth", strokeWidth
