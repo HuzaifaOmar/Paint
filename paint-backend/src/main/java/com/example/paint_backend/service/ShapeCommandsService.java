@@ -11,6 +11,7 @@ import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.exception.ShapeNotFoundException;
 import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
+
 @Service
 public class ShapeCommandsService {
 
@@ -24,7 +25,7 @@ public class ShapeCommandsService {
 
     public ShapeDTO moveShape(Long shapeId, MoveRequest request) {
         Shape shape = findShapeById(shapeId);
-        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shape , request.getXStart(), request.getYStart());
+        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shape, request.getX(), request.getY());
         moveShapeCommand.execute();
         commandHistory.push(moveShapeCommand);
         shapeRepository.update(shape);
@@ -39,9 +40,9 @@ public class ShapeCommandsService {
         return new ShapeDTO(shape);
     }
 
-    public String  eraseShape(Long shapeId) {
+    public String eraseShape(Long shapeId) {
         Shape shape = findShapeById(shapeId);
-        EarseShapesCommand eraseShapeCommand = new EarseShapesCommand(shape , shapeRepository);
+        EarseShapesCommand eraseShapeCommand = new EarseShapesCommand(shape, shapeRepository);
         commandHistory.push(eraseShapeCommand);
         return "Shape erased successfully";
     }

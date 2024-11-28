@@ -28,9 +28,9 @@ public abstract class AbstractShape implements Shape {
 
     // Default implementations for common methods
     @Override
-    public void moveTo(double x, double y) {
-        this.xStart = x;
-        this.yStart = y;
+    public void moveTo(double deltaX, double deltaY) {
+        this.xStart += deltaX;
+        this.yStart += deltaY;
         dimensionCalculate();
     }
 

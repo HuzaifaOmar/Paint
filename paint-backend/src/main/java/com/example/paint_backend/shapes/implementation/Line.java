@@ -8,6 +8,9 @@ import com.example.paint_backend.shapes.AbstractShape;
 
 //TODO: implement moving for line or make another interface for Movable
 public class Line extends AbstractShape {
+    private Double x;
+    private Double y;
+
     public Line(Map<String, Object> attributes) {
         super(attributes);
     }
@@ -18,15 +21,9 @@ public class Line extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double x, double y) {
-        double xDiff = x - this.xStart;
-        double yDiff = y - this.yStart;
-
-        this.xStart = x;
-        this.yStart = y;
-
-        this.xEnd += xDiff;
-        this.yEnd += yDiff;
+    public void moveTo(double newX, double newY) {
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -42,9 +39,18 @@ public class Line extends AbstractShape {
                         this.yEnd == null ? this.yStart : yEnd)
                 .toList();
 
-        return Map.of(
+        Map<String, Object> attributes = new java.util.HashMap<>(Map.of(
                 "points", points,
                 "stroke", strokeColor,
-                "strokeWidth", strokeWidth);
+                "strokeWidth", strokeWidth
+        ));
+
+        if (x != null) {
+            attributes.put("x", x);
+        }
+        if (y != null) {
+            attributes.put("y", y);
+        }
+        return attributes;
     }
 }

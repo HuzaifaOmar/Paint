@@ -149,22 +149,12 @@ const Canvas = ({
   const handleDragEnd = async (e, shape) => {
     if (eraserOn) return;
     console.log("in handleDragEnd fun");
-    console.log("shape", shape);
 
-    const pos =
-      e.target.attrs && e.target.attrs.points
-        ? {
-            x: e.target.attrs.points[0] + e.target.x(),
-            y: e.target.attrs.points[1] + e.target.y(),
-          }
-        : {
-            x: e.target.attrs.x,
-            y: e.target.attrs.y,
-          };
+    const pos = e.target.position();
     try {
       const moveRequest = {
-        xStart: pos.x,
-        yStart: pos.y,
+        x: pos.x,
+        y: pos.y,
       };
       console.log("moveRequest json", JSON.stringify(moveRequest));
       const response = await axios.put(
@@ -172,6 +162,7 @@ const Canvas = ({
         moveRequest
       );
       console.log("move response", response.data);
+      console.log("shape before move", shape);
 
       setShapes((prevShapes) => {
         const newShapes = [...prevShapes];
@@ -184,6 +175,7 @@ const Canvas = ({
             ...newShapes[shapeIndex],
             ...response.data.attributes,
           };
+          console.log("shape after move", newShapes[shapeIndex]);
         }
         return newShapes;
       });
@@ -212,6 +204,8 @@ const Canvas = ({
       draggable: draggable,
       onDragEnd: (e) => handleDragEnd(e, shape),
       onClick: (e) => handleShapeClick(e),
+      ...(shape.x !== undefined && { x: shape.x }), // Conditionally add x if it exists
+      ...(shape.y !== undefined && { y: shape.y }), // Conditionally add y if it exists
     };
 
     switch (shape.type) {

@@ -5,21 +5,21 @@ import com.example.paint_backend.shapes.Shape;
 
 public class MoveShapeCommand implements ShapeCommand {
     private final Shape shape;
-    private Double oldX;
-    private Double oldY;
     private final Double newX;
     private final Double newY;
+    private final Double oldX;
+    private final Double oldY;
 
     public MoveShapeCommand(Shape shape, Double newX, Double newY) {
         this.shape = shape;
         this.newX = newX;
         this.newY = newY;
+        this.oldX = shape.getX();
+        this.oldY = shape.getY();
     }
 
     @Override
     public void execute() {
-        oldX = shape.getX();
-        oldY = shape.getY();
         shape.moveTo(newX, newY);
     }
 

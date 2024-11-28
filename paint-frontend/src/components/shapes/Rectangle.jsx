@@ -1,7 +1,7 @@
 import React from "react";
 import { Rect } from "react-konva";
 
-const Rectangle = ({ shape, draggable, onDragEnd,onClick }) => (
+const Rectangle = ({ shape, draggable, onDragEnd, onClick }) => (
   <Rect
     key={shape.shapeId}
     x={shape.x}
