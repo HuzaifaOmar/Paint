@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer,Transformer } from "react-konva";
 import { ShapeType } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
 
@@ -30,6 +30,7 @@ const Canvas = ({
   const startX = useRef(0);
   const startY = useRef(0);
   const currentShapeId = useRef(null);
+
 
   const handleMouseDown = async () => {
     if (selectedShape === ShapeType.POINTER || eraserOn) return;
@@ -194,9 +195,9 @@ const Canvas = ({
       console.error("Error updating shape position:", error);
     }
   };
-
+  // const [selectedId,setSelectedId]=useState(null);
+  const [selectedNode, setSelectedNode] = useState(null); 
   const handleShapeClick = async (e) => {
-    console.log("in handleShapeClick, target: ", e.target);
     if (eraserOn) {
       setShapes(
         shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId)
@@ -204,6 +205,9 @@ const Canvas = ({
       await axios.delete(
         `${API_BASE_URL}/${shapes[e.target.index].shapeId}/erase`
       );
+    }
+    else if (selectedShape === "pointer") {
+      setSelectedNode(e.target);
     }
   };
 
@@ -238,6 +242,8 @@ const Canvas = ({
     }
   };
 
+
+
   return (
     <div className="canvas-container">
       <Stage
@@ -249,7 +255,15 @@ const Canvas = ({
         onMouseUp={handleMouseUp}
       >
         <Layer>{dots}</Layer>
-        <Layer>{shapes.map((shape, i) => renderShape(shape, i))}</Layer>
+        <Layer>{shapes.map((shape, i) => renderShape(shape, i))}
+          {/* Transformer */}
+
+          {selectedNode && (
+          <Transformer
+            nodes={[selectedNode]}
+          />
+        )}
+        </Layer>
       </Stage>
     </div>
   );
