@@ -26,14 +26,23 @@ const Canvas = ({
     generateDottedBackground(window.innerWidth, window.innerHeight)
   );
   const [shapes, setShapes] = useState([]);
+  const [selectedNode, setSelectedNode] = useState(null); 
   const isDrawing = useRef(false);
   const startX = useRef(0);
   const startY = useRef(0);
   const currentShapeId = useRef(null);
 
 
-  const handleMouseDown = async () => {
-    if (selectedShape === ShapeType.POINTER || eraserOn) return;
+  const handleMouseDown = async (e) => {
+    
+    if(eraserOn)return
+
+    else if (selectedShape === ShapeType.POINTER){
+      if (e.target === stageRef.current) {
+        setSelectedNode(null);
+      }
+      return
+    }
     console.log("in handleMouseDown fun");
     const pos = stageRef.current.getPointerPosition();
     startX.current = pos.x;
@@ -196,9 +205,10 @@ const Canvas = ({
     }
   };
   // const [selectedId,setSelectedId]=useState(null);
-  const [selectedNode, setSelectedNode] = useState(null); 
+  
   const handleShapeClick = async (e) => {
     if (eraserOn) {
+      setSelectedNode(null)
       setShapes(
         shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId)
       );
@@ -206,7 +216,7 @@ const Canvas = ({
         `${API_BASE_URL}/${shapes[e.target.index].shapeId}/erase`
       );
     }
-    else if (selectedShape === "pointer") {
+    else if (selectedShape === ShapeType.POINTER ) {
       setSelectedNode(e.target);
     }
   };
