@@ -3,32 +3,25 @@ package com.example.paint_backend.shapes;
 import java.util.Map;
 
 public interface Shape {
-    public void DimensionCalculate();
+    void dimensionCalculate();
 
-    public Double getX();
+    Double getX();
 
-    public Double getY();
+    Double getY();
 
-<<<<<<<<<<<<<<  ✨ Codeium Command ⭐ >>>>>>>>>>>>>>>>
-    /**
-     * Sets the starting points of the shape.
-     *
-     * @param xStart the x-coordinate of the starting point
-     * @param yStart the y-coordinate of the starting point
-     */
+    void setEndPoints(double xEnd, double yEnd);
 
-<<<<<<<  0d25f13f-fc20-4adc-9dd9-273724b88fc1  >>>>>>>
-    public void setStartPoints(double xStart, double yStart);
+    void setFillColor(String fillColor);
 
-    public void setEndPoints(double xEnd, double yEnd);
+    void setStrokeColor(String Stroke);
+    void moveTo(double x, double y);
+    Long getShapeId();
 
-    public void setFillColor(String fillColor);
+    String getFillColor();
 
-    public void setStrokeColor(String Stroke);
+    String getStrokeColor();
 
-    public Long getShapeId();
-
-    public void setShapeId(Long id);
+    void setShapeId(Long id);
 
     String getShapeType();
 
