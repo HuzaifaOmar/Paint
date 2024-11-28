@@ -1,7 +1,13 @@
 import React from "react";
 import { Ellipse } from "react-konva";
 
-const EllipseDraw = ({ shape, draggable, onDragEnd, onClick}) => (
+const EllipseDraw = ({
+  shape,
+  draggable,
+  onDragEnd,
+  onClick,
+  onTransformEnd,
+}) => (
   <Ellipse
     key={shape.shapeId}
     x={shape.x}
@@ -13,6 +19,7 @@ const EllipseDraw = ({ shape, draggable, onDragEnd, onClick}) => (
     strokeWidth={shape.strokeWidth}
     draggable={draggable}
     onDragEnd={onDragEnd}
+    onTransformEnd={onTransformEnd}
     onClick={onClick}
   />
 );

@@ -1,7 +1,15 @@
 import React from "react";
 import { Line } from "react-konva";
 
-const Freehand = ({ shape, draggable, onDragEnd, onClick, x, y }) => (
+const Freehand = ({
+  shape,
+  draggable,
+  onDragEnd,
+  onClick,
+  x,
+  y,
+  onTransformEnd,
+}) => (
   <Line
     {...(x !== undefined && { x })} // Only add x if it's provided
     {...(y !== undefined && { y })} // Only add y if it's provided
@@ -14,6 +22,7 @@ const Freehand = ({ shape, draggable, onDragEnd, onClick, x, y }) => (
     lineJoin="round"
     draggable={draggable}
     onDragEnd={onDragEnd}
+    onTransformEnd={onTransformEnd}
     onClick={onClick}
   />
 );

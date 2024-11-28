@@ -2,12 +2,12 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
-public class Square extends AbstractShape {
-    private double x;
-    private double y;
-    private double side = 0;
+public class Square extends Shape {
+    private Double x;
+    private Double y;
+    private Double side = 0.0;
 
     public Square(Map<String, Object> attributes) {
         super(attributes);
@@ -26,7 +26,7 @@ public class Square extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.x = newX;
         this.y = newY;
     }
@@ -52,6 +52,9 @@ public class Square extends AbstractShape {
                 "side", this.side,
                 "x", this.x,
                 "y", this.y,
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "fill", this.fillColor,
                 "stroke", this.strokeColor,
                 "strokeWidth", this.strokeWidth);

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
-public class FreeHandLine extends AbstractShape {
+public class FreeHandLine extends Shape {
     private final List<Double> points;
     private Double x;
     private Double y;
@@ -22,13 +22,13 @@ public class FreeHandLine extends AbstractShape {
     }
 
     @Override
-    public void setEndPoints(double xEnd, double yEnd) {
+    public void setEndPoints(Double xEnd, Double yEnd) {
         this.points.add(xEnd);
         this.points.add(yEnd);
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.x = newX;
         this.y = newY;
     }
@@ -51,6 +51,9 @@ public class FreeHandLine extends AbstractShape {
     @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> attributes = new java.util.HashMap<>(Map.of(
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "points", points,
                 "stroke", this.fillColor,
                 "strokeWidth", strokeWidth

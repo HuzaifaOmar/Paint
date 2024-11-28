@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Stage, Layer,Transformer } from "react-konva";
+import { Stage, Layer, Transformer } from "react-konva";
 import { ShapeType } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
 
@@ -26,22 +26,19 @@ const Canvas = ({
     generateDottedBackground(window.innerWidth, window.innerHeight)
   );
   const [shapes, setShapes] = useState([]);
-  const [selectedNode, setSelectedNode] = useState(null); 
+  const [selectedNode, setSelectedNode] = useState(null);
   const isDrawing = useRef(false);
   const startX = useRef(0);
   const startY = useRef(0);
   const currentShapeId = useRef(null);
 
-
   const handleMouseDown = async (e) => {
-    
-    if(eraserOn)return
-
-    else if (selectedShape === ShapeType.POINTER){
+    if (eraserOn) return;
+    else if (selectedShape === ShapeType.POINTER) {
       if (e.target === stageRef.current) {
         setSelectedNode(null);
       }
-      return
+      return;
     }
     console.log("in handleMouseDown fun");
     const pos = stageRef.current.getPointerPosition();
@@ -204,19 +201,53 @@ const Canvas = ({
       console.error("Error updating shape position:", error);
     }
   };
-  // const [selectedId,setSelectedId]=useState(null);
-  
+  const handleTransformEnd = async (e, shape) => {
+    console.log("in handleTransformEnd fun");
+    console.log("e", e);
+    const attr = e.target.attrs;
+    console.log("shape", shape);
+    try {
+      const transformRequest = {
+        x: attr.x,
+        y: attr.y,
+        scaleX: attr.scaleX,
+        scaleY: attr.scaleY,
+        rotation: attr.rotation,
+      };
+      const response = await axios.put(
+        `${API_BASE_URL}/${shape.shapeId}/transform`,
+        transformRequest
+      );
+      console.log("transform response", response.data);
+      setShapes((prevShapes) => {
+        const newShapes = [...prevShapes];
+        const shapeIndex = newShapes.findIndex(
+          (s) => s.shapeId === shape.shapeId
+        );
+
+        if (shapeIndex !== -1) {
+          newShapes[shapeIndex] = {
+            ...newShapes[shapeIndex],
+            ...response.data.attributes,
+          };
+        }
+        return newShapes;
+      });
+    } catch (error) {
+      console.error("Error transforming shape: ", error);
+    }
+  };
+
   const handleShapeClick = async (e) => {
     if (eraserOn) {
-      setSelectedNode(null)
+      setSelectedNode(null);
       setShapes(
         shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId)
       );
       await axios.delete(
         `${API_BASE_URL}/${shapes[e.target.index].shapeId}/erase`
       );
-    }
-    else if (selectedShape === ShapeType.POINTER ) {
+    } else if (selectedShape === ShapeType.POINTER) {
       setSelectedNode(e.target);
     }
   };
@@ -230,6 +261,7 @@ const Canvas = ({
       onClick: (e) => handleShapeClick(e),
       ...(shape.x !== undefined && { x: shape.x }), // Conditionally add x if it exists
       ...(shape.y !== undefined && { y: shape.y }), // Conditionally add y if it exists
+      onTransformEnd: (e) => handleTransformEnd(e, shape),
     };
 
     switch (shape.type) {
@@ -252,8 +284,6 @@ const Canvas = ({
     }
   };
 
-
-
   return (
     <div className="canvas-container">
       <Stage
@@ -265,14 +295,11 @@ const Canvas = ({
         onMouseUp={handleMouseUp}
       >
         <Layer>{dots}</Layer>
-        <Layer>{shapes.map((shape, i) => renderShape(shape, i))}
+        <Layer>
+          {shapes.map((shape, i) => renderShape(shape, i))}
           {/* Transformer */}
 
-          {selectedNode && (
-          <Transformer
-            nodes={[selectedNode]}
-          />
-        )}
+          {selectedNode && <Transformer nodes={[selectedNode]} />}
         </Layer>
       </Stage>
     </div>

@@ -9,8 +9,8 @@ import com.example.paint_backend.dto.shape_creation_request.ShapeRequest;
 import com.example.paint_backend.dto.shape_creation_request.ShapeUpdateRequest;
 import com.example.paint_backend.exception.*;
 import com.example.paint_backend.repository.ShapeRepository;
-import com.example.paint_backend.shapes.Shape;
 import com.example.paint_backend.factory.ShapeFactory;
+import com.example.paint_backend.shapes.Shape;
 import org.springframework.stereotype.Service;
 
 @Service

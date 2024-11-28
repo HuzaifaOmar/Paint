@@ -2,10 +2,10 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
-public class Circle extends AbstractShape {
-    private double radius;
+public class Circle extends Shape {
+    private Double radius;
 
     public Circle(Map<String, Object> attributes) {
         super(attributes);
@@ -17,7 +17,7 @@ public class Circle extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.xStart = newX;
         this.yStart = newY;
     }
@@ -33,6 +33,9 @@ public class Circle extends AbstractShape {
                 "radius", radius,
                 "x", xStart,
                 "y", yStart,
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "fill", fillColor,
                 "stroke", strokeColor,
                 "strokeWidth", strokeWidth);

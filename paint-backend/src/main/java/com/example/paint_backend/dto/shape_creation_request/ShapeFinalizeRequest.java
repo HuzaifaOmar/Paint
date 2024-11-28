@@ -7,11 +7,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ShapeFinalizeRequest {
-
-    @JsonProperty("fillColor")
     private String fillColor;
-
-    @JsonProperty("strokeColor")
     private String strokeColor;
-
 }

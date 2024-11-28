@@ -2,13 +2,13 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import com.example.paint_backend.shapes.AbstractShape;
+import com.example.paint_backend.shapes.Shape;
 
-public class Rectangle extends AbstractShape {
-    private double x;
-    private double y;
-    private double height;
-    private double width;
+public class Rectangle extends Shape {
+    private Double x;
+    private Double y;
+    private Double height;
+    private Double width;
 
     public Rectangle(Map<String, Object> attributes) {
         super(attributes);
@@ -33,7 +33,7 @@ public class Rectangle extends AbstractShape {
     }
 
     @Override
-    public void moveTo(double newX, double newY) {
+    public void moveTo(Double newX, Double newY) {
         this.x = newX;
         this.y = newY;
     }
@@ -60,6 +60,9 @@ public class Rectangle extends AbstractShape {
                 "width", this.width,
                 "x", x,
                 "y", y,
+                "scaleX", scaleX,
+                "scaleY", scaleY,
+                "rotation", rotation,
                 "fill", this.fillColor,
                 "stroke", this.strokeColor,
                 "strokeWidth", this.strokeWidth);

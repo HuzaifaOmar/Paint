@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Repository;
-
 import com.example.paint_backend.shapes.Shape;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class ShapeRepository {
