@@ -20,11 +20,11 @@ public class MoveShapeCommand implements ShapeCommand {
     public void execute() {
         oldX = shape.getX();
         oldY = shape.getY();
-        shape.setStartPoints(newX, newY);
+        shape.moveTo(newX, newY);
     }
 
     @Override
     public void undo() {
-        shape.setStartPoints(oldX, oldY);
+        shape.moveTo(oldX, oldY);
     }
 }

@@ -2,35 +2,20 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import com.example.paint_backend.shapes.Shape;
+import com.example.paint_backend.shapes.AbstractShape;
 
-public class Rectangle implements Shape {
-    Long shapeId;
-    double xEnd;
-    double yEnd;
-    double xStart;
-    double yStart;
-    double x;
-    double y;
-    String fillColor;
-    String strokeColor;
-    double strokeWidth;
-    double height;
-    double width;
+public class Rectangle extends AbstractShape {
+    private double x;
+    private double y;
+    private double height;
+    private double width;
 
     public Rectangle(Map<String, Object> attributes) {
-        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
-        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
-        this.fillColor = (String) attributes.get("fillColor");
-        this.strokeColor = (String) attributes.get("strokeColor");
-        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        // ! initially the rectangle is just a point
-        this.xEnd = xStart;
-        this.yEnd = yStart;
+        super(attributes);
     }
 
     @Override
-    public void DimensionCalculate() {
+    public void dimensionCalculate() {
         // Calculate width and height maintaining the bottom right corner
         this.width = Math.abs(xEnd - xStart);
         this.height = Math.abs(yEnd - yStart);
@@ -48,6 +33,12 @@ public class Rectangle implements Shape {
     }
 
     @Override
+    public void moveTo(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
     public Double getX() {
         return x;
     }
@@ -55,48 +46,6 @@ public class Rectangle implements Shape {
     @Override
     public Double getY() {
         return y;
-    }
-
-    @Override
-    public void setEndPoints(double xEnd, double yEnd) {
-        this.xEnd = xEnd;
-        this.yEnd = yEnd;
-    }
-
-    @Override
-    public void setStartPoints(double xStart, double yStart) {
-        this.xStart = xStart;
-        this.yStart = yStart;
-    }
-
-    @Override
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    @Override
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    @Override
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    @Override
-    public String getStrokeColor() {
-        return strokeColor;
-    }
-
-    @Override
-    public Long getShapeId() {
-        return shapeId;
-    }
-
-    @Override
-    public void setShapeId(Long id) {
-        this.shapeId = id;
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.paint_backend.dto.MoveRequest;
+import com.example.paint_backend.dto.command_requests.MoveRequest;
 import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.service.ShapeCommandsService;
 

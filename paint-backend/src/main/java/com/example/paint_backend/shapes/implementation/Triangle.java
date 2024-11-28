@@ -1,33 +1,20 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Map;
 
-public class Triangle implements Shape {
-    Long shapeId;
-    double xStart;
-    double yStart;
-    Double xEnd;
-    Double yEnd;
-    List<Double> points;
-    String fillColor;
-    String strokeColor;
-    double strokeWidth;
+import com.example.paint_backend.shapes.AbstractShape;
+
+public class Triangle extends AbstractShape {
+    private List<Double> points;
 
     public Triangle(Map<String, Object> attributes) {
-        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
-        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
-        this.fillColor = (String) attributes.get("fillColor");
-        this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
-        this.strokeColor = (String) attributes.get("strokeColor");
+        super(attributes);
     }
 
     @Override
-    public void DimensionCalculate() {
+    public void dimensionCalculate() {
         points = new ArrayList<>();
         points.add(this.xStart);
         points.add(this.yStart);
@@ -40,44 +27,24 @@ public class Triangle implements Shape {
     }
 
     @Override
-    public void setEndPoints(double xEnd, double yEnd) {
-        this.xEnd = xEnd;
-        this.yEnd = yEnd;
+    public void moveTo(double x, double y) {
+        double xDiff = x - this.xStart;
+        double yDiff = y - this.yStart;
+
+        for (int i = 0; i < points.size(); i += 2) {
+            points.set(i, points.get(i) + xDiff);
+            points.set(i + 1, points.get(i + 1) + yDiff);
+        }
     }
 
-    @Override
-    public void setStartPoints(double xStart, double yStart) {
-        this.xStart = xStart;
-        this.yStart = yStart;
-    }
-
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    //TODO: implement this
     @Override
     public Double getX() {
-        return x;
+        return points.isEmpty() ? 0.0 : points.getFirst();
     }
 
     @Override
     public Double getY() {
-        return y;
-    }
-
-    @Override
-    public Long getShapeId() {
-        return shapeId;
-    }
-
-    @Override
-    public void setShapeId(Long id) {
-        this.shapeId = id;
+        return points.isEmpty() ? 0.0 : points.get(1);
     }
 
     @Override

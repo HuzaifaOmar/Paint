@@ -1,4 +1,4 @@
-package com.example.paint_backend.dto.shape_creation_dto;
+package com.example.paint_backend.dto.shape_creation_request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

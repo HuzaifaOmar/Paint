@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.paint_backend.dto.ShapeDTO;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeFinalizeRequest;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeRequest;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeUpdateRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeFinalizeRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeUpdateRequest;
 import com.example.paint_backend.service.ShapeCreationService;
 
 @RestController

@@ -4,9 +4,9 @@ import com.example.paint_backend.commands.CommandHistory;
 import com.example.paint_backend.commands.ShapeCommand;
 import com.example.paint_backend.commands.implementation.CreateShapeCommand;
 import com.example.paint_backend.dto.*;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeFinalizeRequest;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeRequest;
-import com.example.paint_backend.dto.shape_creation_dto.ShapeUpdateRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeFinalizeRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeRequest;
+import com.example.paint_backend.dto.shape_creation_request.ShapeUpdateRequest;
 import com.example.paint_backend.exception.*;
 import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
@@ -29,14 +29,14 @@ public class ShapeCreationService {
     public ShapeDTO createShape(ShapeRequest shapeRequest) {
         validateShapeRequest(shapeRequest);
         Shape shape = shapeFactory.getShape(shapeRequest.getShapeType(), shapeRequest.getAttributes());
-        shape.DimensionCalculate();
+        shape.dimensionCalculate();
         return new ShapeDTO(shapeRepository.save(shape));
     }
 
     public ShapeDTO updateShape(Long shapeId, ShapeUpdateRequest request) {
         Shape shape = findShapeById(shapeId);
         shape.setEndPoints(request.getXEnd(), request.getYEnd());
-        shape.DimensionCalculate();
+        shape.dimensionCalculate();
         return new ShapeDTO(shapeRepository.save(shape));
     }
 

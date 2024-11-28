@@ -6,7 +6,7 @@ import com.example.paint_backend.commands.CommandHistory;
 import com.example.paint_backend.commands.implementation.EarseShapesCommand;
 import com.example.paint_backend.commands.implementation.MoveShapeCommand;
 import com.example.paint_backend.commands.implementation.RecolorShapeCommand;
-import com.example.paint_backend.dto.MoveRequest;
+import com.example.paint_backend.dto.command_requests.MoveRequest;
 import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.exception.ShapeNotFoundException;
 import com.example.paint_backend.repository.ShapeRepository;
@@ -25,6 +25,7 @@ public class ShapeCommandsService {
     public ShapeDTO moveShape(Long shapeId, MoveRequest request) {
         Shape shape = findShapeById(shapeId);
         MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shape , request.getXStart(), request.getYStart());
+        moveShapeCommand.execute();
         commandHistory.push(moveShapeCommand);
         shapeRepository.update(shape);
         return new ShapeDTO(shape);
