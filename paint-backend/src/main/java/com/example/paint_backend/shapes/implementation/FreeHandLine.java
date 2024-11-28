@@ -1,15 +1,16 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.example.paint_backend.shapes.Shape;
 
 public class FreeHandLine implements Shape {
     Long shapeId;
     List<Double> points;
     String fillColor;
+    
     double strokeWidth;
 
     public FreeHandLine(Map<String, Object> attributes) {
@@ -27,12 +28,12 @@ public class FreeHandLine implements Shape {
 
     //TODO: implement moving for line or make another interface for Movable
     @Override
-    public Double getXStart() {
+    public Double getX() {
         return 0.0;
     }
 
     @Override
-    public Double getYStart() {
+    public Double getY() {
         return 0.0;
     }
 
@@ -46,13 +47,24 @@ public class FreeHandLine implements Shape {
     public void setStartPoints(double xStart, double yStart) {
         return;
     }
-
+    @Override
     public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    @Override
+    public void setStrokeColor(String strokeColor) {
         return;
     }
 
-    public void setStrokeColor(String strokeColor) {
-        return;
+    @Override
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public String getStrokeColor() {
+        return fillColor;
     }
 
     @Override

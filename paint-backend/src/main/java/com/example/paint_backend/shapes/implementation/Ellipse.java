@@ -1,11 +1,11 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
-
 import java.util.Map;
 
+import com.example.paint_backend.shapes.Shape;
+
 public class Ellipse implements Shape {
+
     double xEnd;
     double yEnd;
     double xStart;
@@ -16,7 +16,6 @@ public class Ellipse implements Shape {
     Long shapeId;
     double radiusX;
     double radiusY;
-
 
     public Ellipse(Map<String, Object> attributes) {
         this.xStart = ((Number) attributes.get("xStart")).doubleValue();
@@ -56,12 +55,24 @@ public class Ellipse implements Shape {
         this.yStart = yStart;
     }
 
+    @Override
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
     }
 
+    @Override
     public void setStrokeColor(String strokeColor) {
         this.strokeColor = strokeColor;
+    }
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public String getStrokeColor() {
+        return strokeColor;
     }
 
     @Override

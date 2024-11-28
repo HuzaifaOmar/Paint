@@ -1,8 +1,8 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
 import java.util.Map;
+
+import com.example.paint_backend.shapes.Shape;
 
 public class Square implements Shape {
     Long shapeId;
@@ -52,10 +52,12 @@ public class Square implements Shape {
         this.yStart = yStart;
     }
 
+    @Override
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
     }
 
+    @Override
     public void setStrokeColor(String strokeColor) {
         this.strokeColor = strokeColor;
     }
@@ -73,6 +75,16 @@ public class Square implements Shape {
     @Override
     public Long getShapeId() {
         return shapeId;
+    }
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public String getStrokeColor() {
+        return strokeColor;
     }
 
     @Override

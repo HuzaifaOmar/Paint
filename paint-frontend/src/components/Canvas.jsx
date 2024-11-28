@@ -9,7 +9,7 @@ import LineDraw from "./shapes/Line.jsx";
 import EllipseDraw from "./shapes/Ellipse.jsx";
 import CircleDraw from "./shapes/Circle.jsx";
 
-const API_BASE_URL = "http://localhost:8080/shapes";
+const API_BASE_URL = "http://localhost:8080/api/shapes";
 
 const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) => {
   const stageRef = useRef();
@@ -69,7 +69,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) =
       };
 
       const response = await axios.put(
-        `${API_BASE_URL}/update/${currentShapeId.current}`,
+        `${API_BASE_URL}/${currentShapeId.current}`,
         updateRequest
       );
       console.log(response.data);
@@ -103,7 +103,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) =
       };
       let tempId = currentShapeId.current;
       const response = await axios.put(
-        `${API_BASE_URL}/finalize/${currentShapeId.current}`,
+        `${API_BASE_URL}/${currentShapeId.current}/finalize`,
         finalizeRequest
       );
 
@@ -142,7 +142,7 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) =
       };
       console.log("moveRequest json", JSON.stringify(moveRequest));
       const response = await axios.put(
-        `${API_BASE_URL}/move/${shape.shapeId}`,
+        `${API_BASE_URL}/${shape.shapeId}/move`,
         moveRequest
       );
       console.log("api response data", response.data);
@@ -170,8 +170,8 @@ const Canvas = ({ selectedShape, fillColor, strokeColor, lineWidth,eraserOn }) =
     console.log(e.target);
     if(eraserOn){
       setShapes(shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId))
-      await axios.put(
-        `${API_BASE_URL}/erase/${shapes[e.target.index].shapeId}`);
+      await axios.delete(
+        `${API_BASE_URL}/${shapes[e.target.index].shapeId}/erase`);
     }
   };
 

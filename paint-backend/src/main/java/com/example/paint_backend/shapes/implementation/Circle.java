@@ -1,8 +1,8 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
 import java.util.Map;
+
+import com.example.paint_backend.shapes.Shape;
 
 public class Circle implements Shape {
     Long shapeId;
@@ -78,6 +78,15 @@ public class Circle implements Shape {
     @Override
     public String getShapeType() {
         return "circle";
+    }
+    @Override
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public String getStrokeColor() {
+        return strokeColor;
     }
 
     @Override

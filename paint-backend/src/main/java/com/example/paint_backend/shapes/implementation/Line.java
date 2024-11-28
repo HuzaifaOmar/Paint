@@ -1,11 +1,10 @@
 package com.example.paint_backend.shapes.implementation;
 
-import com.example.paint_backend.shapes.Shape;
-
 import java.util.List;
 import java.util.Map;
-
 import java.util.stream.Stream;
+
+import com.example.paint_backend.shapes.Shape;
 
 public class Line implements Shape {
 
@@ -31,12 +30,12 @@ public class Line implements Shape {
 
     //TODO: implement moving for line or make another interface for Movable
     @Override
-    public Double getXStart() {
+    public Double getX() {
         return 0.0;
     }
 
     @Override
-    public Double getYStart() {
+    public Double getY() {
         return 0.0;
     }
 
@@ -48,15 +47,18 @@ public class Line implements Shape {
 
     @Override
     public void setStartPoints(double xStart, double yStart) {
-        return;
+        this.xStart = xStart;
+        this.yStart = yStart;
     }
 
+    @Override
     public void setFillColor(String fillColor) {
-        return;
+        this.strokeColor = fillColor;
     }
 
+    @Override
     public void setStrokeColor(String strokeColor) {
-        return;
+        this.strokeColor = strokeColor;
     }
 
     @Override
@@ -72,6 +74,16 @@ public class Line implements Shape {
     @Override
     public String getShapeType() {
         return "line";
+    }
+
+    @Override
+    public String getFillColor() {
+        return strokeColor;
+    }
+
+    @Override
+    public String getStrokeColor() {
+        return strokeColor;
     }
 
     @Override

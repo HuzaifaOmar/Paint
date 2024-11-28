@@ -1,14 +1,19 @@
 package com.example.paint_backend.controller;
 
-import com.example.paint_backend.dto.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.dto.shape_creation_dto.ShapeFinalizeRequest;
 import com.example.paint_backend.dto.shape_creation_dto.ShapeRequest;
 import com.example.paint_backend.dto.shape_creation_dto.ShapeUpdateRequest;
 import com.example.paint_backend.service.ShapeCreationService;
-import com.example.paint_backend.shapes.Shape;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/shapes/")

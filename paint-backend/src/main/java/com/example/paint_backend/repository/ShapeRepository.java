@@ -1,17 +1,18 @@
 package com.example.paint_backend.repository;
 
-import com.example.paint_backend.shapes.Shape;
-import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
+import com.example.paint_backend.shapes.Shape;
 
 @Repository
 public class ShapeRepository {
     private final List<Shape> shapes = new ArrayList<>();
 
-    public Shape save(Shape shape) {
+    public Shape save(Shape shape) {//TODO: check if any shape deleted there will be 2 shape with same id
         if (shape.getShapeId() == null) {
             shape.setShapeId((long) shapes.size() + 1);
         }
