@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import "./styles/main.css";
 
 function App() {
-  const [selectedShape, setSelectedShape] = useState("freehand");
+  const [selectedTool, setSelectedTool] = useState("freehand");
   const [fillColor, setFillColor] = useState("#F0F0F0");
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [lineWidth, setLineWidth] = useState(2.0);
@@ -13,8 +13,8 @@ function App() {
   return (
     <div className="main-screen">
       <Toolbar
-        selectedTool={selectedShape}
-        setSelectedTool={setSelectedShape}
+        selectedTool={selectedTool}
+        setSelectedTool={setSelectedTool}
         fillColor={fillColor}
         setFillColor={setFillColor}
         strokeColor={strokeColor}
@@ -25,11 +25,14 @@ function App() {
         setEraserOn={setEraserOn}
       />
       <Canvas
-        selectedShape={selectedShape}
+        selectedTool={selectedTool}
         fillColor={fillColor}
         strokeColor={strokeColor}
         lineWidth={lineWidth}
         eraserOn={eraserOn}
+        setFillColor={setFillColor}
+        setStrokeColor={setStrokeColor}
+        setLineWidth={setLineWidth}
       />
     </div>
   );
