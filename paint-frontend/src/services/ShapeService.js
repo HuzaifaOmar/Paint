@@ -119,6 +119,21 @@ class ShapeService {
       throw error;
     }
   }
+
+  /**
+   * copy a shape
+   * @param {string} shapeId - ID of the shape to copy
+   * @returns {Promise} 
+   */
+  static async copyShape(shapeId) {
+    console.log("copy request", shapeId);
+    try {
+      await axios.post(`${API_BASE_URL}/${shapeId}/clone`);
+    } catch (error) {
+      console.error("Error erasing shape:", error);
+      throw error;
+    }
+  }
 }
 
 export default ShapeService;
