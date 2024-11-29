@@ -57,44 +57,8 @@ const Canvas = ({
     },
   });
 
-  const copyShapeRequest = (tool, pos, fill, stroke, width) => ({
-    shapeType: tool,
-    attributes: {
-      xStart: pos.x,
-      yStart: pos.y,
-      fillColor: fill,
-      strokeColor: stroke,
-      strokeWidth: width,
-    },
-  });
-
-  // const handleCopy2 = async (selectedShape) => {
-  //   if (!selectedShape) return;
-
-  //   const pos = { x: selectedShape.xStart + 10, y: selectedShape.yStart + 10 }; // Offset the copied shape by 10 pixels
-  //   const shapeRequest = copyShapeRequest(
-  //     selectedShape.type,
-  //     pos,
-  //     selectedShape.fillColor,
-  //     selectedShape.strokeColor,
-  //     selectedShape.strokeWidth
-  //   );
-
-  //   try {
-  //     const response = await ShapeService.createShape(shapeRequest);
-  //     setShapes((prevShapes) => [
-  //       ...prevShapes,
-  //       {
-  //         type: selectedShape.type,
-  //         shapeId: response.shapeId,
-  //         ...response.attributes,
-  //       },
-  //     ]);
-  //   } catch (error) {
-  //     handleApiError("Error copying shape", error);
-  //   }
-  // };
-
+  
+  
   const handleMouseDown = useCallback(
     async (e) => {
       if (eraserOn || selectedTool === ShapeType.POINTER) {
@@ -287,19 +251,19 @@ const Canvas = ({
     });
   };
 
-  const handleCopy = async () => {
-    console.log("original shape", selectedShape);
+
+  const handleCopy=async()=>{
     const response = await ShapeService.copyShape(selectedShape.shapeId);
-    console.log("copied shape", response);
-    setShapes((prev) => [
-      ...prev,
+    setShapes((prevShapes) => [
+      ...prevShapes,
       {
         type: response.shapeType,
         shapeId: response.shapeId,
         ...response.attributes,
       },
     ]);
-  };
+    
+  }
 
   useEffect(() => {
     if (copyTool === true) {
@@ -307,10 +271,9 @@ const Canvas = ({
       if (!selectedShape) {
         return;
       }
-
-      handleCopy();
+      handleCopy()
     }
-  }, [copyTool, selectedShape, handleCopy, setCopyTool]);
+  }, [copyTool]);
 
   const resetDrawingState = () => {
     isDrawing.current = false;
