@@ -31,8 +31,8 @@ public abstract class Shape {
 
     // Common constructor for all shapes
     public Shape(Map<String, Object> attributes) {
-        this.xStart = ((Number) attributes.getOrDefault("xStart", 0.0)).doubleValue();
-        this.yStart = ((Number) attributes.getOrDefault("yStart", 0.0)).doubleValue();
+        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
+        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
@@ -76,5 +76,6 @@ public abstract class Shape {
 
     public abstract Map<String, Object> getAttributes();
 
+    //! build the object the same way it was made to clone
     public abstract Shape clone();
 }

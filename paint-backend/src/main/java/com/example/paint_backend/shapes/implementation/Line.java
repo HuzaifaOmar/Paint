@@ -6,10 +6,7 @@ import java.util.stream.Stream;
 
 import com.example.paint_backend.shapes.Shape;
 
-//TODO: implement moving for line or make another interface for Movable
 public class Line extends Shape {
-    private Double x;
-    private Double y;
 
     public Line(Map<String, Object> attributes) {
         super(attributes);
@@ -48,19 +45,25 @@ public class Line extends Shape {
                 "strokeWidth", strokeWidth
         ));
 
-        if (x != null) {
-            attributes.put("x", x);
+        if (this.x != null) {
+            attributes.put("x", this.x);
         }
-        if (y != null) {
-            attributes.put("y", y);
+        if (this.y != null) {
+            attributes.put("y", this.y);
         }
         return attributes;
     }
 
     @Override
     public Shape clone() {
-        Shape clone = new Line(getAttributes());
-        clone.dimensionCalculate();
+        Shape clone = new FreeHandLine(Map.of(
+                "xStart", this.xStart,
+                "yStart", this.yStart,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
     }

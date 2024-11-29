@@ -10,6 +10,8 @@ public class Ellipse extends Shape {
 
     public Ellipse(Map<String, Object> attributes) {
         super(attributes);
+        this.x = xStart;
+        this.y = yStart;
     }
 
     @Override
@@ -20,8 +22,8 @@ public class Ellipse extends Shape {
 
     @Override
     public void moveTo(Double newX, Double newY) {
-        this.xStart = newX;
-        this.yStart = newY;
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -34,8 +36,8 @@ public class Ellipse extends Shape {
         return Map.of(
                 "radiusX", radiusX,
                 "radiusY", radiusY,
-                "x", xStart,
-                "y", yStart,
+                "x", x,
+                "y", y,
                 "scaleX", scaleX,
                 "scaleY", scaleY,
                 "rotation", rotation,
@@ -46,7 +48,14 @@ public class Ellipse extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Ellipse(getAttributes());
+        Shape clone = new Ellipse(Map.of(
+                "xStart", this.x,
+                "yStart", this.y,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;

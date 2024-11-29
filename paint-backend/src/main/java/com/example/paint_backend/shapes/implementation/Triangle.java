@@ -8,8 +8,6 @@ import com.example.paint_backend.shapes.Shape;
 
 public class Triangle extends Shape {
     private List<Double> points;
-    private Double x;
-    private Double y;
 
     public Triangle(Map<String, Object> attributes) {
         super(attributes);
@@ -71,7 +69,14 @@ public class Triangle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Triangle(getAttributes());
+        Shape clone = new Triangle(Map.of(
+                "xStart", this.x,
+                "yStart", this.y,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;

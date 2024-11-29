@@ -135,7 +135,7 @@ const Canvas = ({
         handleApiError("Error creating shape", error);
       }
     },
-    [selectedTool, fillColor, strokeColor, lineWidth, eraserOn]
+    [selectedTool, fillColor, strokeColor, lineWidth, eraserOn, setSelectedShape]
   );
 
   const isValidDrawingState = () =>
@@ -265,7 +265,7 @@ const Canvas = ({
     selectedShape.fill = fillColor;
     selectedShape.stroke = strokeColor;
     selectedShape.strokeWidth = lineWidth;
-  }, [fillColor, strokeColor, lineWidth]);
+  }, [fillColor, strokeColor, lineWidth, selectedShape]);
 
   const updateShapesState = (response, id) => {
     setShapes((prevShapes) => {
@@ -299,7 +299,7 @@ const Canvas = ({
 
       handleCopy()
     }
-  }, [copyTool]);
+  }, [copyTool, selectedShape, handleCopy, setCopyTool]);
 
 
 

@@ -5,8 +5,6 @@ import java.util.Map;
 import com.example.paint_backend.shapes.Shape;
 
 public class Square extends Shape {
-    private Double x;
-    private Double y;
     private Double side = 0.0;
 
     public Square(Map<String, Object> attributes) {
@@ -62,9 +60,16 @@ public class Square extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Square(getAttributes());
+        Shape clone = new Square(Map.of(
+                "xStart", this.x,
+                "yStart", this.y,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.dimensionCalculate();
-        clone.transform(x + 5.0, y + 5.0, scaleX, scaleY, rotation);
+        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
     }
 }

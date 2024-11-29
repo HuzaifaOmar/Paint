@@ -9,6 +9,8 @@ public class Circle extends Shape {
 
     public Circle(Map<String, Object> attributes) {
         super(attributes);
+        this.x = xStart;
+        this.y = yStart;
     }
 
     @Override
@@ -18,8 +20,8 @@ public class Circle extends Shape {
 
     @Override
     public void moveTo(Double newX, Double newY) {
-        this.xStart = newX;
-        this.yStart = newY;
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -30,9 +32,9 @@ public class Circle extends Shape {
     @Override
     public Map<String, Object> getAttributes() {
         return Map.of(
+                "x", x,
+                "y", y,
                 "radius", radius,
-                "x", xStart,
-                "y", yStart,
                 "scaleX", scaleX,
                 "scaleY", scaleY,
                 "rotation", rotation,
@@ -43,7 +45,14 @@ public class Circle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Circle(getAttributes());
+        Shape clone = new Circle(Map.of(
+                "xStart", this.x,
+                "yStart", this.y,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;

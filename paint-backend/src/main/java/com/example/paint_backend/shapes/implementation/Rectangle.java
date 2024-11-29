@@ -5,8 +5,6 @@ import java.util.Map;
 import com.example.paint_backend.shapes.Shape;
 
 public class Rectangle extends Shape {
-    private Double x;
-    private Double y;
     private Double height;
     private Double width;
 
@@ -16,20 +14,11 @@ public class Rectangle extends Shape {
 
     @Override
     public void dimensionCalculate() {
-        // Calculate width and height maintaining the bottom right corner
         this.width = Math.abs(xEnd - xStart);
         this.height = Math.abs(yEnd - yStart);
 
-        if (xEnd < xStart || yEnd < yStart) {
-            // When mouse moves up and left, adjust the top-left corner
-            // While keeping the bottom right corner fixed
-            x = Math.min(xStart, xEnd);
-            y = Math.min(yStart, yEnd);
-        } else {
-            // When mouse moves down and right
-            x = Math.min(xStart, xEnd);
-            y = Math.min(yStart, yEnd);
-        }
+        x = Math.min(xStart, xEnd);
+        y = Math.min(yStart, yEnd);
     }
 
     @Override
@@ -70,7 +59,14 @@ public class Rectangle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Rectangle(getAttributes());
+        Shape clone = new Rectangle(Map.of(
+                "xStart", this.x,
+                "yStart", this.y,
+                "fillColor", this.fillColor,
+                "strokeColor", this.strokeColor,
+                "strokeWidth", this.strokeWidth
+        ));
+        clone.setEndPoints(this.xEnd, this.yEnd);
         clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
