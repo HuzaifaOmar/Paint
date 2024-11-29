@@ -7,21 +7,14 @@ import com.example.paint_backend.shapes.Shape;
 public class CreateShapeCommand implements ShapeCommand {
     private final ShapeRepository shapeRepository;
     private final Shape shape;
-    private final String fill;
-    private final String stroke;
 
-    // Constructor to pass ShapeRepository and ShapeRequest
-    public CreateShapeCommand(ShapeRepository shapeRepository, Shape shape, String fillColor, String strokeColor) {
+    public CreateShapeCommand(ShapeRepository shapeRepository, Shape shape) {
         this.shapeRepository = shapeRepository;
         this.shape = shape;
-        this.fill = fillColor;
-        this.stroke = strokeColor;
     }
 
     @Override
     public void execute() {
-        shape.setFillColor(fill);
-        shape.setStrokeColor(stroke);
         shapeRepository.save(shape);
     }
 

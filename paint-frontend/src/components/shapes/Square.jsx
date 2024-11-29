@@ -6,6 +6,9 @@ const Square = ({ shape, draggable, onDragEnd, onClick, onTransformEnd }) => (
     key={shape.shapeId}
     x={shape.x}
     y={shape.y}
+    scaleX={shape.scaleX}
+    scaleY={shape.scaleY}
+    rotation={shape.rotation}
     width={shape.side}
     height={shape.side}
     fill={shape.fill}

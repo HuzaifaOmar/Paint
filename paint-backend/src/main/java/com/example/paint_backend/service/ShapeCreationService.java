@@ -42,9 +42,9 @@ public class ShapeCreationService {
 
     public ShapeDTO finalizeShape(Long shapeId, ShapeFinalizeRequest request) {
         Shape shape = findShapeById(shapeId);
-        String fillColor = request.getFillColor();
-        String strokeColor = request.getStrokeColor();
-        ShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape, fillColor, strokeColor);
+        shape.setFillColor(request.getFillColor());
+        shape.setStrokeColor(request.getStrokeColor());
+        ShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape);
         createShape.execute();
         commandHistory.push(createShape);
         return new ShapeDTO(shapeRepository.save(shape));

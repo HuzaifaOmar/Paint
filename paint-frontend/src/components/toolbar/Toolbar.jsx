@@ -71,6 +71,10 @@ const Toolbar = ({
     setIsLineWidthDropdownOpen(false);
   };
 
+  const handleFillColorBlur = async (e) => {
+      
+  };
+
   return (
     <>
       <div className={`toolbar ${isToolbarHidden ? "hidden" : ""}`}>
@@ -144,7 +148,7 @@ const Toolbar = ({
 
         {/* Buttons */}
         <ToolbarButton
-          icon={<FontAwesomeIcon icon={faEraser}/>}
+          icon={<FontAwesomeIcon icon={faEraser} />}
           onClick={toggleEraser}
           title="Eraser"
           label="Eraser"
@@ -155,6 +159,7 @@ const Toolbar = ({
           className="toolbar-color-input"
           value={fillColor}
           onChange={(e) => setFillColor(e.target.value)}
+          onBlur={handleFillColorBlur} 
           title="Fill Color"
         />
         <input
@@ -162,6 +167,7 @@ const Toolbar = ({
           className="toolbar-color-input"
           value={strokeColor}
           onChange={(e) => setStrokeColor(e.target.value)}
+          onBlur
           title="Stroke Color"
         />
         <ToolbarButton

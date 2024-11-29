@@ -55,7 +55,7 @@ public class FreeHandLine extends Shape {
                 "scaleY", scaleY,
                 "rotation", rotation,
                 "points", points,
-                "stroke", this.fillColor,
+                "stroke", strokeColor,
                 "strokeWidth", strokeWidth
         ));
 
@@ -68,4 +68,10 @@ public class FreeHandLine extends Shape {
         return attributes;
     }
 
+    @Override
+    public Shape clone() {
+        Shape clone = new FreeHandLine(getAttributes());
+        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        return clone;
+    }
 }

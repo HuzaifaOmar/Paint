@@ -73,11 +73,9 @@ public abstract class Shape {
         return yStart;
     }
 
-    public String getShapeType() {
-        return "";
-    }
+    public abstract String getShapeType();
 
-    public Map<String, Object> getAttributes() {
-        return null;
-    }
+    public abstract Map<String, Object> getAttributes();
+
+    public abstract Shape clone();
 }

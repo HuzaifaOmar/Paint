@@ -1,14 +1,9 @@
 package com.example.paint_backend.controller;
 
+import com.example.paint_backend.dto.command_requests.RecolorRequest;
 import com.example.paint_backend.dto.command_requests.TransformRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.paint_backend.dto.command_requests.MoveRequest;
 import com.example.paint_backend.dto.ShapeDTO;
@@ -47,9 +42,13 @@ public class ShapesCommandsController {
         return ResponseEntity.ok(erasedShape);
     }
 
-
     @PutMapping("{shapeId}/recolor")
-    public ResponseEntity<ShapeDTO> recolorShape(@PathVariable Long shapeId, @RequestBody String newFillColor) {
-        return ResponseEntity.ok(shapeService.recolorShape(shapeId, newFillColor));
+    public ResponseEntity<ShapeDTO> recolorShape(@PathVariable Long shapeId, @RequestBody RecolorRequest request) {
+        return ResponseEntity.ok(shapeService.recolorShape(shapeId, request));
+    }
+
+    @PostMapping("{shapeId}/clone")
+    public ResponseEntity<ShapeDTO> cloneShape(@PathVariable Long shapeId) {
+        return ResponseEntity.ok(shapeService.cloneShape(shapeId));
     }
 }

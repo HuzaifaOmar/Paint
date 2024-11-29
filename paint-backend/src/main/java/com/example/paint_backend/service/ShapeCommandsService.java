@@ -1,14 +1,12 @@
 package com.example.paint_backend.service;
 
-import com.example.paint_backend.commands.implementation.TransformShapeCommand;
+import com.example.paint_backend.commands.implementation.*;
+import com.example.paint_backend.dto.command_requests.RecolorRequest;
 import com.example.paint_backend.dto.command_requests.TransformRequest;
 import com.example.paint_backend.shapes.Shape;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.commands.CommandHistory;
-import com.example.paint_backend.commands.implementation.EraseShapesCommand;
-import com.example.paint_backend.commands.implementation.MoveShapeCommand;
-import com.example.paint_backend.commands.implementation.RecolorShapeCommand;
 import com.example.paint_backend.dto.command_requests.MoveRequest;
 import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.exception.ShapeNotFoundException;
@@ -43,9 +41,9 @@ public class ShapeCommandsService {
         return new ShapeDTO(shape);
     }
 
-    public ShapeDTO recolorShape(Long shapeId, String newFillColor) {
+    public ShapeDTO recolorShape(Long shapeId, RecolorRequest request) {
         Shape shape = findShapeById(shapeId);
-        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shape, newFillColor);
+        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shape, request.getFillColor(), request.getStrokeColor());
         commandHistory.push(recolorShapeCommand);
         shapeRepository.update(shape);
         return new ShapeDTO(shape);
@@ -56,6 +54,14 @@ public class ShapeCommandsService {
         EraseShapesCommand eraseShapeCommand = new EraseShapesCommand(shape, shapeRepository);
         commandHistory.push(eraseShapeCommand);
         return "Shape erased successfully";
+    }
+
+    public ShapeDTO cloneShape(Long shapeId) {
+        Shape shape = findShapeById(shapeId);
+        CreateShapeCommand createShapeCommand = new CreateShapeCommand(shapeRepository, shape.clone());
+        createShapeCommand.execute();
+        commandHistory.push(createShapeCommand);
+        return new ShapeDTO(shape);
     }
 
     private Shape findShapeById(Long shapeId) {

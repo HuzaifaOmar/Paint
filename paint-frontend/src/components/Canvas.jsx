@@ -1,18 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { Stage, Layer, Transformer } from "react-konva";
 import { ShapeType } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
-
-import axios from "axios";
-import Freehand from "./shapes/Freehand.jsx";
-import Rectangle from "./shapes/Rectangle.jsx";
-import Square from "./shapes/Square.jsx";
-import Triangle from "./shapes/Triangle.jsx";
-import LineDraw from "./shapes/Line.jsx";
-import EllipseDraw from "./shapes/Ellipse.jsx";
-import CircleDraw from "./shapes/Circle.jsx";
-
-const API_BASE_URL = "http://localhost:8080/api/shapes";
+import ShapeService from "../services/ShapeService.js";
+import ShapesRenderer from "./ShapesRenderer.jsx";
 
 const Canvas = ({
   selectedTool,
@@ -22,80 +19,90 @@ const Canvas = ({
   eraserOn,
   setFillColor,
   setStrokeColor,
-  setLineWidth
+  setLineWidth,
 }) => {
-  const stageRef = useRef();
-  const [dots] = useState(() =>
-    generateDottedBackground(window.innerWidth, window.innerHeight)
-  );
-  const [shapes, setShapes] = useState([]);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const isDrawing = useRef(false);
   const startX = useRef(0);
   const startY = useRef(0);
+
+  const stageRef = useRef(null);
+  const isDrawing = useRef(false);
   const currentShapeId = useRef(null);
-  const [selectedShap,setSelectedShape]=useState(null)
 
-  const handleMouseDown = async (e) => {
-    if (eraserOn) return;
-    else if (selectedShape === ShapeType.POINTER) {
+  // State management
+  const [shapes, setShapes] = useState([]);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedShape, setSelectedShape] = useState(null);
 
-      if (e.target === stageRef.current) {
-        setSelectedNode(null);
-        setSelectedShape(null)
+  // Memoized background dots to prevent unnecessary re-renders
+  const backgroundDots = useMemo(
+    () => generateDottedBackground(window.innerWidth, window.innerHeight),
+    []
+  );
+
+  const createShapeRequest = (tool, pos, fill, stroke, width) => ({
+    shapeType: tool,
+    attributes: {
+      xStart: pos.x,
+      yStart: pos.y,
+      fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
+        ? fill
+        : fill + "6F",
+      strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
+        ? stroke
+        : stroke + "6F",
+      strokeWidth: width,
+    },
+  });
+  const handleMouseDown = useCallback(
+    async (e) => {
+      if (eraserOn || selectedTool === ShapeType.POINTER) {
+        if (e.target === stageRef.current) {
+          setSelectedNode(null);
+          setSelectedShape(null);
+        }
+        return;
       }
-      return;
-    }
-    console.log("in handleMouseDown fun");
-    const pos = stageRef.current.getPointerPosition();
-    startX.current = pos.x;
-    startY.current = pos.y;
-    isDrawing.current = true;
 
-    try {
-      const shapeRequest = {
-        shapeType: selectedTool,
-        attributes: {
-          xStart: pos.x,
-          yStart: pos.y,
-          fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
-            selectedTool
-          )
-            ? fillColor
-            : fillColor + "6F",
-          strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(
-            selectedTool
-          )
-            ? strokeColor
-            : strokeColor + "6F",
-          strokeWidth: lineWidth,
-        },
-      };
-      console.log("create request", shapeRequest);
-      const response = await axios.post(`${API_BASE_URL}/create`, shapeRequest);
-      currentShapeId.current = response.data.shapeId;
-      console.log("create response", response.data);
-      setShapes((prevShapes) => [
-        ...prevShapes,
-        {
-          type: selectedTool,
-          shapeId: response.data.shapeId,
-          ...response.data.attributes,
-        },
-      ]);
-    } catch (error) {
-      console.error("Error creating shape:", error);
-    }
-  };
+      console.log("in handleMouseDown fun");
+      const pos = stageRef.current.getPointerPosition();
+      isDrawing.current = true;
+      startX.current = pos.x;
+      startY.current = pos.y;
+
+      try {
+        const shapeRequest = createShapeRequest(
+          selectedTool,
+          pos,
+          fillColor,
+          strokeColor,
+          lineWidth
+        );
+        const response = await ShapeService.createShape(shapeRequest);
+        currentShapeId.current = response.shapeId;
+        setShapes((prevShapes) => [
+          ...prevShapes,
+          {
+            type: selectedTool,
+            shapeId: response.shapeId,
+            ...response.attributes,
+          },
+        ]);
+      } catch (error) {
+        handleApiError("Error creating shape", error);
+      }
+    },
+    [selectedTool, fillColor, strokeColor, lineWidth, eraserOn]
+  );
+
+  const isValidDrawingState = () =>
+    isDrawing.current &&
+    currentShapeId.current &&
+    selectedTool !== ShapeType.POINTER &&
+    !eraserOn;
 
   const handleMouseMove = async () => {
-    if (
-      !isDrawing.current ||
-      !currentShapeId.current ||
-      selectedTool === ShapeType.POINTER ||
-      eraserOn
-    )
-      return;
+    if (!isValidDrawingState()) return;
+
     console.log("in handleMouseMove fun");
     const pos = stageRef.current.getPointerPosition();
     try {
@@ -104,70 +111,42 @@ const Canvas = ({
         yEnd: pos.y,
       };
 
-      const response = await axios.put(
-        `${API_BASE_URL}/${currentShapeId.current}`,
+      const response = await ShapeService.updateShapeDrawing(
+        currentShapeId.current,
         updateRequest
       );
-      console.log("update response", response.data);
 
-      setShapes((prevShapes) => {
-        const newShapes = [...prevShapes];
-        const shapeIndex = newShapes.findIndex(
-          (s) => s.shapeId === currentShapeId.current
-        );
-
-        if (shapeIndex !== -1) {
-          newShapes[shapeIndex] = {
-            ...newShapes[shapeIndex],
-            ...response.data.attributes,
-          };
-        }
-        return newShapes;
-      });
+      updateShapesState(response, currentShapeId.current);
     } catch (error) {
       console.error("Error updating shape:", error);
     }
   };
 
+  const isValidFinalizationState = () =>
+    currentShapeId.current && selectedTool !== ShapeType.POINTER && !eraserOn;
+
   const handleMouseUp = async () => {
-    if (
-      !currentShapeId.current ||
-      selectedTool === ShapeType.POINTER ||
-      eraserOn
-    )
-      return;
+    if (!isValidFinalizationState()) return;
+
     console.log("in handleMouseUp fun");
     try {
       const finalizeRequest = {
-        fillColor: fillColor,
-        strokeColor: strokeColor,
+        fillColor,
+        strokeColor,
       };
+
       let tempId = currentShapeId.current;
-      const response = await axios.put(
-        `${API_BASE_URL}/${currentShapeId.current}/finalize`,
+      const response = await ShapeService.finalizeShape(
+        tempId,
         finalizeRequest
       );
 
-      setShapes((prevShapes) => {
-        const newShapes = [...prevShapes];
-
-        const shapeIndex = newShapes.findIndex((s) => s.shapeId === tempId);
-        console.log("shapes arr after finalizing shape", shapes);
-
-        if (shapeIndex !== -1) {
-          newShapes[shapeIndex] = {
-            ...newShapes[shapeIndex],
-            ...response.data.attributes,
-          };
-        }
-
-        return newShapes;
-      });
+      updateShapesState(response, tempId);
     } catch (error) {
-      console.error("Error updating shape:", error);
+      handleApiError("Error finalizing shape", error);
+    } finally {
+      resetDrawingState();
     }
-    isDrawing.current = false;
-    currentShapeId.current = null;
   };
 
   const handleDragEnd = async (e, shape) => {
@@ -180,38 +159,17 @@ const Canvas = ({
         x: pos.x,
         y: pos.y,
       };
-      console.log("moveRequest json", JSON.stringify(moveRequest));
-      const response = await axios.put(
-        `${API_BASE_URL}/${shape.shapeId}/move`,
-        moveRequest
-      );
-      console.log("move response", response.data);
-      console.log("shape before move", shape);
+      const response = await ShapeService.moveShape(shape.shapeId, moveRequest);
 
-      setShapes((prevShapes) => {
-        const newShapes = [...prevShapes];
-        const shapeIndex = newShapes.findIndex(
-          (s) => s.shapeId === shape.shapeId
-        );
-
-        if (shapeIndex !== -1) {
-          newShapes[shapeIndex] = {
-            ...newShapes[shapeIndex],
-            ...response.data.attributes,
-          };
-          console.log("shape after move", newShapes[shapeIndex]);
-        }
-        return newShapes;
-      });
+      updateShapesState(response, shape.shapeId);
     } catch (error) {
-      console.error("Error updating shape position:", error);
+      handleApiError("Error finalizing shape", error);
     }
   };
+
   const handleTransformEnd = async (e, shape) => {
     console.log("in handleTransformEnd fun");
-    console.log("e", e);
     const attr = e.target.attrs;
-    console.log("shape", shape);
     try {
       const transformRequest = {
         x: attr.x,
@@ -220,89 +178,73 @@ const Canvas = ({
         scaleY: attr.scaleY,
         rotation: attr.rotation,
       };
-      const response = await axios.put(
-        `${API_BASE_URL}/${shape.shapeId}/transform`,
+      const response = await ShapeService.transformShape(
+        shape.shapeId,
         transformRequest
       );
-      console.log("transform response", response.data);
-      setShapes((prevShapes) => {
-        const newShapes = [...prevShapes];
-        const shapeIndex = newShapes.findIndex(
-          (s) => s.shapeId === shape.shapeId
-        );
-
-        if (shapeIndex !== -1) {
-          newShapes[shapeIndex] = {
-            ...newShapes[shapeIndex],
-            ...response.data.attributes,
-          };
-        }
-        return newShapes;
-      });
+      updateShapesState(response, shape.shapeId);
     } catch (error) {
-      console.error("Error transforming shape: ", error);
+      handleApiError("Error transforming shape", error);
     }
   };
 
+  const eraseShape = async (shape) => {
+    setSelectedNode(null);
+    setShapes((prevShapes) =>
+      prevShapes.filter((s) => s.shapeId !== shape.shapeId)
+    );
+    await ShapeService.eraseShape(shape.shapeId);
+  };
+
+  const handleShapeSelection = (shape, target) => {
+    setSelectedNode(target);
+    setFillColor(shape.fill);
+    setStrokeColor(shape.stroke);
+    setLineWidth(shape.strokeWidth);
+    setSelectedShape(shape);
+  };
   const handleShapeClick = async (e) => {
+    const clickedShape = shapes[e.target.index];
+
     if (eraserOn) {
-      setSelectedNode(null);
-      setShapes(
-        shapes.filter((s) => s.shapeId !== shapes[e.target.index].shapeId)
-      );
-      await axios.delete(
-        `${API_BASE_URL}/${shapes[e.target.index].shapeId}/erase`
-      );
-    } else if (selectedShape === ShapeType.POINTER) {
-      setSelectedNode(e.target);
-      setFillColor(shapes[e.target.index].fill)
-      setStrokeColor(shapes[e.target.index].stroke)
-      setLineWidth(shapes[e.target.index].strokeWidth)
-      setSelectedShape(shapes[e.target.index])
-    }
-  };
-  useEffect(()=>{
-    if(selectedShap!==null){
-      console.log(fillColor);
-      console.log(selectedShap)
-      selectedShap.fill=fillColor
-      selectedShap.stroke=strokeColor
-      selectedShap.strokeWidth=lineWidth
-    }
-  },[fillColor,strokeColor,lineWidth,selectedShap])  
-
-  const renderShape = (shape) => {
-    const draggable = selectedTool === ShapeType.POINTER && !eraserOn;
-    const shapeProps = {
-      shape: shape,
-      draggable: draggable,
-      onDragEnd: (e) => handleDragEnd(e, shape),
-      onClick: (e) => handleShapeClick(e),
-      ...(shape.x !== undefined && { x: shape.x }), // Conditionally add x if it exists
-      ...(shape.y !== undefined && { y: shape.y }), // Conditionally add y if it exists
-      onTransformEnd: (e) => handleTransformEnd(e, shape),
-    };
-
-    switch (shape.type) {
-      case ShapeType.FREEHAND:
-        return <Freehand {...shapeProps} />;
-      case ShapeType.LINE:
-        return <LineDraw {...shapeProps} />;
-      case ShapeType.RECTANGLE:
-        return <Rectangle {...shapeProps} />;
-      case ShapeType.SQUARE:
-        return <Square {...shapeProps} />;
-      case ShapeType.CIRCLE:
-        return <CircleDraw {...shapeProps} />;
-      case ShapeType.ELLIPSE:
-        return <EllipseDraw {...shapeProps} />;
-      case ShapeType.TRIANGLE:
-        return <Triangle {...shapeProps} />;
-      default:
-        return null;
+      await eraseShape(clickedShape);
+    } else if (selectedTool === ShapeType.POINTER) {
+      handleShapeSelection(clickedShape, e.target);
     }
   };
 
+  useEffect(() => {
+    if (!selectedShape) return;
+    console.log("selected shape", selectedShape);
+    console.log(fillColor);
+    console.log(selectedShape);
+    selectedShape.fill = fillColor;
+    selectedShape.stroke = strokeColor;
+    selectedShape.strokeWidth = lineWidth;
+  }, [fillColor, strokeColor, lineWidth, selectedShape]);
+
+  const updateShapesState = (response, id) => {
+    setShapes((prevShapes) => {
+      const newShapes = [...prevShapes];
+      const shapeIndex = newShapes.findIndex((s) => s.shapeId === id);
+
+      if (shapeIndex !== -1) {
+        newShapes[shapeIndex] = {
+          ...newShapes[shapeIndex],
+          ...response.attributes,
+        };
+      }
+      return newShapes;
+    });
+  };
+
+  const resetDrawingState = () => {
+    isDrawing.current = false;
+    currentShapeId.current = null;
+  };
+  const handleApiError = (message, error) => {
+    console.error(message, error);
+  };
   return (
     <div className="canvas-container">
       <Stage
@@ -313,11 +255,16 @@ const Canvas = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
-        <Layer>{dots}</Layer>
+        <Layer>{backgroundDots}</Layer>
         <Layer>
-          {shapes.map((shape, i) => renderShape(shape, i))}
-          {/* Transformer */}
-
+          <ShapesRenderer
+            shapes={shapes}
+            selectedTool={selectedTool}
+            eraserOn={eraserOn}
+            onShapeClick={handleShapeClick}
+            onDragEnd={handleDragEnd}
+            onTransformEnd={handleTransformEnd}
+          />
           {selectedNode && <Transformer nodes={[selectedNode]} />}
         </Layer>
       </Stage>
