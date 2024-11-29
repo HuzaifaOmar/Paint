@@ -23,7 +23,7 @@ const Canvas = ({
   selectedShape,
   setSelectedShape,
   copyTool,
-  setCopyTool
+  setCopyTool,
 }) => {
   const startX = useRef(0);
   const startY = useRef(0);
@@ -68,10 +68,9 @@ const Canvas = ({
     },
   });
 
-
   // const handleCopy2 = async (selectedShape) => {
   //   if (!selectedShape) return;
-  
+
   //   const pos = { x: selectedShape.xStart + 10, y: selectedShape.yStart + 10 }; // Offset the copied shape by 10 pixels
   //   const shapeRequest = copyShapeRequest(
   //     selectedShape.type,
@@ -80,7 +79,7 @@ const Canvas = ({
   //     selectedShape.strokeColor,
   //     selectedShape.strokeWidth
   //   );
-  
+
   //   try {
   //     const response = await ShapeService.createShape(shapeRequest);
   //     setShapes((prevShapes) => [
@@ -95,8 +94,7 @@ const Canvas = ({
   //     handleApiError("Error copying shape", error);
   //   }
   // };
-  
-  
+
   const handleMouseDown = useCallback(
     async (e) => {
       if (eraserOn || selectedTool === ShapeType.POINTER) {
@@ -135,7 +133,14 @@ const Canvas = ({
         handleApiError("Error creating shape", error);
       }
     },
-    [selectedTool, fillColor, strokeColor, lineWidth, eraserOn, setSelectedShape]
+    [
+      selectedTool,
+      fillColor,
+      strokeColor,
+      lineWidth,
+      eraserOn,
+      setSelectedShape,
+    ]
   );
 
   const isValidDrawingState = () =>
@@ -282,26 +287,30 @@ const Canvas = ({
     });
   };
 
-
-  const handleCopy=async()=>{
-    console.log(selectedShape)
+  const handleCopy = async () => {
+    console.log("original shape", selectedShape);
     const response = await ShapeService.copyShape(selectedShape.shapeId);
-    console.log(response);
-    
-  }
+    console.log("copied shape", response);
+    setShapes((prev) => [
+      ...prev,
+      {
+        type: response.shapeType,
+        shapeId: response.shapeId,
+        ...response.attributes,
+      },
+    ]);
+  };
 
   useEffect(() => {
-    if(copyTool===true){
-      setCopyTool(false)
-      if (!selectedShape){
+    if (copyTool === true) {
+      setCopyTool(false);
+      if (!selectedShape) {
         return;
       }
 
-      handleCopy()
+      handleCopy();
     }
   }, [copyTool, selectedShape, handleCopy, setCopyTool]);
-
-
 
   const resetDrawingState = () => {
     isDrawing.current = false;
@@ -310,7 +319,7 @@ const Canvas = ({
   const handleApiError = (message, error) => {
     console.error(message, error);
   };
-  
+
   return (
     <div className="canvas-container">
       <Stage

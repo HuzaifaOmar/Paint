@@ -1,11 +1,14 @@
 package com.example.paint_backend.shapes.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Line extends Shape {
 
     public Line(Map<String, Object> attributes) {
@@ -56,15 +59,18 @@ public class Line extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new FreeHandLine(Map.of(
-                "xStart", this.xStart,
-                "yStart", this.yStart,
-                "fillColor", this.fillColor,
-                "strokeColor", this.strokeColor,
-                "strokeWidth", this.strokeWidth
-        ));
-        clone.setEndPoints(this.xEnd, this.yEnd);
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Line clone = new Line();
+        clone.xStart = this.xStart;
+        clone.yStart = this.yStart;
+        clone.xEnd = this.xEnd;
+        clone.yEnd = this.yEnd;
+        clone.x = this.x != null ? this.x + 10 : null;
+        clone.y = this.y != null ? this.y + 10 : null;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

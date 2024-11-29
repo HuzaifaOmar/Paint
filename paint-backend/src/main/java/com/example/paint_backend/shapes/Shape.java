@@ -1,19 +1,17 @@
 package com.example.paint_backend.shapes;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Map;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class Shape {
-    @Setter
-    @Getter
     protected Long shapeId;
-    @Setter
-    @Getter
     protected String fillColor;
-    @Getter
-    @Setter
     protected String strokeColor;
     protected Double strokeWidth;
     protected Double xStart;
@@ -22,11 +20,8 @@ public abstract class Shape {
     protected Double yEnd;
     protected Double x;
     protected Double y;
-    @Getter
     protected Double scaleX = 1.0;
-    @Getter
     protected Double scaleY = 1.0;
-    @Getter
     protected Double rotation = 0.0;
 
     // Common constructor for all shapes

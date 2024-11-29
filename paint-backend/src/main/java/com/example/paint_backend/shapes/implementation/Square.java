@@ -3,7 +3,9 @@ package com.example.paint_backend.shapes.implementation;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Square extends Shape {
     private Double side = 0.0;
 
@@ -60,16 +62,16 @@ public class Square extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Square(Map.of(
-                "xStart", this.x,
-                "yStart", this.y,
-                "fillColor", this.fillColor,
-                "strokeColor", this.strokeColor,
-                "strokeWidth", this.strokeWidth
-        ));
-        clone.setEndPoints(this.xEnd, this.yEnd);
-        clone.dimensionCalculate();
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Square clone = new Square();
+        clone.side = this.side;
+        clone.x = this.x + 10;
+        clone.y = this.y + 10;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

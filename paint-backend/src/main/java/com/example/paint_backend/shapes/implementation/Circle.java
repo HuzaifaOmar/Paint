@@ -3,7 +3,10 @@ package com.example.paint_backend.shapes.implementation;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Circle extends Shape {
     private Double radius;
 
@@ -45,16 +48,16 @@ public class Circle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Circle(Map.of(
-                "xStart", this.x,
-                "yStart", this.y,
-                "fillColor", this.fillColor,
-                "strokeColor", this.strokeColor,
-                "strokeWidth", this.strokeWidth
-        ));
-        clone.setEndPoints(this.xEnd, this.yEnd);
-        clone.dimensionCalculate();
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Circle clone = new Circle();
+        clone.x = this.x + 10;
+        clone.y = this.y + 10;
+        clone.radius = this.radius;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

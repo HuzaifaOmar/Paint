@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class FreeHandLine extends Shape {
-    private final List<Double> points;
+    private List<Double> points;
 
     public FreeHandLine(Map<String, Object> attributes) {
         super(attributes);
@@ -68,16 +70,15 @@ public class FreeHandLine extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new FreeHandLine(Map.of(
-                "xStart", this.xStart,
-                "yStart", this.yStart,
-                "fillColor", this.fillColor,
-                "strokeColor", this.strokeColor,
-                "strokeWidth", this.strokeWidth
-        ));
-        for (int i = 2; i < points.size(); i += 2)
-            clone.setEndPoints(points.get(i), points.get(i + 1));
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        FreeHandLine clone = new FreeHandLine();
+        clone.points = new ArrayList<>(this.points);
+        clone.x = this.x != null ? this.x + 10 : null;
+        clone.y = this.y != null ? this.y + 10 : null;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }
