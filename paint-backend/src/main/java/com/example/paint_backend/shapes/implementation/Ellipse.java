@@ -2,16 +2,18 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import java.util.Map;
-
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Ellipse extends Shape {
     private Double radiusX;
     private Double radiusY;
 
     public Ellipse(Map<String, Object> attributes) {
         super(attributes);
+        this.x = xStart;
+        this.y = yStart;
     }
 
     @Override
@@ -22,8 +24,8 @@ public class Ellipse extends Shape {
 
     @Override
     public void moveTo(Double newX, Double newY) {
-        this.xStart = newX;
-        this.yStart = newY;
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -36,8 +38,8 @@ public class Ellipse extends Shape {
         return Map.of(
                 "radiusX", radiusX,
                 "radiusY", radiusY,
-                "x", xStart,
-                "y", yStart,
+                "x", x,
+                "y", y,
                 "scaleX", scaleX,
                 "scaleY", scaleY,
                 "rotation", rotation,
@@ -48,8 +50,17 @@ public class Ellipse extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Ellipse(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Ellipse clone = new Ellipse();
+        clone.x = this.x + 10;
+        clone.y = this.y + 10;
+        clone.radiusX = this.radiusX;
+        clone.radiusY = this.radiusY;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

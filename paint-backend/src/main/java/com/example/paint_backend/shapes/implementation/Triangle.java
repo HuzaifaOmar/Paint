@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Triangle extends Shape {
     private List<Double> points;
-    private Double x;
-    private Double y;
 
     public Triangle(Map<String, Object> attributes) {
         super(attributes);
     }
-
     @Override
     public void dimensionCalculate() {
         points = new ArrayList<>();
@@ -71,8 +70,16 @@ public class Triangle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Triangle(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Triangle clone = new Triangle();
+        clone.points = new ArrayList<>(this.points);
+        clone.x = this.x != null ? this.x + 10 : null;
+        clone.y = this.y != null ? this.y + 10 : null;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }
