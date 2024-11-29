@@ -59,4 +59,11 @@ public class Square extends Shape {
                 "stroke", this.strokeColor,
                 "strokeWidth", this.strokeWidth);
     }
+
+    @Override
+    public Shape clone() {
+        Shape clone = new Square(getAttributes());
+        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        return clone;
+    }
 }

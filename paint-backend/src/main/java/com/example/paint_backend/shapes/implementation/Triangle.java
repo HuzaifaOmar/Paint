@@ -68,4 +68,11 @@ public class Triangle extends Shape {
         }
         return attributes;
     }
+
+    @Override
+    public Shape clone() {
+        Shape clone = new Triangle(getAttributes());
+        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        return clone;
+    }
 }

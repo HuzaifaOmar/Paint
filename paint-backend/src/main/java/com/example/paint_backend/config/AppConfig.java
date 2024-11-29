@@ -21,10 +21,11 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // Apply to all endpoints starting with /api/
-                .allowedOrigins("http://localhost:3000") // Allow requests from localhost:3000 (your frontend)
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // Allow these HTTP methods
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Allow credentials (cookies, HTTP authentication)
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://localhost:3000") // Specify exact origin
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

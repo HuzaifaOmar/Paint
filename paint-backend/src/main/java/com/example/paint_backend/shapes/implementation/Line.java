@@ -56,4 +56,11 @@ public class Line extends Shape {
         }
         return attributes;
     }
+
+    @Override
+    public Shape clone() {
+        Shape clone = new Line(getAttributes());
+        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        return clone;
+    }
 }
