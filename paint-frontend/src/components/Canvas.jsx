@@ -20,6 +20,10 @@ const Canvas = ({
   setFillColor,
   setStrokeColor,
   setLineWidth,
+  selectedShape,
+  setSelectedShape,
+  copyTool,
+  setCopyTool
 }) => {
   const startX = useRef(0);
   const startY = useRef(0);
@@ -31,7 +35,6 @@ const Canvas = ({
   // State management
   const [shapes, setShapes] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [selectedShape, setSelectedShape] = useState(null);
 
   // Memoized background dots to prevent unnecessary re-renders
   const backgroundDots = useMemo(
@@ -53,6 +56,47 @@ const Canvas = ({
       strokeWidth: width,
     },
   });
+
+  const copyShapeRequest = (tool, pos, fill, stroke, width) => ({
+    shapeType: tool,
+    attributes: {
+      xStart: pos.x,
+      yStart: pos.y,
+      fillColor: fill,
+      strokeColor: stroke,
+      strokeWidth: width,
+    },
+  });
+
+
+  // const handleCopy2 = async (selectedShape) => {
+  //   if (!selectedShape) return;
+  
+  //   const pos = { x: selectedShape.xStart + 10, y: selectedShape.yStart + 10 }; // Offset the copied shape by 10 pixels
+  //   const shapeRequest = copyShapeRequest(
+  //     selectedShape.type,
+  //     pos,
+  //     selectedShape.fillColor,
+  //     selectedShape.strokeColor,
+  //     selectedShape.strokeWidth
+  //   );
+  
+  //   try {
+  //     const response = await ShapeService.createShape(shapeRequest);
+  //     setShapes((prevShapes) => [
+  //       ...prevShapes,
+  //       {
+  //         type: selectedShape.type,
+  //         shapeId: response.shapeId,
+  //         ...response.attributes,
+  //       },
+  //     ]);
+  //   } catch (error) {
+  //     handleApiError("Error copying shape", error);
+  //   }
+  // };
+  
+  
   const handleMouseDown = useCallback(
     async (e) => {
       if (eraserOn || selectedTool === ShapeType.POINTER) {
@@ -221,7 +265,7 @@ const Canvas = ({
     selectedShape.fill = fillColor;
     selectedShape.stroke = strokeColor;
     selectedShape.strokeWidth = lineWidth;
-  }, [fillColor, strokeColor, lineWidth, selectedShape]);
+  }, [fillColor, strokeColor, lineWidth]);
 
   const updateShapesState = (response, id) => {
     setShapes((prevShapes) => {
@@ -238,6 +282,29 @@ const Canvas = ({
     });
   };
 
+
+  const handleCopy=async()=>{
+    console.log(selectedShape)
+    const response = await ShapeService.copyShape(selectedShape.shapeId);
+    console.log(response);
+    
+  }
+
+
+
+  useEffect(() => {
+    if(copyTool===true){
+      setCopyTool(false)
+      if (!selectedShape){
+        return;
+      }
+
+      handleCopy()
+    }
+  }, [copyTool]);
+
+
+
   const resetDrawingState = () => {
     isDrawing.current = false;
     currentShapeId.current = null;
@@ -245,6 +312,7 @@ const Canvas = ({
   const handleApiError = (message, error) => {
     console.error(message, error);
   };
+  
   return (
     <div className="canvas-container">
       <Stage

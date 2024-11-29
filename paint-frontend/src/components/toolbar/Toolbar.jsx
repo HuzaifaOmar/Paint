@@ -32,10 +32,15 @@ const Toolbar = ({
   setLineWidth,
   eraserOn,
   setEraserOn,
+  selectedShape,
+  copyTool,
+  setCopyTool
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
   const [isToolbarHidden, setIsToolbarHidden] = useState(false);
+  const [tempFillColor, setTempFillColor] = useState(null);
+  const [tempStrokeColor, setTempStrokeColor] = useState(null);
 
   const tools = [
     { id: "pointer", icon: faArrowPointer, label: "Pointer" },
@@ -71,9 +76,17 @@ const Toolbar = ({
     setIsLineWidthDropdownOpen(false);
   };
 
-  const handleFillColorBlur = async (e) => {
-      
+  const handleFillColorBlur = () => {
+    setFillColor(tempFillColor)
   };
+  const handleStrokeColorBlur = () => {
+      setStrokeColor(tempStrokeColor)
+  };
+
+
+  const copy = () =>{
+      setCopyTool(true);
+  }
 
   return (
     <>
@@ -158,7 +171,7 @@ const Toolbar = ({
           type="color"
           className="toolbar-color-input"
           value={fillColor}
-          onChange={(e) => setFillColor(e.target.value)}
+          onChange={(e) => setTempFillColor(e.target.value)}
           onBlur={handleFillColorBlur} 
           title="Fill Color"
         />
@@ -166,8 +179,8 @@ const Toolbar = ({
           type="color"
           className="toolbar-color-input"
           value={strokeColor}
-          onChange={(e) => setStrokeColor(e.target.value)}
-          onBlur
+          onChange={(e) => setTempStrokeColor(e.target.value)}
+          onBlur={handleStrokeColorBlur}
           title="Stroke Color"
         />
         <ToolbarButton
@@ -196,7 +209,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faCopy} />}
-          onClick={() => console.log("Copy action")}
+          onClick={copy}
           title="Copy"
           label="Copy"
         />
