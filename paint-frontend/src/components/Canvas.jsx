@@ -290,8 +290,6 @@ const Canvas = ({
     
   }
 
-
-
   useEffect(() => {
     if(copyTool===true){
       setCopyTool(false)

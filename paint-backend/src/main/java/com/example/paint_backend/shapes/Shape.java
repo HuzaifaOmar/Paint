@@ -1,6 +1,5 @@
 package com.example.paint_backend.shapes;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,13 +31,13 @@ public abstract class Shape {
 
     // Common constructor for all shapes
     public Shape(Map<String, Object> attributes) {
-        this.xStart = ((Number) attributes.get("xStart")).doubleValue();
-        this.yStart = ((Number) attributes.get("yStart")).doubleValue();
+        this.xStart = ((Number) attributes.getOrDefault("xStart", 0.0)).doubleValue();
+        this.yStart = ((Number) attributes.getOrDefault("yStart", 0.0)).doubleValue();
         this.fillColor = (String) attributes.get("fillColor");
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
 
-        //! Initialize end points to start points by default
+        // ! Initialize end points to start points by default
         this.xEnd = this.xStart;
         this.yEnd = this.yStart;
     }

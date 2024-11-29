@@ -44,6 +44,7 @@ public class Circle extends Shape {
     @Override
     public Shape clone() {
         Shape clone = new Circle(getAttributes());
+        clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
     }

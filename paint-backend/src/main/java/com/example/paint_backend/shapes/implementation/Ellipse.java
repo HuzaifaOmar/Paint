@@ -2,8 +2,6 @@ package com.example.paint_backend.shapes.implementation;
 
 import java.util.Map;
 
-import java.util.Map;
-
 import com.example.paint_backend.shapes.Shape;
 
 public class Ellipse extends Shape {
@@ -49,6 +47,7 @@ public class Ellipse extends Shape {
     @Override
     public Shape clone() {
         Shape clone = new Ellipse(getAttributes());
+        clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
     }

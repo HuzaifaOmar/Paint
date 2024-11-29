@@ -71,6 +71,7 @@ public class FreeHandLine extends Shape {
     @Override
     public Shape clone() {
         Shape clone = new FreeHandLine(getAttributes());
+        clone.dimensionCalculate();
         clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
         return clone;
     }

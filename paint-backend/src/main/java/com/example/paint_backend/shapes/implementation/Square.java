@@ -63,7 +63,8 @@ public class Square extends Shape {
     @Override
     public Shape clone() {
         Shape clone = new Square(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        clone.dimensionCalculate();
+        clone.transform(x + 5.0, y + 5.0, scaleX, scaleY, rotation);
         return clone;
     }
 }
