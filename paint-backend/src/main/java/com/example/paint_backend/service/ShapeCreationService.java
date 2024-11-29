@@ -1,17 +1,19 @@
 package com.example.paint_backend.service;
 
+import org.springframework.stereotype.Service;
+
 import com.example.paint_backend.commands.CommandHistory;
 import com.example.paint_backend.commands.ShapeCommand;
 import com.example.paint_backend.commands.implementation.CreateShapeCommand;
-import com.example.paint_backend.dto.*;
+import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.dto.shape_creation_request.ShapeFinalizeRequest;
 import com.example.paint_backend.dto.shape_creation_request.ShapeRequest;
 import com.example.paint_backend.dto.shape_creation_request.ShapeUpdateRequest;
-import com.example.paint_backend.exception.*;
-import com.example.paint_backend.repository.ShapeRepository;
+import com.example.paint_backend.exception.InvalidShapeTypeException;
+import com.example.paint_backend.exception.ShapeNotFoundException;
 import com.example.paint_backend.factory.ShapeFactory;
+import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ShapeCreationService {
@@ -37,6 +39,7 @@ public class ShapeCreationService {
         Shape shape = findShapeById(shapeId);
         shape.setEndPoints(request.getXEnd(), request.getYEnd());
         shape.dimensionCalculate();
+        shapeRepository.deleteById(shapeId);
         return new ShapeDTO(shapeRepository.save(shape));
     }
 
@@ -47,6 +50,7 @@ public class ShapeCreationService {
         ShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape);
         createShape.execute();
         commandHistory.push(createShape);
+        shapeRepository.deleteById(shapeId);
         return new ShapeDTO(shapeRepository.save(shape));
     }
 

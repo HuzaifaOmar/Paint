@@ -1,16 +1,20 @@
 package com.example.paint_backend.service;
 
-import com.example.paint_backend.commands.implementation.*;
-import com.example.paint_backend.dto.command_requests.RecolorRequest;
-import com.example.paint_backend.dto.command_requests.TransformRequest;
-import com.example.paint_backend.shapes.Shape;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.commands.CommandHistory;
-import com.example.paint_backend.dto.command_requests.MoveRequest;
+import com.example.paint_backend.commands.implementation.CreateShapeCommand;
+import com.example.paint_backend.commands.implementation.EraseShapesCommand;
+import com.example.paint_backend.commands.implementation.MoveShapeCommand;
+import com.example.paint_backend.commands.implementation.RecolorShapeCommand;
+import com.example.paint_backend.commands.implementation.TransformShapeCommand;
 import com.example.paint_backend.dto.ShapeDTO;
+import com.example.paint_backend.dto.command_requests.MoveRequest;
+import com.example.paint_backend.dto.command_requests.RecolorRequest;
+import com.example.paint_backend.dto.command_requests.TransformRequest;
 import com.example.paint_backend.exception.ShapeNotFoundException;
 import com.example.paint_backend.repository.ShapeRepository;
+import com.example.paint_backend.shapes.Shape;
 
 @Service
 public class ShapeCommandsService {
@@ -67,4 +71,5 @@ public class ShapeCommandsService {
     private Shape findShapeById(Long shapeId) {
         return shapeRepository.findById(shapeId).orElseThrow(() -> new ShapeNotFoundException(shapeId));
     }
+
 }

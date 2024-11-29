@@ -5,16 +5,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.example.paint_backend.shapes.Shape;
 import org.springframework.stereotype.Repository;
+
+import com.example.paint_backend.shapes.Shape;
 
 @Repository
 public class ShapeRepository {
+
     private final List<Shape> shapes = new ArrayList<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
 
     public Shape save(Shape shape) {
-        if (shape.getShapeId() == null) shape.setShapeId(idGenerator.getAndIncrement());
+        if (shape.getShapeId() == null) {
+            shape.setShapeId(idGenerator.getAndIncrement());
+        }
         shapes.add(shape);
         return shape;
     }
@@ -39,4 +43,5 @@ public class ShapeRepository {
             }
         }
     }
+
 }

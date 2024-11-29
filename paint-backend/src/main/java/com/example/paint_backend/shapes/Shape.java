@@ -1,12 +1,12 @@
 package com.example.paint_backend.shapes;
 
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
-
 public abstract class Shape {
+
     @Setter
     @Getter
     protected Long shapeId;
@@ -77,5 +77,6 @@ public abstract class Shape {
 
     public abstract Map<String, Object> getAttributes();
 
+    @Override
     public abstract Shape clone();
 }

@@ -20,7 +20,6 @@ import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 import ToolbarButton from "./ToolbarButton";
 import "../../styles/Toolbar.css";
-import SavePagePopup from "../SavePagePopup.jsx";
 import axios from "axios";
 const API_BASE_URL = "http://localhost:8080/api/shapes";
 const Toolbar = ({
@@ -34,6 +33,7 @@ const Toolbar = ({
     setLineWidth,
     eraserOn,
     setEraserOn,
+    setIsPopupOpen,
 }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(
@@ -60,8 +60,13 @@ const Toolbar = ({
         return <FontAwesomeIcon icon={tool.icon} />;
     };
     const saveFunction = async () => {
-        const response = await axios.get(`${API_BASE_URL}/save`);
-        SavePagePopup(response.data);
+        try {
+            console.log("Saving...");
+            setIsPopupOpen(true);
+        } catch (error) {
+            console.error("Error saving shapes:", error);
+            alert("Failed to save shapes. Please try again.");
+        }
     };
 
     const toggleEraser = () => {
