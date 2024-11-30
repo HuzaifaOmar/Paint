@@ -1,3 +1,5 @@
+
+
 import React, {
   useRef,
   useEffect,
@@ -230,7 +232,7 @@ const Canvas = ({
     console.log("selected shape", selectedShape);
     console.log(fillColor);
     console.log(selectedShape);
-    selectedShape.fill = fillColor;
+    selectedShape.fill=fillColor
     selectedShape.stroke = strokeColor;
     selectedShape.strokeWidth = lineWidth;
   }, [fillColor, strokeColor, lineWidth, selectedShape]);
@@ -310,3 +312,4 @@ const Canvas = ({
 };
 
 export default Canvas;
+
