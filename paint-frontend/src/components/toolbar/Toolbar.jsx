@@ -14,7 +14,7 @@ import {
     faSquare,
     faCircle,
     faArrowPointer,
-    faCopy, // Import the copy icon
+    faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
@@ -135,11 +135,18 @@ const Toolbar = ({
                     }}
                 >
                     <div className="toolbar-dropdown-selected">
+                        
                         <span
-                            style={{ fontSize: lineWidth + 7, display: "flex" }}
+                            style={{ fontSize: lineWidth + 7, display: (lineWidth!==0?"flex":"none") }}
                         >
                             <FontAwesomeIcon icon={faCircle} />
                         </span>
+                        <span
+                            style={{ fontSize: 10,fontWeight:"bold", display: (lineWidth===0?"flex":"none") }}
+                        >
+                            None
+                        </span>
+
                     </div>
                     <FontAwesomeIcon
                         icon={faCaretDown}
@@ -147,7 +154,22 @@ const Toolbar = ({
                     />
                     {isLineWidthDropdownOpen && (
                         <ul className="toolbar-dropdown-list">
-                            {[2, 3, 5, 7, 9].map((width) => (
+                            <li
+                                key={0}
+                                className="toolbar-dropdown-item"
+                                onClick={() =>
+                                    handleLineWidthSelection(0)
+                                }
+                                style={{
+                                    display:((selectedTool==="line"||selectedTool==="freehand")?"none":"block"),
+                                    fontSize: 10,
+                                    justifyContent: "center",
+                                }}
+                                >
+                                None
+                            </li>
+                            {
+                            [2, 3, 5, 7, 9].map((width) => (
                                 <li
                                     key={width}
                                     className="toolbar-dropdown-item"
@@ -174,23 +196,6 @@ const Toolbar = ({
           label="Eraser"
           clicked={eraserOn}
         />
-        {/* <input
-          type="color"
-          className="toolbar-color-input"
-          value={fillColor}
-          onChange={(e) => setFillColor(e.target.value)}
-          onBlur={handleFillColorBlur} 
-          title="Fill Color"
-        /> */}
-        
-        {/* <input
-          type="color"
-          className="toolbar-color-input"
-          value={strokeColor}
-          onChange={(e) => setStrokeColor(e.target.value)}
-          onBlur
-          title="Stroke Color"
-        /> */}
 
         <ColorPicker 
             color={fillColor} 
