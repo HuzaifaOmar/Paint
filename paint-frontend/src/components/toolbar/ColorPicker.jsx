@@ -1,9 +1,9 @@
 import { ChromePicker } from "react-color";
 
-const ColorPicker = ({color,setColor,showPicker,setShowPicker,setOtherPicker}) => {
+const ColorPicker = ({color,setColor,showPicker,setShowPicker,setOtherPicker,title}) => {
 
   const handleColorChange = (newColor) => {
-    const { r, g, b, a } = newColor.rgb; // Get color with transparency
+    const { r, g, b, a } = newColor.rgb;
     const rgbaColor = `rgba(${r}, ${g}, ${b}, ${a})`;
     setColor(rgbaColor);
     console.log("Selected color:", rgbaColor);
@@ -14,9 +14,12 @@ const ColorPicker = ({color,setColor,showPicker,setShowPicker,setOtherPicker}) =
     <div>
       {/* Current color display */}
       <div
+      title={title}
         style={{
-          width: "20px",
-          height: "15px",
+          width: "25px",
+          height: "25px",
+          margin:"0 10px",
+          borderRadius:"50%",
           background: color,
           border: "1px solid #ccc",
           cursor: "pointer",
@@ -24,7 +27,6 @@ const ColorPicker = ({color,setColor,showPicker,setShowPicker,setOtherPicker}) =
         onClick={() => {setShowPicker(!showPicker)
           setOtherPicker(false)
         }
-          
         }
       ></div>
 
