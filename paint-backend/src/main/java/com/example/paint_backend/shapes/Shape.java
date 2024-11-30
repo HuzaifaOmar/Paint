@@ -1,14 +1,15 @@
 package com.example.paint_backend.shapes;
-import java.util.Map;
-
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class Shape {
-    @Setter
-    @Getter
     protected Long shapeId;
     protected String fillColor;
     protected String strokeColor;
@@ -69,6 +70,7 @@ public abstract class Shape {
     public abstract String getShapeType();
 
     public abstract Map<String, Object> getAttributes();
-    @Override
+
+    // ! build the object the same way it was made to clone
     public abstract Shape clone();
 }

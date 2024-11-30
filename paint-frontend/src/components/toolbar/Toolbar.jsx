@@ -20,8 +20,6 @@ import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 import ToolbarButton from "./ToolbarButton";
 import "../../styles/Toolbar.css";
-import axios from "axios";
-const API_BASE_URL = "http://localhost:8080/api/shapes";
 const Toolbar = ({
   selectedTool,
   setSelectedTool,
@@ -59,7 +57,7 @@ const Toolbar = ({
         }
         return <FontAwesomeIcon icon={tool.icon} />;
     };
-    const saveFunction = async () => {
+    const handleSave = async () => {
         try {
             console.log("Saving...");
             setIsPopupOpen(true);
@@ -204,7 +202,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faDownload} />}
-          onClick={() => console.log("Save action")}
+          onClick={() => handleSave}
           title="Save"
           label="Save"
         />
