@@ -34,6 +34,8 @@ const Toolbar = ({
   eraserOn,
   setEraserOn,
   setIsPopupOpen,
+  copyTool,
+  setCopyTool,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
@@ -85,6 +87,9 @@ const Toolbar = ({
   const handleFillColorBlur = async (e) => {
       
   };
+  const handleCopy = () =>{
+    setCopyTool(true);
+}
 
     return (
         <>
@@ -211,7 +216,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faCopy} />}
-          onClick={() => console.log("Copy action")}
+          onClick={() =>handleCopy}
           title="Copy"
           label="Copy"
         />
