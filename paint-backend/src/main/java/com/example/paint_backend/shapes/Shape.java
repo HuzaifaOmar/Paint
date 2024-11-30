@@ -71,6 +71,6 @@ public abstract class Shape {
 
     public abstract Map<String, Object> getAttributes();
 
-    //! build the object the same way it was made to clone
+    // ! build the object the same way it was made to clone
     public abstract Shape clone();
 }

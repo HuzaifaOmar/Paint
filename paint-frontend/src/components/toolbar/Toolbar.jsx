@@ -1,26 +1,25 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCaretUp,
-  faCaretDown,
-  faEraser,
-  faRotateLeft,
-  faRotateRight,
-  faDownload,
-  faUpload,
-  faPaintBrush,
-  faRulerHorizontal,
-  faSquare,
-  faCircle,
-  faArrowPointer,
-  faCopy, // Import the copy icon
+    faCaretUp,
+    faCaretDown,
+    faEraser,
+    faRotateLeft,
+    faRotateRight,
+    faDownload,
+    faUpload,
+    faPaintBrush,
+    faRulerHorizontal,
+    faSquare,
+    faCircle,
+    faArrowPointer,
+    faCopy, // Import the copy icon
 } from "@fortawesome/free-solid-svg-icons";
 import EllipseIcon from "./icons/ellipse.jsx";
 import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 import ToolbarButton from "./ToolbarButton";
 import "../../styles/Toolbar.css";
-
 const Toolbar = ({
   selectedTool,
   setSelectedTool,
@@ -32,132 +31,140 @@ const Toolbar = ({
   setLineWidth,
   eraserOn,
   setEraserOn,
-  selectedShape,
+  setIsPopupOpen,
   copyTool,
-  setCopyTool
+  setCopyTool,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
   const [isToolbarHidden, setIsToolbarHidden] = useState(false);
-  const [tempFillColor, setTempFillColor] = useState(null);
-  const [tempStrokeColor, setTempStrokeColor] = useState(null);
 
-  const tools = [
-    { id: "pointer", icon: faArrowPointer, label: "Pointer" },
-    { id: "freehand", icon: faPaintBrush, label: "Freehand" },
-    { id: "line", icon: faRulerHorizontal, label: "Line" },
-    { id: "square", icon: faSquare, label: "Square" },
-    { id: "circle", icon: faCircle, label: "Circle" },
-    { id: "rectangle", icon: RectangleIcon, label: "Rectangle" },
-    { id: "triangle", icon: TriangleIcon, label: "Triangle" },
-    { id: "ellipse", icon: EllipseIcon, label: "Ellipse" },
-  ];
+    const tools = [
+        { id: "pointer", icon: faArrowPointer, label: "Pointer" },
+        { id: "freehand", icon: faPaintBrush, label: "Freehand" },
+        { id: "line", icon: faRulerHorizontal, label: "Line" },
+        { id: "square", icon: faSquare, label: "Square" },
+        { id: "circle", icon: faCircle, label: "Circle" },
+        { id: "rectangle", icon: RectangleIcon, label: "Rectangle" },
+        { id: "triangle", icon: TriangleIcon, label: "Triangle" },
+        { id: "ellipse", icon: EllipseIcon, label: "Ellipse" },
+    ];
 
-  const renderIcon = (tool) => {
-    if (tool.icon instanceof Function) {
-      const IconComponent = tool.icon;
-      return <IconComponent />;
-    }
-    return <FontAwesomeIcon icon={tool.icon} />;
+    const renderIcon = (tool) => {
+        if (tool.icon instanceof Function) {
+            const IconComponent = tool.icon;
+            return <IconComponent />;
+        }
+        return <FontAwesomeIcon icon={tool.icon} />;
+    };
+    const handleSave = async () => {
+        try {
+            console.log("Saving...");
+            setIsPopupOpen(true);
+        } catch (error) {
+            console.error("Error saving shapes:", error);
+            alert("Failed to save shapes. Please try again.");
+        }
+    };
+
+    const toggleEraser = () => {
+        setEraserOn(!eraserOn);
+    };
+
+    const getSelectedToolIcon = () => {
+        const tool = tools.find((t) => t.id === selectedTool);
+        if (!tool) return <FontAwesomeIcon icon={faPaintBrush} />;
+        return renderIcon(tool);
+    };
+
+    const handleLineWidthSelection = (width) => {
+        setLineWidth(width);
+        setIsLineWidthDropdownOpen(false);
+    };
+
+  const handleFillColorBlur = async (e) => {
+      
   };
+  const handleCopy = () =>{
+    console.log("xx");
+    
+    setCopyTool(true);
+}
 
-  const toggleEraser=()=>{
-    setEraserOn(!eraserOn)
-  }
-
-  const getSelectedToolIcon = () => {
-    const tool = tools.find((t) => t.id === selectedTool);
-    if (!tool) return <FontAwesomeIcon icon={faPaintBrush} />;
-    return renderIcon(tool);
-  };
-
-  const handleLineWidthSelection = (width) => {
-    setLineWidth(width);
-    setIsLineWidthDropdownOpen(false);
-  };
-
-  const handleFillColorBlur = () => {
-    setFillColor(tempFillColor)
-  };
-  const handleStrokeColorBlur = () => {
-      setStrokeColor(tempStrokeColor)
-  };
-
-
-  const copy = () =>{
-      setCopyTool(true);
-  }
-
-  return (
-    <>
-      <div className={`toolbar ${isToolbarHidden ? "hidden" : ""}`}>
-        {/* Tool Selection Dropdown */}
-        <div
-          className="toolbar-dropdown-container"
-          onClick={() => {
-            setIsDropdownOpen(!isDropdownOpen);
-            setIsLineWidthDropdownOpen(false);
-          }}
-        >
-          <div className="toolbar-dropdown-selected">
-            {getSelectedToolIcon()}
-          </div>
-          <FontAwesomeIcon
-            icon={faCaretDown}
-            className="toolbar-dropdown-toggle"
-          />
-          {isDropdownOpen && (
-            <ul className="toolbar-dropdown-list">
-              {tools.map((tool) => (
-                <li
-                  key={tool.id}
-                  className="toolbar-dropdown-item"
-                  onClick={() => {
-                    setSelectedTool(tool.id);
-                    setIsDropdownOpen(false);
-                  }}
+    return (
+        <>
+            <div className={`toolbar ${isToolbarHidden ? "hidden" : ""}`}>
+                {/* Tool Selection Dropdown */}
+                <div
+                    className="toolbar-dropdown-container"
+                    onClick={() => {
+                        setIsDropdownOpen(!isDropdownOpen);
+                        setIsLineWidthDropdownOpen(false);
+                    }}
                 >
-                  {renderIcon(tool)}
-                  <span>{tool.label}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <div
-          className="toolbar-dropdown-container"
-          onClick={() => {
-            setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen);
-            setIsDropdownOpen(false);
-          }}
-        >
-          <div className="toolbar-dropdown-selected">
-            <span style={{ fontSize: lineWidth + 7, display: "flex" }}>
-              <FontAwesomeIcon icon={faCircle} />
-            </span>
-          </div>
-          <FontAwesomeIcon
-            icon={faCaretDown}
-            className="toolbar-dropdown-toggle"
-          />
-          {isLineWidthDropdownOpen && (
-            <ul className="toolbar-dropdown-list">
-              {[2, 3, 5, 7, 9].map((width) => (
-                <li
-                  key={width}
-                  className="toolbar-dropdown-item"
-                  onClick={() => handleLineWidthSelection(width)}
-                  style={{
-                    fontSize: width + 7,
-                    justifyContent: "center",
-                  }}
+                    <div className="toolbar-dropdown-selected">
+                        {getSelectedToolIcon()}
+                    </div>
+                    <FontAwesomeIcon
+                        icon={faCaretDown}
+                        className="toolbar-dropdown-toggle"
+                    />
+                    {isDropdownOpen && (
+                        <ul className="toolbar-dropdown-list">
+                            {tools.map((tool) => (
+                                <li
+                                    key={tool.id}
+                                    className="toolbar-dropdown-item"
+                                    onClick={() => {
+                                        setSelectedTool(tool.id);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                >
+                                    {renderIcon(tool)}
+                                    <span>{tool.label}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                <div
+                    className="toolbar-dropdown-container"
+                    onClick={() => {
+                        setIsLineWidthDropdownOpen(!isLineWidthDropdownOpen);
+                        setIsDropdownOpen(false);
+                    }}
                 >
-                  <FontAwesomeIcon icon={faCircle} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                    <div className="toolbar-dropdown-selected">
+                        <span
+                            style={{ fontSize: lineWidth + 7, display: "flex" }}
+                        >
+                            <FontAwesomeIcon icon={faCircle} />
+                        </span>
+                    </div>
+                    <FontAwesomeIcon
+                        icon={faCaretDown}
+                        className="toolbar-dropdown-toggle"
+                    />
+                    {isLineWidthDropdownOpen && (
+                        <ul className="toolbar-dropdown-list">
+                            {[2, 3, 5, 7, 9].map((width) => (
+                                <li
+                                    key={width}
+                                    className="toolbar-dropdown-item"
+                                    onClick={() =>
+                                        handleLineWidthSelection(width)
+                                    }
+                                    style={{
+                                        fontSize: width + 7,
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faCircle} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
         {/* Buttons */}
         <ToolbarButton
@@ -171,7 +178,7 @@ const Toolbar = ({
           type="color"
           className="toolbar-color-input"
           value={fillColor}
-          onChange={(e) => setTempFillColor(e.target.value)}
+          onChange={(e) => setFillColor(e.target.value)}
           onBlur={handleFillColorBlur} 
           title="Fill Color"
         />
@@ -179,8 +186,8 @@ const Toolbar = ({
           type="color"
           className="toolbar-color-input"
           value={strokeColor}
-          onChange={(e) => setTempStrokeColor(e.target.value)}
-          onBlur={handleStrokeColorBlur}
+          onChange={(e) => setStrokeColor(e.target.value)}
+          onBlur
           title="Stroke Color"
         />
         <ToolbarButton
@@ -197,7 +204,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faDownload} />}
-          onClick={() => console.log("Save action")}
+          onClick={() => handleSave()}
           title="Save"
           label="Save"
         />
@@ -209,25 +216,27 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faCopy} />}
-          onClick={copy}
+          onClick={() =>handleCopy()}
           title="Copy"
           label="Copy"
         />
       </div>
 
-      {/* Hide/Show Button */}
-      <button
-        className={`toolbar-toggle ${isToolbarHidden ? "hidden" : ""}`}
-        onClick={() => {
-          setIsToolbarHidden(!isToolbarHidden);
-          setIsLineWidthDropdownOpen(false);
-          setIsDropdownOpen(false);
-        }}
-      >
-        <FontAwesomeIcon icon={isToolbarHidden ? faCaretDown : faCaretUp} />
-      </button>
-    </>
-  );
+            {/* Hide/Show Button */}
+            <button
+                className={`toolbar-toggle ${isToolbarHidden ? "hidden" : ""}`}
+                onClick={() => {
+                    setIsToolbarHidden(!isToolbarHidden);
+                    setIsLineWidthDropdownOpen(false);
+                    setIsDropdownOpen(false);
+                }}
+            >
+                <FontAwesomeIcon
+                    icon={isToolbarHidden ? faCaretDown : faCaretUp}
+                />
+            </button>
+        </>
+    );
 };
 
 export default Toolbar;

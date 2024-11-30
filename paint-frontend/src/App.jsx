@@ -3,15 +3,15 @@ import Canvas from "./components/Canvas";
 import Toolbar from "./components/toolbar/Toolbar";
 import React, { useState } from "react";
 import "./styles/main.css";
-
+import SavePagePopup from "./components/SavePagePopup";
 function App() {
   const [selectedTool, setSelectedTool] = useState("freehand");
   const [fillColor, setFillColor] = useState("#F0F0F0");
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [lineWidth, setLineWidth] = useState(2.0);
   const [eraserOn,setEraserOn]=useState(false)
-  const [selectedShape, setSelectedShape] = useState(null);
   const[copyTool,setCopyTool]=useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   return (
     <div className="main-screen">
       <Toolbar
@@ -25,10 +25,15 @@ function App() {
         setLineWidth={setLineWidth}
         eraserOn={eraserOn}
         setEraserOn={setEraserOn}
-        selectedShape={selectedShape}
+        isPopupOpen={isPopupOpen}
+        setIsPopupOpen={setIsPopupOpen}
+        copyTool={copyTool}
         setCopyTool={setCopyTool}
-        copyTool = {copyTool}
       />
+      <SavePagePopup
+                isPopupOpen={isPopupOpen}
+                setIsPopupOpen={setIsPopupOpen}
+            />
       <Canvas
         selectedTool={selectedTool}
         fillColor={fillColor}
@@ -38,8 +43,6 @@ function App() {
         setFillColor={setFillColor}
         setStrokeColor={setStrokeColor}
         setLineWidth={setLineWidth}
-        selectedShape={selectedShape}
-        setSelectedShape={setSelectedShape}
         copyTool={copyTool}
         setCopyTool={setCopyTool}
       />

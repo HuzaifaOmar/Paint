@@ -20,8 +20,6 @@ const Canvas = ({
   setFillColor,
   setStrokeColor,
   setLineWidth,
-  selectedShape,
-  setSelectedShape,
   copyTool,
   setCopyTool,
 }) => {
@@ -35,6 +33,7 @@ const Canvas = ({
   // State management
   const [shapes, setShapes] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedShape, setSelectedShape] = useState(null);
 
   // Memoized background dots to prevent unnecessary re-renders
   const backgroundDots = useMemo(

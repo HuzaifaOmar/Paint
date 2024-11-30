@@ -3,7 +3,6 @@ package com.example.paint_backend.shapes.implementation;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
