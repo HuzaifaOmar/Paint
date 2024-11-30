@@ -56,8 +56,6 @@ const Canvas = ({
     },
   });
 
-  
-  
   const handleMouseDown = useCallback(
     async (e) => {
       if (eraserOn || selectedTool === ShapeType.POINTER) {
@@ -210,8 +208,8 @@ const Canvas = ({
 
   const handleShapeSelection = (shape, target) => {
     setSelectedNode(target);
-    setFillColor(shape.fill);
-    setStrokeColor(shape.stroke);
+    setFillColor(shape.fill || fillColor);
+    setStrokeColor(shape.stroke || strokeColor);
     setLineWidth(shape.strokeWidth);
     setSelectedShape(shape);
   };
@@ -227,9 +225,6 @@ const Canvas = ({
 
   useEffect(() => {
     if (!selectedShape) return;
-    console.log("selected shape", selectedShape);
-    console.log(fillColor);
-    console.log(selectedShape);
     selectedShape.fill = fillColor;
     selectedShape.stroke = strokeColor;
     selectedShape.strokeWidth = lineWidth;
@@ -250,9 +245,11 @@ const Canvas = ({
     });
   };
 
-
-  const handleCopy=async()=>{
+  const handleCopy = async () => {
+    console.log("original shape", selectedShape);
     const response = await ShapeService.copyShape(selectedShape.shapeId);
+    console.log("copied shape", response);
+
     setShapes((prevShapes) => [
       ...prevShapes,
       {
@@ -261,16 +258,13 @@ const Canvas = ({
         ...response.attributes,
       },
     ]);
-    
-  }
+  };
 
   useEffect(() => {
     if (copyTool === true) {
       setCopyTool(false);
-      if (!selectedShape) {
-        return;
-      }
-      handleCopy()
+      if (!selectedShape) return;
+      handleCopy();
     }
   }, [copyTool]);
 

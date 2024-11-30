@@ -1,5 +1,6 @@
 package com.example.paint_backend.controller;
 
+import com.example.paint_backend.dto.UndoRedoResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,12 +51,19 @@ public class ShapesCommandsController {
 
     @PutMapping("{shapeId}/recolor")
     public ResponseEntity<ShapeDTO> recolorShape(@PathVariable Long shapeId, @RequestBody RecolorRequest request) {
+        System.out.println("Received recolor request for shape ID: " + shapeId);
         return ResponseEntity.ok(shapeService.recolorShape(shapeId, request));
     }
 
     @PostMapping("{shapeId}/clone")
     public ResponseEntity<ShapeDTO> cloneShape(@PathVariable Long shapeId) {
-        System.out.println(shapeId);
+        System.out.println("Received clone request for shape ID: " + shapeId);
         return ResponseEntity.ok(shapeService.cloneShape(shapeId));
+    }
+
+    @PostMapping("undo")
+    public ResponseEntity<UndoRedoResponse> undo() {
+        System.out.println("Received undo request: ");
+        return ResponseEntity.ok(shapeService.undo());
     }
 }

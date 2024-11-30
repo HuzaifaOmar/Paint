@@ -3,7 +3,7 @@ import Canvas from "./components/Canvas";
 import Toolbar from "./components/toolbar/Toolbar";
 import React, { useState } from "react";
 import "./styles/main.css";
-import SavePagePopup from "./components/SavePagePopup";
+import SavePagePopup from "./components/savePopup/SavePagePopup";
 function App() {
   const [selectedTool, setSelectedTool] = useState("freehand");
   const [fillColor, setFillColor] = useState("#F0F0F0");

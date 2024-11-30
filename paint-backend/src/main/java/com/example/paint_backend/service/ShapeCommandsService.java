@@ -1,5 +1,7 @@
 package com.example.paint_backend.service;
 
+import com.example.paint_backend.commands.ShapeCommand;
+import com.example.paint_backend.dto.UndoRedoResponse;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.commands.CommandHistory;
@@ -16,6 +18,8 @@ import com.example.paint_backend.exception.ShapeNotFoundException;
 import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
 
+import java.util.Optional;
+
 @Service
 public class ShapeCommandsService {
 
@@ -29,7 +33,7 @@ public class ShapeCommandsService {
 
     public ShapeDTO moveShape(Long shapeId, MoveRequest request) {
         Shape shape = findShapeById(shapeId);
-        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shape, request.getX(), request.getY());
+        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shapeRepository, shape, request.getX(), request.getY());
         moveShapeCommand.execute();
         commandHistory.push(moveShapeCommand);
         shapeRepository.update(shape);
@@ -38,7 +42,7 @@ public class ShapeCommandsService {
 
     public ShapeDTO transformShape(Long shapeId, TransformRequest request) {
         Shape shape = findShapeById(shapeId);
-        TransformShapeCommand transformShapeCommand = new TransformShapeCommand(shape, request.getX(), request.getY(),
+        TransformShapeCommand transformShapeCommand = new TransformShapeCommand(shapeRepository, shape, request.getX(), request.getY(),
                 request.getScaleX(), request.getScaleY(), request.getRotation());
         transformShapeCommand.execute();
         commandHistory.push(transformShapeCommand);
@@ -48,7 +52,7 @@ public class ShapeCommandsService {
 
     public ShapeDTO recolorShape(Long shapeId, RecolorRequest request) {
         Shape shape = findShapeById(shapeId);
-        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shape, request.getFillColor(),
+        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shapeRepository, shape, request.getFillColor(),
                 request.getStrokeColor());
         commandHistory.push(recolorShapeCommand);
         shapeRepository.update(shape);
@@ -68,6 +72,24 @@ public class ShapeCommandsService {
         createShapeCommand.execute();
         commandHistory.push(createShapeCommand);
         return new ShapeDTO(clone);
+    }
+
+    public UndoRedoResponse undo() {
+        Optional<ShapeCommand> command = commandHistory.popUndo();
+        if (command.isEmpty())
+            return new UndoRedoResponse(false);
+        commandHistory.pushRedo(command.get());
+        command.get().undo();
+        return command.get().getUndoResponse();
+    }
+
+    public UndoRedoResponse redo() {
+        Optional<ShapeCommand> command = commandHistory.popRedo();
+        if (command.isEmpty())
+            return new UndoRedoResponse(false);
+        commandHistory.push(command.get());
+        command.get().undo();
+        return command.get().getRedoResponse();
     }
 
     private Shape findShapeById(Long shapeId) {

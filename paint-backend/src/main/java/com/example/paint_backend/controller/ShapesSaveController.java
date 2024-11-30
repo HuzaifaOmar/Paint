@@ -8,11 +8,11 @@ import com.example.paint_backend.service.ShapesSavingService;
 
 @RestController
 @RequestMapping("/api/shapes/save")
-public class ShapesSaveControllar {
+public class ShapesSaveController {
 
-    private ShapesSavingService shapesSavingService;
+    private final ShapesSavingService shapesSavingService;
 
-    public ShapesSaveControllar(ShapesSavingService shapesSavingService) {
+    public ShapesSaveController(ShapesSavingService shapesSavingService) {
         this.shapesSavingService = shapesSavingService;
     }
 

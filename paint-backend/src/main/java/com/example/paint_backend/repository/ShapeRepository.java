@@ -18,6 +18,9 @@ public class ShapeRepository {
     public Shape save(Shape shape) {
         if (shape.getShapeId() == null) {
             shape.setShapeId(idGenerator.getAndIncrement());
+        } else {
+            update(shape);
+            return shape;
         }
         shapes.add(shape);
         return shape;
