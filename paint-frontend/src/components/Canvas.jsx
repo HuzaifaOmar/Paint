@@ -20,6 +20,10 @@ const Canvas = ({
   setFillColor,
   setStrokeColor,
   setLineWidth,
+  selectedShape,
+  setSelectedShape,
+  copyTool,
+  setCopyTool,
 }) => {
   const startX = useRef(0);
   const startY = useRef(0);
@@ -31,7 +35,6 @@ const Canvas = ({
   // State management
   const [shapes, setShapes] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [selectedShape, setSelectedShape] = useState(null);
 
   // Memoized background dots to prevent unnecessary re-renders
   const backgroundDots = useMemo(
@@ -53,6 +56,9 @@ const Canvas = ({
       strokeWidth: width,
     },
   });
+
+  
+  
   const handleMouseDown = useCallback(
     async (e) => {
       if (eraserOn || selectedTool === ShapeType.POINTER) {
@@ -91,7 +97,14 @@ const Canvas = ({
         handleApiError("Error creating shape", error);
       }
     },
-    [selectedTool, fillColor, strokeColor, lineWidth, eraserOn]
+    [
+      selectedTool,
+      fillColor,
+      strokeColor,
+      lineWidth,
+      eraserOn,
+      setSelectedShape,
+    ]
   );
 
   const isValidDrawingState = () =>
@@ -238,6 +251,30 @@ const Canvas = ({
     });
   };
 
+
+  const handleCopy=async()=>{
+    const response = await ShapeService.copyShape(selectedShape.shapeId);
+    setShapes((prevShapes) => [
+      ...prevShapes,
+      {
+        type: response.shapeType,
+        shapeId: response.shapeId,
+        ...response.attributes,
+      },
+    ]);
+    
+  }
+
+  useEffect(() => {
+    if (copyTool === true) {
+      setCopyTool(false);
+      if (!selectedShape) {
+        return;
+      }
+      handleCopy()
+    }
+  }, [copyTool]);
+
   const resetDrawingState = () => {
     isDrawing.current = false;
     currentShapeId.current = null;
@@ -245,6 +282,7 @@ const Canvas = ({
   const handleApiError = (message, error) => {
     console.error(message, error);
   };
+
   return (
     <div className="canvas-container">
       <Stage

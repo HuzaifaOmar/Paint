@@ -55,6 +55,7 @@ public class ShapesCommandsController {
 
     @PostMapping("{shapeId}/clone")
     public ResponseEntity<ShapeDTO> cloneShape(@PathVariable Long shapeId) {
+        System.out.println(shapeId);
         return ResponseEntity.ok(shapeService.cloneShape(shapeId));
     }
 }

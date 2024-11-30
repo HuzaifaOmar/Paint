@@ -3,12 +3,17 @@ package com.example.paint_backend.shapes.implementation;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Circle extends Shape {
     private Double radius;
 
     public Circle(Map<String, Object> attributes) {
         super(attributes);
+        this.x = xStart;
+        this.y = yStart;
     }
 
     @Override
@@ -18,8 +23,8 @@ public class Circle extends Shape {
 
     @Override
     public void moveTo(Double newX, Double newY) {
-        this.xStart = newX;
-        this.yStart = newY;
+        this.x = newX;
+        this.y = newY;
     }
 
     @Override
@@ -30,9 +35,9 @@ public class Circle extends Shape {
     @Override
     public Map<String, Object> getAttributes() {
         return Map.of(
+                "x", x,
+                "y", y,
                 "radius", radius,
-                "x", xStart,
-                "y", yStart,
                 "scaleX", scaleX,
                 "scaleY", scaleY,
                 "rotation", rotation,
@@ -43,8 +48,16 @@ public class Circle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Circle(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Circle clone = new Circle();
+        clone.x = this.x + 10;
+        clone.y = this.y + 10;
+        clone.radius = this.radius;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

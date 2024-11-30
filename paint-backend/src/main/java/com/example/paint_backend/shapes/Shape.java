@@ -1,20 +1,16 @@
 package com.example.paint_backend.shapes;
-
 import java.util.Map;
+
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class Shape {
 
+public abstract class Shape {
     @Setter
     @Getter
     protected Long shapeId;
-    @Setter
-    @Getter
     protected String fillColor;
-    @Getter
-    @Setter
     protected String strokeColor;
     protected Double strokeWidth;
     protected Double xStart;
@@ -23,11 +19,8 @@ public abstract class Shape {
     protected Double yEnd;
     protected Double x;
     protected Double y;
-    @Getter
     protected Double scaleX = 1.0;
-    @Getter
     protected Double scaleY = 1.0;
-    @Getter
     protected Double rotation = 0.0;
 
     // Common constructor for all shapes
@@ -38,7 +31,7 @@ public abstract class Shape {
         this.strokeColor = (String) attributes.get("strokeColor");
         this.strokeWidth = ((Number) attributes.get("strokeWidth")).doubleValue();
 
-        //! Initialize end points to start points by default
+        // ! Initialize end points to start points by default
         this.xEnd = this.xStart;
         this.yEnd = this.yStart;
     }
@@ -76,7 +69,6 @@ public abstract class Shape {
     public abstract String getShapeType();
 
     public abstract Map<String, Object> getAttributes();
-
     @Override
     public abstract Shape clone();
 }

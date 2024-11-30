@@ -1,15 +1,15 @@
 package com.example.paint_backend.shapes.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
-//TODO: implement moving for line or make another interface for Movable
+@NoArgsConstructor
 public class Line extends Shape {
-    private Double x;
-    private Double y;
 
     public Line(Map<String, Object> attributes) {
         super(attributes);
@@ -48,19 +48,29 @@ public class Line extends Shape {
                 "strokeWidth", strokeWidth
         ));
 
-        if (x != null) {
-            attributes.put("x", x);
+        if (this.x != null) {
+            attributes.put("x", this.x);
         }
-        if (y != null) {
-            attributes.put("y", y);
+        if (this.y != null) {
+            attributes.put("y", this.y);
         }
         return attributes;
     }
 
     @Override
     public Shape clone() {
-        Shape clone = new Line(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Line clone = new Line();
+        clone.xStart = this.xStart;
+        clone.yStart = this.yStart;
+        clone.xEnd = this.xEnd;
+        clone.yEnd = this.yEnd;
+        clone.x = this.x != null ? this.x + 10 : null;
+        clone.y = this.y != null ? this.y + 10 : null;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

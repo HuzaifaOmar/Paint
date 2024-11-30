@@ -23,23 +23,21 @@ import "../../styles/Toolbar.css";
 import axios from "axios";
 const API_BASE_URL = "http://localhost:8080/api/shapes";
 const Toolbar = ({
-    selectedTool,
-    setSelectedTool,
-    fillColor,
-    setFillColor,
-    strokeColor,
-    setStrokeColor,
-    lineWidth,
-    setLineWidth,
-    eraserOn,
-    setEraserOn,
-    setIsPopupOpen,
+  selectedTool,
+  setSelectedTool,
+  fillColor,
+  setFillColor,
+  strokeColor,
+  setStrokeColor,
+  lineWidth,
+  setLineWidth,
+  eraserOn,
+  setEraserOn,
+  setIsPopupOpen,
 }) => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(
-        false
-    );
-    const [isToolbarHidden, setIsToolbarHidden] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
+  const [isToolbarHidden, setIsToolbarHidden] = useState(false);
 
     const tools = [
         { id: "pointer", icon: faArrowPointer, label: "Pointer" },
@@ -84,7 +82,9 @@ const Toolbar = ({
         setIsLineWidthDropdownOpen(false);
     };
 
-    const handleFillColorBlur = async (e) => {};
+  const handleFillColorBlur = async (e) => {
+      
+  };
 
     return (
         <>
@@ -161,61 +161,61 @@ const Toolbar = ({
                     )}
                 </div>
 
-                {/* Buttons */}
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faEraser} />}
-                    onClick={toggleEraser}
-                    title="Eraser"
-                    label="Eraser"
-                    clicked={eraserOn}
-                />
-                <input
-                    type="color"
-                    className="toolbar-color-input"
-                    value={fillColor}
-                    onChange={(e) => setFillColor(e.target.value)}
-                    onBlur={handleFillColorBlur}
-                    title="Fill Color"
-                />
-                <input
-                    type="color"
-                    className="toolbar-color-input"
-                    value={strokeColor}
-                    onChange={(e) => setStrokeColor(e.target.value)}
-                    onBlur
-                    title="Stroke Color"
-                />
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faRotateLeft} />}
-                    onClick={() => console.log("Undo action")}
-                    title="Undo"
-                    label="Undo"
-                />
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faRotateRight} />}
-                    onClick={() => console.log("Redo action")}
-                    title="Redo"
-                    label="Redo"
-                />
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faDownload} />}
-                    onClick={saveFunction}
-                    title="Save"
-                    label="Save"
-                />
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faUpload} />}
-                    onClick={() => console.log("Load action")}
-                    title="Load"
-                    label="Load"
-                />
-                <ToolbarButton
-                    icon={<FontAwesomeIcon icon={faCopy} />}
-                    onClick={() => console.log("Copy action")}
-                    title="Copy"
-                    label="Copy"
-                />
-            </div>
+        {/* Buttons */}
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faEraser} />}
+          onClick={toggleEraser}
+          title="Eraser"
+          label="Eraser"
+          clicked={eraserOn}
+        />
+        <input
+          type="color"
+          className="toolbar-color-input"
+          value={fillColor}
+          onChange={(e) => setFillColor(e.target.value)}
+          onBlur={handleFillColorBlur} 
+          title="Fill Color"
+        />
+        <input
+          type="color"
+          className="toolbar-color-input"
+          value={strokeColor}
+          onChange={(e) => setStrokeColor(e.target.value)}
+          onBlur
+          title="Stroke Color"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faRotateLeft} />}
+          onClick={() => console.log("Undo action")}
+          title="Undo"
+          label="Undo"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faRotateRight} />}
+          onClick={() => console.log("Redo action")}
+          title="Redo"
+          label="Redo"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faDownload} />}
+          onClick={() => console.log("Save action")}
+          title="Save"
+          label="Save"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faUpload} />}
+          onClick={() => console.log("Load action")}
+          title="Load"
+          label="Load"
+        />
+        <ToolbarButton
+          icon={<FontAwesomeIcon icon={faCopy} />}
+          onClick={() => console.log("Copy action")}
+          title="Copy"
+          label="Copy"
+        />
+      </div>
 
             {/* Hide/Show Button */}
             <button

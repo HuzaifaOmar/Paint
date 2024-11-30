@@ -3,10 +3,10 @@ package com.example.paint_backend.shapes.implementation;
 import java.util.Map;
 
 import com.example.paint_backend.shapes.Shape;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Rectangle extends Shape {
-    private Double x;
-    private Double y;
     private Double height;
     private Double width;
 
@@ -16,20 +16,11 @@ public class Rectangle extends Shape {
 
     @Override
     public void dimensionCalculate() {
-        // Calculate width and height maintaining the bottom right corner
         this.width = Math.abs(xEnd - xStart);
         this.height = Math.abs(yEnd - yStart);
 
-        if (xEnd < xStart || yEnd < yStart) {
-            // When mouse moves up and left, adjust the top-left corner
-            // While keeping the bottom right corner fixed
-            x = Math.min(xStart, xEnd);
-            y = Math.min(yStart, yEnd);
-        } else {
-            // When mouse moves down and right
-            x = Math.min(xStart, xEnd);
-            y = Math.min(yStart, yEnd);
-        }
+        x = Math.min(xStart, xEnd);
+        y = Math.min(yStart, yEnd);
     }
 
     @Override
@@ -70,8 +61,17 @@ public class Rectangle extends Shape {
 
     @Override
     public Shape clone() {
-        Shape clone = new Rectangle(getAttributes());
-        clone.transform(x + 5, y + 5, scaleX, scaleY, rotation);
+        Rectangle clone = new Rectangle();
+        clone.height = this.height;
+        clone.width = this.width;
+        clone.x = this.x + 10;
+        clone.y = this.y + 10;
+        clone.scaleX = this.scaleX;
+        clone.scaleY = this.scaleY;
+        clone.rotation = this.rotation;
+        clone.fillColor = this.fillColor;
+        clone.strokeColor = this.strokeColor;
+        clone.strokeWidth = this.strokeWidth;
         return clone;
     }
 }

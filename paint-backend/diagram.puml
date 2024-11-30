@@ -1,0 +1,348 @@
+@startuml
+class TransformRequest {
+- Double x
+- Double y
+- Double scaleX
+- Double scaleY
+- Double rotation
+}
+
+class ShapeUpdateRequest {
+- Double xEnd
+- Double yEnd
+}
+
+class PaintBackendApplication {
++ {static} void main(String[])
+}
+
+class AppConfig {
++ ShapeFactory shapeFactory()
++ CommandHistory commandHistory()
++ void addCorsMappings(CorsRegistry)
+}
+
+class ShapeCreationService {
+- ShapeRepository shapeRepository
+- ShapeFactory shapeFactory
+- CommandHistory commandHistory
++ ShapeDTO createShape(ShapeRequest)
++ ShapeDTO updateShape(Long,ShapeUpdateRequest)
++ ShapeDTO finalizeShape(Long,ShapeFinalizeRequest)
+- Shape findShapeById(Long)
+- void validateShapeRequest(ShapeRequest)
+}
+
+class TransformShapeCommand {
+- Shape shape
+- Double newX
+- Double newY
+- Double oldX
+- Double oldY
+- Double oldScaleX
+- Double oldScaleY
+- Double newScaleX
+- Double newScaleY
+- Double oldRotation
+- Double newRotation
++ void execute()
++ void undo()
+}
+
+class CreateShapeCommand {
+- ShapeRepository shapeRepository
+- Shape shape
++ void execute()
++ void undo()
+}
+
+class RecolorRequest {
+- String fillColor
+- String strokeColor
+}
+
+class CommandHistory {
+- Deque<ShapeCommand> undoStack
+- Deque<ShapeCommand> redoStack
++ void push(ShapeCommand)
++ ShapeCommand popUndo()
++ ShapeCommand popRedo()
++ void pushRedo(ShapeCommand)
++ boolean canUndo()
++ boolean canRedo()
+}
+
+class Square {
+- Double x
+- Double y
+- Double side
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ Double getX()
++ Double getY()
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class GlobalExceptionHandler {
++ ResponseEntity<ErrorResponse> handleGeneralException(Exception)
++ ResponseEntity<ErrorResponse> handleShapeNotFound(ShapeNotFoundException)
++ ResponseEntity<ErrorResponse> handleInvalidShapeTypeException(InvalidShapeTypeException)
++ ResponseEntity<ErrorResponse> handleJsonParseException(org.springframework.http.converter.HttpMessageNotReadableException)
+}
+
+class ShapesCommandsController {
+- ShapeCommandsService shapeService
++ ResponseEntity<ShapeDTO> moveShape(Long,MoveRequest)
++ ResponseEntity<ShapeDTO> transformShape(Long,TransformRequest)
++ ResponseEntity<String> eraseShape(Long)
++ ResponseEntity<ShapeDTO> recolorShape(Long,RecolorRequest)
++ ResponseEntity<ShapeDTO> cloneShape(Long)
+}
+
+class Ellipse {
+- Double radiusX
+- Double radiusY
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class Rectangle {
+- Double x
+- Double y
+- Double height
+- Double width
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ Double getX()
++ Double getY()
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class ShapeRequest {
+- String shapeType
+- Map<String,Object> attributes
+}
+
+class RecolorShapeCommand {
+- Shape shape
+- String oldFillColor
+- String newFillColor
+- String oldStrokeColor
+- String newStrokeColor
++ void execute()
++ void undo()
+}
+
+class ShapesCreatorController {
+- ShapeCreationService shapeService
++ ResponseEntity<ShapeDTO> createShape(ShapeRequest)
++ ResponseEntity<ShapeDTO> updateShape(Long,ShapeUpdateRequest)
++ ResponseEntity<ShapeDTO> finalizeShape(Long,ShapeFinalizeRequest)
+}
+
+class ShapeCommandsService {
+- ShapeRepository shapeRepository
+- CommandHistory commandHistory
++ ShapeDTO moveShape(Long,MoveRequest)
++ ShapeDTO transformShape(Long,TransformRequest)
++ ShapeDTO recolorShape(Long,RecolorRequest)
++ String eraseShape(Long)
++ ShapeDTO cloneShape(Long)
+- Shape findShapeById(Long)
+}
+
+class ErrorResponse {
+- String errorCode
+- String errorMessage
++ String getErrorCode()
++ void setErrorCode(String)
++ String getErrorMessage()
++ void setErrorMessage(String)
+}
+
+class ShapeNotFoundException {
+- Long shapeId
++ Long getShapeId()
+}
+
+class ShapeRepository {
+- List<Shape> shapes
+- AtomicLong idGenerator
++ Shape save(Shape)
++ Optional<Shape> findById(Long)
++ List<Shape> findAll()
++ void deleteById(Long)
++ void update(Shape)
+}
+
+class EraseShapesCommand {
+- Shape shape
+- ShapeRepository shapeRepository
++ void execute()
++ void undo()
+}
+
+class ShapeFactory {
++ Shape getShape(String,Map<String,Object>)
+}
+
+class MoveShapeCommand {
+- Shape shape
+- Double newX
+- Double newY
+- Double oldX
+- Double oldY
++ void execute()
++ void undo()
+}
+
+class Line {
+- Double x
+- Double y
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class ShapeDTO {
+- Long shapeId
+- String shapeType
+- Map<String,Object> attributes
+}
+
+class Triangle {
+- List<Double> points
+- Double x
+- Double y
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ Double getX()
++ Double getY()
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class FreeHandLine {
+- List<Double> points
+- Double x
+- Double y
++ void dimensionCalculate()
++ void setEndPoints(Double,Double)
++ void moveTo(Double,Double)
++ Double getX()
++ Double getY()
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+class MissingRequiredParametersException {
+}
+
+class MoveRequest {
+- Double x
+- Double y
+}
+
+abstract class Shape {
+# Long shapeId
+# String fillColor
+# String strokeColor
+# Double strokeWidth
+# Double xStart
+# Double yStart
+# Double xEnd
+# Double yEnd
+# Double x
+# Double y
+# Double scaleX
+# Double scaleY
+# Double rotation
++ void moveTo(Double,Double)
++ void transform(Double,Double,Double,Double,Double)
++ void setEndPoints(Double,Double)
++ {abstract}void dimensionCalculate()
++ Double getX()
++ Double getY()
++ {abstract}String getShapeType()
++ {abstract}Map<String,Object> getAttributes()
++ {abstract}Shape clone()
+}
+
+class ShapeFinalizeRequest {
+- String fillColor
+- String strokeColor
+}
+
+interface ShapeCommand {
+~ void execute()
+~ void undo()
+}
+
+class InvalidShapeTypeException {
+}
+
+class Circle {
+- Double radius
++ void dimensionCalculate()
++ void moveTo(Double,Double)
++ String getShapeType()
++ Map<String,Object> getAttributes()
++ Shape clone()
+}
+
+' Inheritance Relationships
+WebMvcConfigurer <|.. AppConfig
+ShapeCommand <|.. TransformShapeCommand
+ShapeCommand <|.. CreateShapeCommand
+Shape <|-- Square
+Shape <|-- Ellipse
+Shape <|-- Rectangle
+ShapeCommand <|.. RecolorShapeCommand
+RuntimeException <|-- ShapeNotFoundException
+ShapeCommand <|.. EraseShapesCommand
+ShapeCommand <|.. MoveShapeCommand
+Shape <|-- Line
+Shape <|-- Triangle
+Shape <|-- FreeHandLine
+RuntimeException <|-- MissingRequiredParametersException
+RuntimeException <|-- InvalidShapeTypeException
+Shape <|-- Circle
+
+' Additional Associations
+ShapeCreationService "1" *-- "1" ShapeRepository : uses
+ShapeCreationService "1" *-- "1" ShapeFactory : uses
+ShapeCreationService "1" *-- "1" CommandHistory : uses
+
+ShapeCommandsService "1" *-- "1" ShapeRepository : uses
+ShapeCommandsService "1" *-- "1" CommandHistory : uses
+
+ShapesCommandsController "1" o-- "1" ShapeCommandsService : uses
+ShapesCreatorController "1" o-- "1" ShapeCreationService : uses
+
+TransformShapeCommand "1" o-- "1" Shape : transforms
+CreateShapeCommand "1" o-- "1" Shape : creates
+RecolorShapeCommand "1" o-- "1" Shape : recolors
+EraseShapesCommand "1" o-- "1" Shape : erases
+MoveShapeCommand "1" o-- "1" Shape : moves
+
+' Composition and Dependency Relationships
+ShapeFactory ..> Shape : creates
+CommandHistory "1" *-- "*" ShapeCommand : contains
+ShapeRepository "1" *-- "*" Shape : manages
+
+' Exception Relationships
+GlobalExceptionHandler ..> ShapeNotFoundException : handles
+GlobalExceptionHandler ..> InvalidShapeTypeException : handles
+GlobalExceptionHandler ..> MissingRequiredParametersException : handles
+@enduml
