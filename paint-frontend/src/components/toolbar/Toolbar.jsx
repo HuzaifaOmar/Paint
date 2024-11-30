@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ColorPicker from "./ColorPicker.jsx";
 import {
     faCaretUp,
     faCaretDown,
@@ -38,6 +39,8 @@ const Toolbar = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
   const [isToolbarHidden, setIsToolbarHidden] = useState(false);
+  const [showFillColorPicker,setShowFillColorPicker]=useState(false);
+  const [showStrokeColorPicker,setShowStrokeColorPicker]=useState(false);
 
     const tools = [
         { id: "pointer", icon: faArrowPointer, label: "Pointer" },
@@ -82,9 +85,6 @@ const Toolbar = ({
         setIsLineWidthDropdownOpen(false);
     };
 
-  const handleFillColorBlur = async (e) => {
-      
-  };
   const handleCopy = () =>{
     console.log("xx");
     
@@ -174,22 +174,40 @@ const Toolbar = ({
           label="Eraser"
           clicked={eraserOn}
         />
-        <input
+        {/* <input
           type="color"
           className="toolbar-color-input"
           value={fillColor}
           onChange={(e) => setFillColor(e.target.value)}
           onBlur={handleFillColorBlur} 
           title="Fill Color"
-        />
-        <input
+        /> */}
+        
+        {/* <input
           type="color"
           className="toolbar-color-input"
           value={strokeColor}
           onChange={(e) => setStrokeColor(e.target.value)}
           onBlur
           title="Stroke Color"
-        />
+        /> */}
+
+        <ColorPicker 
+            color={fillColor} 
+            setColor={setFillColor}
+            showPicker={showFillColorPicker}
+            setShowPicker={setShowFillColorPicker}
+            setOtherPicker={setShowStrokeColorPicker}
+            />
+
+        <ColorPicker
+            color={strokeColor} 
+            setColor={setStrokeColor}
+            showPicker={showStrokeColorPicker} 
+            setShowPicker={setShowStrokeColorPicker}
+            setOtherPicker={setShowFillColorPicker}
+            />
+
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faRotateLeft} />}
           onClick={() => console.log("Undo action")}
@@ -225,6 +243,7 @@ const Toolbar = ({
             {/* Hide/Show Button */}
             <button
                 className={`toolbar-toggle ${isToolbarHidden ? "hidden" : ""}`}
+                style={{display:(showFillColorPicker||showStrokeColorPicker)?"none":"flex"}}
                 onClick={() => {
                     setIsToolbarHidden(!isToolbarHidden);
                     setIsLineWidthDropdownOpen(false);
@@ -240,3 +259,5 @@ const Toolbar = ({
 };
 
 export default Toolbar;
+
+
