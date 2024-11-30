@@ -1,5 +1,6 @@
 package com.example.paint_backend.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.commands.CommandHistory;
@@ -16,17 +17,12 @@ import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
 
 @Service
+@RequiredArgsConstructor
 public class ShapeCreationService {
 
     private final ShapeRepository shapeRepository;
     private final ShapeFactory shapeFactory;
     private final CommandHistory commandHistory;
-
-    public ShapeCreationService(ShapeRepository shapeRepository, ShapeFactory shapeFactory, CommandHistory commandHistory) {
-        this.shapeRepository = shapeRepository;
-        this.shapeFactory = shapeFactory;
-        this.commandHistory = commandHistory;
-    }
 
     public ShapeDTO createShape(ShapeRequest shapeRequest) {
         validateShapeRequest(shapeRequest);
@@ -39,8 +35,8 @@ public class ShapeCreationService {
         Shape shape = findShapeById(shapeId);
         shape.setEndPoints(request.getXEnd(), request.getYEnd());
         shape.dimensionCalculate();
-        shapeRepository.deleteById(shapeId);
-        return new ShapeDTO(shapeRepository.save(shape));
+        shapeRepository.update(shape);
+        return new ShapeDTO(shape);
     }
 
     public ShapeDTO finalizeShape(Long shapeId, ShapeFinalizeRequest request) {
@@ -50,8 +46,8 @@ public class ShapeCreationService {
         ShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape);
         createShape.execute();
         commandHistory.push(createShape);
-        shapeRepository.deleteById(shapeId);
-        return new ShapeDTO(shapeRepository.save(shape));
+        shapeRepository.update(shape);
+        return new ShapeDTO(shape);
     }
 
     private Shape findShapeById(Long shapeId) {

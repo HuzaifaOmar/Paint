@@ -21,17 +21,16 @@ public class ShapesSavingService {
 
     public ShapesSavingService(ShapeRepository shapeRepository) {
         this.shapeRepository = shapeRepository;
-        this.shapeDTOs = new ArrayList<>(); // Initialize the list
+        this.shapeDTOs = new ArrayList<>();
     }
 
     public void createShapeDTOs() {
-        shapeDTOs.clear(); // Clear existing data to avoid duplication
-        for (Shape shape : shapeRepository.findAll()) {
+        shapeDTOs.clear();
+        for (Shape shape : shapeRepository.findAll())
             shapeDTOs.add(new ShapeDTO(shape));
-        }
-        System.out.println("ShapeRepository: " + shapeRepository.findAll());
-        System.out.println("ShapeDTOs: " + shapeDTOs);
-        System.out.println("ShapeDTOs size: " + shapeDTOs.size());
+//        System.out.println("ShapeRepository: " + shapeRepository.findAll());
+//        System.out.println("ShapeDTOs: " + shapeDTOs);
+//        System.out.println("ShapeDTOs size: " + shapeDTOs.size());
     }
 
     public List<ShapeDTO> getShapeDTOs() {
