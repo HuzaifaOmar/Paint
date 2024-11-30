@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RecolorRequest {
-    private String  fillColor;
-    private String  strokeColor;
+    private String fillColor;
+    private String strokeColor;
+    private Double strokeWidth;
+
 }

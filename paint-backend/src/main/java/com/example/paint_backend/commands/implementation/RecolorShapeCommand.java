@@ -13,28 +13,35 @@ public class RecolorShapeCommand implements ShapeCommand {
     private final String newFillColor;
     private final String oldStrokeColor;
     private final String newStrokeColor;
+    private final Double oldStrokeWidth;
+    private final Double newStrokeWidth;
 
-    public RecolorShapeCommand(ShapeRepository shapeRepository, Shape shape, String newFillColor, String newStrokeColor) {
+    public RecolorShapeCommand(ShapeRepository shapeRepository, Shape shape, String newFillColor,
+            String newStrokeColor, double newStrokeWidth) {
         this.shapeRepository = shapeRepository;
         this.shape = shape;
-        this.oldFillColor = shape.getFillColor();
         this.newFillColor = newFillColor;
+        this.oldFillColor = shape.getFillColor();
         this.newStrokeColor = newStrokeColor;
         this.oldStrokeColor = shape.getStrokeColor();
+        this.newStrokeWidth = newStrokeWidth;
+        this.oldStrokeWidth = shape.getStrokeWidth();
     }
 
     @Override
     public void execute() {
-        shape.setStrokeColor(newStrokeColor);
         shape.setFillColor(newFillColor);
+        shape.setStrokeColor(newStrokeColor);
+        shape.setStrokeWidth(newStrokeWidth);
         shapeRepository.update(shape);
 
     }
 
     @Override
     public void undo() {
-        shape.setStrokeColor(oldStrokeColor);
         shape.setFillColor(oldFillColor);
+        shape.setStrokeColor(oldStrokeColor);
+        shape.setStrokeWidth(oldStrokeWidth);
         shapeRepository.update(shape);
     }
 

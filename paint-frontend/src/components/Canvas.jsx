@@ -225,12 +225,29 @@ const Canvas = ({
     }
   };
 
+
+  const handleRecolor=async(shape)=>{
+    try {
+      const recolorRequest = {
+        fillColor:fillColor,
+        strokeColor:strokeColor,
+        strokeWidth:lineWidth
+      };
+      
+      const response = await ShapeService.recolorShape(
+        shape.shapeId,
+        recolorRequest
+      );
+      updateShapesState(response, shape.shapeId);
+    } catch (error) {
+      handleApiError("Error recoloring shape", error);
+    }
+  }
+
   useEffect(() => {
     if (!selectedShape) return;
-    selectedShape.fill = fillColor
-    selectedShape.stroke = strokeColor;
-    selectedShape.strokeWidth = lineWidth;
-  }, [fillColor, strokeColor, lineWidth, selectedShape]);
+    handleRecolor(selectedShape);
+  }, [fillColor, strokeColor, lineWidth]);
 
   const updateShapesState = (response, id) => {
     setShapes((prevShapes) => {

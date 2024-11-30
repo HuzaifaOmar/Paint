@@ -131,7 +131,27 @@ class ShapeService {
       const response = await axios.post(`${API_BASE_URL}/${shapeId}/clone`);
       return response.data;
     } catch (error) {
-      console.error("Error erasing shape:", error);
+      console.error("Error copy shape:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * recolor a shape
+   * @param {string} shapeId - ID of the shape to copy
+   * @param {Object} recolorRequest
+   * @returns {Promise}
+   */
+  static async recolorShape(shapeId, recolorRequest) {
+    console.log("recolor request", shapeId);
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/${shapeId}/recolor`,
+        recolorRequest
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error recolor shape:", error);
       throw error;
     }
   }
