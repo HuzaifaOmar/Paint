@@ -86,6 +86,8 @@ const Toolbar = ({
       
   };
   const handleCopy = () =>{
+    console.log("xx");
+    
     setCopyTool(true);
 }
 
@@ -202,7 +204,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faDownload} />}
-          onClick={() => handleSave}
+          onClick={() => handleSave()}
           title="Save"
           label="Save"
         />
@@ -214,7 +216,7 @@ const Toolbar = ({
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faCopy} />}
-          onClick={() =>handleCopy}
+          onClick={() =>handleCopy()}
           title="Copy"
           label="Copy"
         />

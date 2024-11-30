@@ -1,6 +1,5 @@
 package com.example.paint_backend.shapes.implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -45,8 +44,7 @@ public class Line extends Shape {
                 "rotation", rotation,
                 "points", points,
                 "stroke", strokeColor,
-                "strokeWidth", strokeWidth
-        ));
+                "strokeWidth", strokeWidth));
 
         if (this.x != null) {
             attributes.put("x", this.x);
