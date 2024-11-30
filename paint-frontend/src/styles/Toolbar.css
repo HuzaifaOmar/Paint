@@ -52,6 +52,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  padding: 6px;
 }
 
 .toolbar-dropdown-selected {
@@ -132,11 +133,14 @@
 
 .toolbar-label {
   font-size: 12px;
+  width: 50px;
+  text-align: center;
   font-weight: bold;
   color: #555;
   opacity: 0;
-  transition: opacity 0.1s ease-in-out;
+  transition: display 0.3s ease-in-out;
 }
+
 .toolbar-label.clicked {
   opacity: 1;
 }

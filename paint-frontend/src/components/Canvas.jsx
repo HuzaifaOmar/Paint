@@ -22,8 +22,8 @@ const Canvas = ({
   setFillColor,
   setStrokeColor,
   setLineWidth,
-  copyTool,
-  setCopyTool,
+  duplicateTool,
+  setDuplicateTool,
 }) => {
   const startX = useRef(0);
   const startY = useRef(0);
@@ -299,13 +299,13 @@ const Canvas = ({
   };
 
   useEffect(() => {
-    if (copyTool === true) {
-      setCopyTool(false);
+    if (duplicateTool === true) {
+      setDuplicateTool(false);
       if (!selectedShape) return;
       handleCopy();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [copyTool]);
+  }, [duplicateTool]);
 
   const resetDrawingState = () => {
     isDrawing.current = false;

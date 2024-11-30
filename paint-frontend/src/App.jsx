@@ -10,7 +10,7 @@ function App() {
   const [strokeColor, setStrokeColor] = useState("rgba(0, 0, 0, 1.00)");
   const [lineWidth, setLineWidth] = useState(2.0);
   const [eraserOn,setEraserOn]=useState(false)
-  const[copyTool,setCopyTool]=useState(false);
+  const[duplicateTool,setDuplicateTool]=useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   return (
     <div className="main-screen">
@@ -27,8 +27,7 @@ function App() {
         setEraserOn={setEraserOn}
         isPopupOpen={isPopupOpen}
         setIsPopupOpen={setIsPopupOpen}
-        copyTool={copyTool}
-        setCopyTool={setCopyTool}
+        setDuplicateTool={setDuplicateTool}
       />
       <SavePagePopup
                 isPopupOpen={isPopupOpen}
@@ -43,8 +42,8 @@ function App() {
         setFillColor={setFillColor}
         setStrokeColor={setStrokeColor}
         setLineWidth={setLineWidth}
-        copyTool={copyTool}
-        setCopyTool={setCopyTool}
+        duplicateTool={duplicateTool}
+        setDuplicateTool={setDuplicateTool}
       />
     </div>
   );
