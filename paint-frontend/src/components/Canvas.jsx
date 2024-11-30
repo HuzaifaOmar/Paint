@@ -1,3 +1,5 @@
+
+
 import React, {
   useRef,
   useEffect,
@@ -225,7 +227,7 @@ const Canvas = ({
 
   useEffect(() => {
     if (!selectedShape) return;
-    selectedShape.fill = fillColor;
+    selectedShape.fill = fillColor
     selectedShape.stroke = strokeColor;
     selectedShape.strokeWidth = lineWidth;
   }, [fillColor, strokeColor, lineWidth, selectedShape]);
@@ -304,3 +306,4 @@ const Canvas = ({
 };
 
 export default Canvas;
+
