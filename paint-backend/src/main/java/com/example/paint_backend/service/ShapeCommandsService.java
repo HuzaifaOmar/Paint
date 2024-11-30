@@ -33,7 +33,8 @@ public class ShapeCommandsService {
 
     public ShapeDTO moveShape(Long shapeId, MoveRequest request) {
         Shape shape = findShapeById(shapeId);
-        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shapeRepository, shape, request.getX(), request.getY());
+        MoveShapeCommand moveShapeCommand = new MoveShapeCommand(shapeRepository, shape, request.getX(),
+                request.getY());
         moveShapeCommand.execute();
         commandHistory.push(moveShapeCommand);
         shapeRepository.update(shape);
@@ -42,7 +43,8 @@ public class ShapeCommandsService {
 
     public ShapeDTO transformShape(Long shapeId, TransformRequest request) {
         Shape shape = findShapeById(shapeId);
-        TransformShapeCommand transformShapeCommand = new TransformShapeCommand(shapeRepository, shape, request.getX(), request.getY(),
+        TransformShapeCommand transformShapeCommand = new TransformShapeCommand(shapeRepository, shape, request.getX(),
+                request.getY(),
                 request.getScaleX(), request.getScaleY(), request.getRotation());
         transformShapeCommand.execute();
         commandHistory.push(transformShapeCommand);
@@ -52,8 +54,11 @@ public class ShapeCommandsService {
 
     public ShapeDTO recolorShape(Long shapeId, RecolorRequest request) {
         Shape shape = findShapeById(shapeId);
-        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shapeRepository, shape, request.getFillColor(),
-                request.getStrokeColor());
+        RecolorShapeCommand recolorShapeCommand = new RecolorShapeCommand(shapeRepository, shape,
+                request.getFillColor(),
+                request.getStrokeColor(),
+                request.getStrokeWidth());
+        recolorShapeCommand.execute();
         commandHistory.push(recolorShapeCommand);
         shapeRepository.update(shape);
         return new ShapeDTO(shape);
