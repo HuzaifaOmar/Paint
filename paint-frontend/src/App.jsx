@@ -6,8 +6,8 @@ import "./styles/main.css";
 import SavePagePopup from "./components/savePopup/SavePagePopup";
 function App() {
   const [selectedTool, setSelectedTool] = useState("freehand");
-  const [fillColor, setFillColor] = useState("#F0F0F0");
-  const [strokeColor, setStrokeColor] = useState("#000000");
+  const [fillColor, setFillColor] = useState("rgba(240, 240, 240, 1.00)");
+  const [strokeColor, setStrokeColor] = useState("rgba(0, 0, 0, 1.00)");
   const [lineWidth, setLineWidth] = useState(2.0);
   const [eraserOn,setEraserOn]=useState(false)
   const[copyTool,setCopyTool]=useState(false);

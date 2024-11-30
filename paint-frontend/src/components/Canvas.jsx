@@ -43,6 +43,17 @@ const Canvas = ({
     []
   );
 
+  function reduseTransperancy(rgba) {
+    const match = rgba.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*[\d.]+\)$/);
+
+    const r = match[1];
+    const g = match[2];
+    const b = match[3];
+    
+    return `rgb(${r}, ${g}, ${b}, 0.3)`;
+  }
+
+
   const createShapeRequest = (tool, pos, fill, stroke, width) => ({
     shapeType: tool,
     attributes: {
@@ -50,10 +61,10 @@ const Canvas = ({
       yStart: pos.y,
       fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
         ? fill
-        : fill + "6F",
+        : reduseTransperancy(fill),
       strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
         ? stroke
-        : stroke + "6F",
+        : reduseTransperancy(stroke),
       strokeWidth: width,
     },
   });
@@ -215,15 +226,20 @@ const Canvas = ({
     setLineWidth(shape.strokeWidth);
     setSelectedShape(shape);
   };
+  
   const handleShapeClick = async (e) => {
     const clickedShape = shapes[e.target.index];
-
     if (eraserOn) {
       await eraseShape(clickedShape);
     } else if (selectedTool === ShapeType.POINTER) {
       handleShapeSelection(clickedShape, e.target);
     }
   };
+
+  useEffect(()=>{
+    setSelectedNode(null)
+    setSelectedShape(null)
+  },[selectedTool])
 
 
   const handleRecolor=async(shape)=>{
@@ -247,6 +263,7 @@ const Canvas = ({
   useEffect(() => {
     if (!selectedShape) return;
     handleRecolor(selectedShape);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fillColor, strokeColor, lineWidth]);
 
   const updateShapesState = (response, id) => {
@@ -277,6 +294,8 @@ const Canvas = ({
         ...response.attributes,
       },
     ]);
+    setSelectedShape(null)
+    setSelectedNode(null)
   };
 
   useEffect(() => {
@@ -285,6 +304,7 @@ const Canvas = ({
       if (!selectedShape) return;
       handleCopy();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [copyTool]);
 
   const resetDrawingState = () => {
