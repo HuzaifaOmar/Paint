@@ -1,5 +1,3 @@
-
-
 import React, {
   useRef,
   useEffect,
@@ -8,23 +6,25 @@ import React, {
   useCallback,
 } from "react";
 import { Stage, Layer, Transformer } from "react-konva";
+import { useDrawingContext } from "../contexts/DrawingContext";
 import { ShapeType } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
 import ShapeService from "../services/ShapeService.js";
 import ShapesRenderer from "./ShapesRenderer.jsx";
 
-const Canvas = ({
-  selectedTool,
-  fillColor,
-  strokeColor,
-  lineWidth,
-  eraserOn,
-  setFillColor,
-  setStrokeColor,
-  setLineWidth,
-  duplicateTool,
-  setDuplicateTool,
-}) => {
+const Canvas = () => {
+    const {
+      selectedTool,
+      fillColor,
+      strokeColor,
+      lineWidth,
+      isEraserActive,
+      isDuplicateToolActive,
+      setFillColor,
+      setStrokeColor,
+      setLineWidth,
+      setIsDuplicateToolActive,
+    } = useDrawingContext();
   const startX = useRef(0);
   const startY = useRef(0);
 
@@ -71,7 +71,7 @@ const Canvas = ({
 
   const handleMouseDown = useCallback(
     async (e) => {
-      if (eraserOn || selectedTool === ShapeType.POINTER) {
+      if (isEraserActive || selectedTool === ShapeType.POINTER) {
         if (e.target === stageRef.current) {
           setSelectedNode(null);
           setSelectedShape(null);
@@ -112,7 +112,7 @@ const Canvas = ({
       fillColor,
       strokeColor,
       lineWidth,
-      eraserOn,
+      isEraserActive,
       setSelectedShape,
     ]
   );
@@ -121,7 +121,7 @@ const Canvas = ({
     isDrawing.current &&
     currentShapeId.current &&
     selectedTool !== ShapeType.POINTER &&
-    !eraserOn;
+    !isEraserActive;
 
   const handleMouseMove = async () => {
     if (!isValidDrawingState()) return;
@@ -146,7 +146,7 @@ const Canvas = ({
   };
 
   const isValidFinalizationState = () =>
-    currentShapeId.current && selectedTool !== ShapeType.POINTER && !eraserOn;
+    currentShapeId.current && selectedTool !== ShapeType.POINTER && !isEraserActive;
 
   const handleMouseUp = async () => {
     if (!isValidFinalizationState()) return;
@@ -173,7 +173,7 @@ const Canvas = ({
   };
 
   const handleDragEnd = async (e, shape) => {
-    if (eraserOn) return;
+    if (isEraserActive) return;
     console.log("in handleDragEnd fun");
 
     const pos = e.target.position();
@@ -229,7 +229,7 @@ const Canvas = ({
   
   const handleShapeClick = async (e) => {
     const clickedShape = shapes[e.target.index];
-    if (eraserOn) {
+    if (isEraserActive) {
       await eraseShape(clickedShape);
     } else if (selectedTool === ShapeType.POINTER) {
       handleShapeSelection(clickedShape, e.target);
@@ -299,13 +299,13 @@ const Canvas = ({
   };
 
   useEffect(() => {
-    if (duplicateTool === true) {
-      setDuplicateTool(false);
+    if (isDuplicateToolActive === true) {
+      setIsDuplicateToolActive(false);
       if (!selectedShape) return;
       handleCopy();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [duplicateTool]);
+  }, [isDuplicateToolActive]);
 
   const resetDrawingState = () => {
     isDrawing.current = false;
@@ -330,7 +330,7 @@ const Canvas = ({
           <ShapesRenderer
             shapes={shapes}
             selectedTool={selectedTool}
-            eraserOn={eraserOn}
+            isEraserActive={isEraserActive}
             onShapeClick={handleShapeClick}
             onDragEnd={handleDragEnd}
             onTransformEnd={handleTransformEnd}

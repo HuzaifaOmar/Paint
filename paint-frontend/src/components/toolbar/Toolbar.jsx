@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDrawingContext } from "../../contexts/DrawingContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColorPicker from "./ColorPicker.jsx";
 import {
@@ -21,20 +22,22 @@ import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 import ToolbarButton from "./ToolbarButton";
 import "../../styles/Toolbar.css";
-const Toolbar = ({
-  selectedTool,
-  setSelectedTool,
-  fillColor,
-  setFillColor,
-  strokeColor,
-  setStrokeColor,
-  lineWidth,
-  setLineWidth,
-  eraserOn,
-  setEraserOn,
-  setIsPopupOpen,
-  setDuplicateTool,
-}) => {
+const Toolbar = () => {
+  const {
+    selectedTool,
+    setSelectedTool,
+    fillColor,
+    setFillColor,
+    strokeColor,
+    setStrokeColor,
+    lineWidth,
+    setLineWidth,
+    isEraserActive,
+    setIsEraserActive,
+    setIsPopupOpen,
+    setIsDuplicateToolActive,
+  } = useDrawingContext();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineWidthDropdownOpen, setIsLineWidthDropdownOpen] = useState(false);
   const [isToolbarHidden, setIsToolbarHidden] = useState(false);
@@ -59,6 +62,7 @@ const Toolbar = ({
     }
     return <FontAwesomeIcon icon={tool.icon} />;
   };
+  
   const handleSave = async () => {
     try {
       console.log("Saving...");
@@ -70,7 +74,7 @@ const Toolbar = ({
   };
 
   const toggleEraser = () => {
-    setEraserOn(!eraserOn);
+    setIsEraserActive(!isEraserActive);
   };
 
   const getSelectedToolIcon = () => {
@@ -85,8 +89,7 @@ const Toolbar = ({
   };
 
   const handleDuplicate = () => {
-    console.log("xx");
-    setDuplicateTool(true);
+    setIsDuplicateToolActive(true);
   };
 
   return (
@@ -212,7 +215,7 @@ const Toolbar = ({
           onClick={toggleEraser}
           title="Eraser"
           label="Eraser"
-          clicked={eraserOn}
+          clicked={isEraserActive}
         />
 
         <ToolbarButton

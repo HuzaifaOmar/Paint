@@ -22,6 +22,7 @@ public class ShapeRepository {
             update(shape);
             return shape;
         }
+        System.out.println("new shape added with id: " + shape.getShapeId());
         shapes.add(shape);
         return shape;
     }
