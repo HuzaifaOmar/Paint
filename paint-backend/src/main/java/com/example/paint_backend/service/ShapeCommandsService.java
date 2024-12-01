@@ -93,7 +93,7 @@ public class ShapeCommandsService {
         if (command.isEmpty())
             return new UndoRedoResponse(false);
         commandHistory.push(command.get());
-        command.get().undo();
+        command.get().execute();
         return command.get().getRedoResponse();
     }
 

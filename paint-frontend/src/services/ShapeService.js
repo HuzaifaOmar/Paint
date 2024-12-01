@@ -155,6 +155,38 @@ class ShapeService {
       throw error;
     }
   }
+
+  /**
+   * undo
+   * @returns {Promise}
+   */
+  static async undo() {
+    console.log("undo request");
+    try {
+      const response = await axios.post(`${API_BASE_URL}/undo`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error undo shape:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * redo
+   * @returns {Promise}
+   */
+  static async redo() {
+    console.log("redo request");
+    try {
+      const response = await axios.post(`${API_BASE_URL}/redo`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error undo shape:", error);
+      throw error;
+    }
+  }
 }
 
 export default ShapeService;
