@@ -7,11 +7,12 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.paint_backend.dto.ShapeDTO;
+import com.example.paint_backend.factory.ShapeFactory;
 import com.example.paint_backend.shapes.Shape;
-
 @Repository
 public class ShapeRepository {
-
+    private final ShapeFactory shapeFactory = new ShapeFactory();
     private final List<Shape> shapes = new ArrayList<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
 
@@ -47,5 +48,15 @@ public class ShapeRepository {
             }
         }
     }
-
+    public void clear() {
+        shapes.clear();
+        idGenerator.set(1);
+    }
+    public void addAll(List<ShapeDTO> shapes) {
+        shapes.forEach(shapeDTO -> {
+            Shape shape = shapeFactory.getShapeByDTO(shapeDTO);
+            this.shapes.add(shape);
+            idGenerator.set(shape.getShapeId() + 1);
+        });
+    }
 }
