@@ -13,18 +13,20 @@ import ShapeService from "../services/ShapeService.js";
 import ShapesRenderer from "./ShapesRenderer.jsx";
 
 const Canvas = () => {
-    const {
-      selectedTool,
-      fillColor,
-      strokeColor,
-      lineWidth,
-      isEraserActive,
-      isDuplicateToolActive,
-      setFillColor,
-      setStrokeColor,
-      setLineWidth,
-      setIsDuplicateToolActive,
-    } = useDrawingContext();
+  const {
+    selectedTool,
+    fillColor,
+    strokeColor,
+    lineWidth,
+    isEraserActive,
+    isDuplicateToolActive,
+    undoRequest,
+    redoRequest,
+    setFillColor,
+    setStrokeColor,
+    setLineWidth,
+    setIsDuplicateToolActive,
+  } = useDrawingContext();
   const startX = useRef(0);
   const startY = useRef(0);
 
@@ -49,10 +51,9 @@ const Canvas = () => {
     const r = match[1];
     const g = match[2];
     const b = match[3];
-    
+
     return `rgb(${r}, ${g}, ${b}, 0.3)`;
   }
-
 
   const createShapeRequest = (tool, pos, fill, stroke, width) => ({
     shapeType: tool,
@@ -146,7 +147,9 @@ const Canvas = () => {
   };
 
   const isValidFinalizationState = () =>
-    currentShapeId.current && selectedTool !== ShapeType.POINTER && !isEraserActive;
+    currentShapeId.current &&
+    selectedTool !== ShapeType.POINTER &&
+    !isEraserActive;
 
   const handleMouseUp = async () => {
     if (!isValidFinalizationState()) return;
@@ -226,7 +229,7 @@ const Canvas = () => {
     setLineWidth(shape.strokeWidth);
     setSelectedShape(shape);
   };
-  
+
   const handleShapeClick = async (e) => {
     const clickedShape = shapes[e.target.index];
     if (isEraserActive) {
@@ -236,20 +239,19 @@ const Canvas = () => {
     }
   };
 
-  useEffect(()=>{
-    setSelectedNode(null)
-    setSelectedShape(null)
-  },[selectedTool])
+  useEffect(() => {
+    setSelectedNode(null);
+    setSelectedShape(null);
+  }, [selectedTool]);
 
-
-  const handleRecolor=async(shape)=>{
+  const handleRecolor = async (shape) => {
     try {
       const recolorRequest = {
-        fillColor:fillColor,
-        strokeColor:strokeColor,
-        strokeWidth:lineWidth
+        fillColor: fillColor,
+        strokeColor: strokeColor,
+        strokeWidth: lineWidth,
       };
-      
+
       const response = await ShapeService.recolorShape(
         shape.shapeId,
         recolorRequest
@@ -258,12 +260,12 @@ const Canvas = () => {
     } catch (error) {
       handleApiError("Error recoloring shape", error);
     }
-  }
+  };
 
   useEffect(() => {
     if (!selectedShape) return;
     handleRecolor(selectedShape);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fillColor, strokeColor, lineWidth]);
 
   const updateShapesState = (response, id) => {
@@ -294,8 +296,8 @@ const Canvas = () => {
         ...response.attributes,
       },
     ]);
-    setSelectedShape(null)
-    setSelectedNode(null)
+    setSelectedShape(null);
+    setSelectedNode(null);
   };
 
   useEffect(() => {
@@ -304,7 +306,7 @@ const Canvas = () => {
       if (!selectedShape) return;
       handleCopy();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDuplicateToolActive]);
 
   const resetDrawingState = () => {
@@ -314,6 +316,64 @@ const Canvas = () => {
   const handleApiError = (message, error) => {
     console.error(message, error);
   };
+
+  useEffect(() => {
+    if (undoRequest === null) return;
+    setSelectedNode(null);
+    const type = undoRequest.type;
+    const shape = undoRequest.shape;
+    switch (type) {
+      case "delete":
+        setShapes((prevShapes) =>
+          prevShapes.filter((s) => s.shapeId !== shape.shapeId)
+        );
+        break;
+      case "update":
+        updateShapesState(shape, shape.shapeId);
+        break;
+      case "create":
+        setShapes((prevShapes) => [
+          ...prevShapes,
+          {
+            type: shape.shapeType,
+            shapeId: shape.shapeId,
+            ...shape.attributes,
+          },
+        ]);
+        break;
+      default:
+        return;
+    }
+  }, [undoRequest]);
+
+  useEffect(() => {
+    if (redoRequest === null) return;
+    setSelectedNode(null);
+    const type = redoRequest.type;
+    const shape = redoRequest.shape;
+    switch (type) {
+      case "delete":
+        setShapes((prevShapes) =>
+          prevShapes.filter((s) => s.shapeId !== shape.shapeId)
+        );
+        break;
+      case "update":
+        updateShapesState(shape, shape.shapeId);
+        break;
+      case "create":
+        setShapes((prevShapes) => [
+          ...prevShapes,
+          {
+            type: shape.shapeType,
+            shapeId: shape.shapeId,
+            ...shape.attributes,
+          },
+        ]);
+        break;
+      default:
+        return;
+    }
+  }, [redoRequest]);
 
   return (
     <div className="canvas-container">
@@ -343,4 +403,3 @@ const Canvas = () => {
 };
 
 export default Canvas;
-

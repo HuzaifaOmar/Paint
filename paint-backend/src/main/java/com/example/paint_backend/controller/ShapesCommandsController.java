@@ -66,4 +66,10 @@ public class ShapesCommandsController {
         System.out.println("Received undo request: ");
         return ResponseEntity.ok(shapeService.undo());
     }
+
+    @PostMapping("redo")
+    public ResponseEntity<UndoRedoResponse> redo() {
+        System.out.println("Received redo request: ");
+        return ResponseEntity.ok(shapeService.redo());
+    }
 }

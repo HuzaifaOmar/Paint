@@ -22,6 +22,7 @@ import TriangleIcon from "./icons/triangle.jsx";
 import RectangleIcon from "./icons/rectangle.jsx";
 import ToolbarButton from "./ToolbarButton";
 import "../../styles/Toolbar.css";
+import ShapeService from "../../services/ShapeService.js";
 const Toolbar = () => {
   const {
     selectedTool,
@@ -36,6 +37,8 @@ const Toolbar = () => {
     setIsEraserActive,
     setIsPopupOpen,
     setIsDuplicateToolActive,
+    setUndoRequest,
+    setRedoRequest,
   } = useDrawingContext();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -62,7 +65,7 @@ const Toolbar = () => {
     }
     return <FontAwesomeIcon icon={tool.icon} />;
   };
-  
+
   const handleSave = async () => {
     try {
       console.log("Saving...");
@@ -90,6 +93,24 @@ const Toolbar = () => {
 
   const handleDuplicate = () => {
     setIsDuplicateToolActive(true);
+  };
+
+  const handleUndo = async () => {
+    const response = await ShapeService.undo();
+    if (response.success === false) {
+      return;
+    } else {
+      setUndoRequest(response);
+    }
+  };
+
+  const handleRedo = async () => {
+    const response = await ShapeService.redo();
+    if (response.success === false) {
+      return;
+    } else {
+      setRedoRequest(response);
+    }
   };
 
   return (
@@ -227,13 +248,13 @@ const Toolbar = () => {
 
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faRotateLeft} />}
-          onClick={() => console.log("Undo action")}
+          onClick={() => handleUndo()}
           title="Undo"
           label="Undo"
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faRotateRight} />}
-          onClick={() => console.log("Redo action")}
+          onClick={() => handleRedo()}
           title="Redo"
           label="Redo"
         />

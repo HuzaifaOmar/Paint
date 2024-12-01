@@ -10,6 +10,8 @@ export const DrawingProvider = ({ children }) => {
   const [isEraserActive, setIsEraserActive] = useState(false);
   const [isDuplicateToolActive, setIsDuplicateToolActive] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [undoRequest, setUndoRequest] = useState(null);
+  const [redoRequest, setRedoRequest] = useState(null);
 
   const contextValue = {
     selectedTool,
@@ -19,6 +21,8 @@ export const DrawingProvider = ({ children }) => {
     isEraserActive,
     isDuplicateToolActive,
     isPopupOpen,
+    undoRequest,
+    redoRequest,
     setSelectedTool,
     setFillColor,
     setStrokeColor,
@@ -26,6 +30,8 @@ export const DrawingProvider = ({ children }) => {
     setIsEraserActive,
     setIsDuplicateToolActive,
     setIsPopupOpen,
+    setUndoRequest,
+    setRedoRequest,
   };
 
   return (
