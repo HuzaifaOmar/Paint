@@ -14,6 +14,9 @@ public class CommandHistory {
         redoStack.clear();
     }
 
+    public void pushUndo(ShapeCommand command) {
+        undoStack.push(command);
+    }
     public Optional<ShapeCommand> popUndo() {
         return undoStack.isEmpty() ? Optional.empty() : Optional.ofNullable(undoStack.pop());
     }

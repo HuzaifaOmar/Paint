@@ -62,14 +62,6 @@ public abstract class Shape {
 
     public abstract void dimensionCalculate();
 
-    public Double getX() {
-        return xStart;
-    }
-
-    public Double getY() {
-        return yStart;
-    }
-
     public abstract String getShapeType();
 
     public abstract Map<String, Object> getAttributes();
