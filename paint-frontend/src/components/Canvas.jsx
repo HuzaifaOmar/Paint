@@ -22,12 +22,14 @@ const Canvas = () => {
     isDuplicateToolActive,
     undoRequest,
     redoRequest,
+    shapes,
+    reload,
     setFillColor,
     setStrokeColor,
     setLineWidth,
     setIsDuplicateToolActive,
-    shapes,
     setShapes,
+    setReload,
   } = useDrawingContext();
   const startX = useRef(0);
   const startY = useRef(0);
@@ -41,9 +43,20 @@ const Canvas = () => {
 
   // Memoized background dots to prevent unnecessary re-renders
   const backgroundDots = useMemo(
-    () => generateDottedBackground(window.innerWidth, window.innerHeight),
+    () =>
+      generateDottedBackground(
+        window.innerWidth,
+        window.innerHeight,
+        setReload
+      ),
     []
   );
+
+  useEffect(() => {
+    if (reload === true) {
+      ShapeService.clear();
+    }
+  }, [reload]);
 
   function reduseTransperancy(rgba) {
     const match = rgba.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*[\d.]+\)$/);

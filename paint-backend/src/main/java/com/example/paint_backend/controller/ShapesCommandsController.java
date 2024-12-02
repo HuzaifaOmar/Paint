@@ -72,4 +72,10 @@ public class ShapesCommandsController {
         System.out.println("Received redo request: ");
         return ResponseEntity.ok(shapeService.redo());
     }
+
+    @DeleteMapping("clear")
+    public void clear() {
+        System.out.println("Received clear request: ");
+        shapeService.clearRepository();
+    }
 }
