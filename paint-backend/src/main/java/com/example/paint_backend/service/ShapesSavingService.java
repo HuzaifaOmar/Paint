@@ -18,7 +18,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 public class ShapesSavingService {
 
     private final ShapeRepository shapeRepository;
-    private List<ShapeDTO> shapeDTOs;
+    private final List<ShapeDTO> shapeDTOs;
 
     public ShapesSavingService(ShapeRepository shapeRepository) {
         this.shapeRepository = shapeRepository;
@@ -29,10 +29,6 @@ public class ShapesSavingService {
         shapeDTOs.clear();
         for (Shape shape : shapeRepository.findAll())
             shapeDTOs.add(new ShapeDTO(shape));
-    }
-
-    public List<ShapeDTO> getShapeDTOs() {
-        return shapeDTOs;
     }
 
     public String getShapeDTOsAsJsonAndXml() {

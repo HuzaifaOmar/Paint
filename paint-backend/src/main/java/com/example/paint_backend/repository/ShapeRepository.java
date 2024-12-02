@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.factory.ShapeFactory;
 import com.example.paint_backend.shapes.Shape;
+
 @Repository
+@Scope("singleton")
 public class ShapeRepository {
     private final ShapeFactory shapeFactory = new ShapeFactory();
     private final List<Shape> shapes = new ArrayList<>();
@@ -23,13 +27,17 @@ public class ShapeRepository {
             update(shape);
             return shape;
         }
-        System.out.println("new shape added with id: " + shape.getShapeId());
         shapes.add(shape);
         return shape;
     }
 
     public Optional<Shape> findById(Long id) {
-        return shapes.stream().filter(shape -> shape.getShapeId().equals(id)).findFirst();
+        for (Shape shape : shapes) {
+            if (shape.getShapeId().equals(id)) {
+                return Optional.of(shape);
+            }
+        }
+        return Optional.empty();
     }
 
     public List<Shape> findAll() {
@@ -44,19 +52,24 @@ public class ShapeRepository {
         for (int i = 0; i < shapes.size(); i++) {
             if (shapes.get(i).getShapeId().equals(shape.getShapeId())) {
                 shapes.set(i, shape);
-                break;
+                return;
             }
         }
+        shapes.add(shape);
     }
+
     public void clear() {
         shapes.clear();
         idGenerator.set(1);
     }
+
     public void addAll(List<ShapeDTO> shapes) {
+        AtomicLong maxId = new AtomicLong(1);
         shapes.forEach(shapeDTO -> {
             Shape shape = shapeFactory.getShapeByDTO(shapeDTO);
             this.shapes.add(shape);
-            idGenerator.set(shape.getShapeId() + 1);
+            maxId.set(Math.max(maxId.get(), shape.getShapeId().intValue() + 1));
         });
+        this.idGenerator.setPlain(maxId.get());
     }
 }

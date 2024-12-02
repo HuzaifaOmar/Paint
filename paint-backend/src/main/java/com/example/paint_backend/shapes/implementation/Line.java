@@ -23,7 +23,7 @@ public class Line extends Shape {
        this.rotation = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("rotation", "0.0").toString());
        this.strokeColor = (String) shapeDTO.getAttributes().getOrDefault("stroke", "black");
        this.strokeWidth = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("strokeWidth", "1.0").toString());
-       this.shapeId = shapeDTO.getShapeId();
+        this.shapeId = (Long) Long.parseLong(shapeDTO.getShapeId().toString());
     }
 
     @Override

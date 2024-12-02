@@ -27,7 +27,7 @@ public class Circle extends Shape {
         this.fillColor = (String) shapeDTO.getAttributes().getOrDefault("fill", "black");
         this.strokeColor = (String) shapeDTO.getAttributes().getOrDefault("stroke", "black");
         this.strokeWidth = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("strokeWidth", "1.0").toString());
-        this.shapeId = shapeDTO.getShapeId();
+        this.shapeId = (Long) Long.parseLong(shapeDTO.getShapeId().toString());
     }
 
     @Override

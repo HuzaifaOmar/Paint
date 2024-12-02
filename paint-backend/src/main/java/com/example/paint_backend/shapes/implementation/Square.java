@@ -25,7 +25,7 @@ public class Square extends Shape {
        this.fillColor = (String) shapeDTO.getAttributes().getOrDefault("fill", "black");
        this.strokeColor = (String) shapeDTO.getAttributes().getOrDefault("stroke", "black");
        this.strokeWidth = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("strokeWidth", "1.0").toString());
-       this.shapeId = shapeDTO.getShapeId();
+        this.shapeId = (Long) Long.parseLong(shapeDTO.getShapeId().toString());
     }
 
     @Override
@@ -44,16 +44,6 @@ public class Square extends Shape {
     public void moveTo(Double newX, Double newY) {
         this.x = newX;
         this.y = newY;
-    }
-
-    @Override
-    public Double getX() {
-        return x;
-    }
-
-    @Override
-    public Double getY() {
-        return y;
     }
 
     @Override

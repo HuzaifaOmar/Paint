@@ -41,9 +41,9 @@ public abstract class Shape {
         this.shapeId = shapeDTO.getShapeId();
     }
     // Default implementations for common methods
-    public void moveTo(Double deltaX, Double deltaY) {
-        this.xStart += deltaX;
-        this.yStart += deltaY;
+    public void moveTo(Double newX, Double newY) {
+        this.xStart += newX;
+        this.yStart += newY;
         dimensionCalculate();
     }
 
@@ -66,6 +66,5 @@ public abstract class Shape {
 
     public abstract Map<String, Object> getAttributes();
 
-    // ! build the object the same way it was made to clone
     public abstract Shape clone();
 }

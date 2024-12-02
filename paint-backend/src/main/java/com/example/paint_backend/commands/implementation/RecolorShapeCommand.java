@@ -34,7 +34,6 @@ public class RecolorShapeCommand implements ShapeCommand {
         shape.setStrokeColor(newStrokeColor);
         shape.setStrokeWidth(newStrokeWidth);
         shapeRepository.update(shape);
-
     }
 
     @Override
