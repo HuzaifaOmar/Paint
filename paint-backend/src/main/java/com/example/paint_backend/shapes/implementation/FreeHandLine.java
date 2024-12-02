@@ -47,16 +47,6 @@ public class FreeHandLine extends Shape {
     }
 
     @Override
-    public Double getX() {
-        return points.isEmpty() ? 0.0 : points.getFirst();
-    }
-
-    @Override
-    public Double getY() {
-        return points.isEmpty() ? 0.0 : points.get(1);
-    }
-
-    @Override
     public String getShapeType() {
         return "freehand";
     }
