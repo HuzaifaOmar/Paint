@@ -34,4 +34,9 @@ public class CommandHistory {
         return !redoStack.isEmpty();
     }
 
+    public void clear() {
+        undoStack.clear();
+        redoStack.clear();
+    }
+
 }

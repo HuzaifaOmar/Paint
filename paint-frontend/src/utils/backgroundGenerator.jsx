@@ -4,9 +4,11 @@ import { Line } from "react-konva";
 export function generateDottedBackground(
   stageWidth,
   stageHeight,
+  setReload,
   dotSpacing = 50,
   dotRadius = 1.5
 ) {
+  setReload(true);
   const dottedPattern = [];
 
   for (let x = 7; x < stageWidth; x += dotSpacing) {

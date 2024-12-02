@@ -36,7 +36,6 @@ const Toolbar = () => {
     isEraserActive,
     setIsEraserActive,
     setIsPopupOpen,
-    isLoadPopupOpen,
     setIsLoadPopupOpen,
     setIsDuplicateToolActive,
     setUndoRequest,

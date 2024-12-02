@@ -13,6 +13,7 @@ export const DrawingProvider = ({ children }) => {
   const [undoRequest, setUndoRequest] = useState(null);
   const [redoRequest, setRedoRequest] = useState(null);
   const [isLoadPopupOpen, setIsLoadPopupOpen] = useState(false);
+  const [reload, setReload] = useState(false);
   const [shapes, setShapes] = useState([]);
   const contextValue = {
     selectedTool,
@@ -24,21 +25,22 @@ export const DrawingProvider = ({ children }) => {
     isPopupOpen,
     undoRequest,
     redoRequest,
+    shapes,
+    isLoadPopupOpen,
+    reload,
     setSelectedTool,
     setFillColor,
     setStrokeColor,
     setLineWidth,
     setIsEraserActive,
     setIsDuplicateToolActive,
-    setIsPopupOpen,
-    shapes,
-    setShapes,
-    isLoadPopupOpen,
     setIsLoadPopupOpen,
     setUndoRequest,
     setRedoRequest,
+    setShapes,
+    setIsPopupOpen,
+    setReload,
   };
-
   return (
     <DrawingContext.Provider value={contextValue}>
       {children}

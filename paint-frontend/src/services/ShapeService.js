@@ -187,6 +187,19 @@ class ShapeService {
       throw error;
     }
   }
+
+  /**
+   * clear
+   */
+  static async clear() {
+    console.log("clear");
+    try {
+      await axios.delete(`${API_BASE_URL}/clear`);
+    } catch (error) {
+      console.error("Error undo shape:", error);
+      throw error;
+    }
+  }
 }
 
 export default ShapeService;

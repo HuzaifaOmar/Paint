@@ -1,3 +1,4 @@
+
 package com.example.paint_backend.service;
 
 import java.util.ArrayList;
@@ -7,7 +8,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.dto.ShapeDTO;
-import com.example.paint_backend.factory.ShapeFactory;
 import com.example.paint_backend.repository.ShapeRepository;
 import com.example.paint_backend.shapes.Shape;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,27 +16,21 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 @Service
 public class ShapesSavingService {
-           
 
     private final ShapeRepository shapeRepository;
-    private  ShapeFactory shapeFactory = new ShapeFactory();
-    private  List<ShapeDTO> shapeDTOs;
+    private List<ShapeDTO> shapeDTOs;
 
     public ShapesSavingService(ShapeRepository shapeRepository) {
         this.shapeRepository = shapeRepository;
         this.shapeDTOs = new ArrayList<>();
     }
-    
 
     public void createShapeDTOs() {
         shapeDTOs.clear();
         for (Shape shape : shapeRepository.findAll())
             shapeDTOs.add(new ShapeDTO(shape));
-//        System.out.println("ShapeRepository: " + shapeRepository.findAll());
-//        System.out.println("ShapeDTOs: " + shapeDTOs);
-//        System.out.println("ShapeDTOs size: " + shapeDTOs.size());
     }
-   
+
     public List<ShapeDTO> getShapeDTOs() {
         return shapeDTOs;
     }
@@ -62,13 +56,13 @@ public class ShapesSavingService {
             return "Error generating JSON or XML";
         }
     }
+
     public void loadJson(List<ShapeDTO> shapeDTOs) {
         try {
-           shapeRepository.addAll(shapeDTOs);
+            shapeRepository.addAll(shapeDTOs);
         } catch (Exception e) {
             throw new RuntimeException("Error loading JSON", e);
         }
     }
-    
-   
+
 }

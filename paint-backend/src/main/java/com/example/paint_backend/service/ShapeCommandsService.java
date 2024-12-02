@@ -1,3 +1,4 @@
+
 package com.example.paint_backend.service;
 
 import com.example.paint_backend.commands.ShapeCommand;
@@ -101,4 +102,8 @@ public class ShapeCommandsService {
         return shapeRepository.findById(shapeId).orElseThrow(() -> new ShapeNotFoundException(shapeId));
     }
 
+    public void clearRepository() {
+        shapeRepository.clear();
+        commandHistory.clear();
+    }
 }
