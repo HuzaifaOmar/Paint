@@ -5,6 +5,7 @@ import com.example.paint_backend.shapes.*;
 import com.example.paint_backend.shapes.implementation.*;
 
 import org.springframework.stereotype.Service;
+import com.example.paint_backend.dto.ShapeDTO;
 
 import java.util.Map;
 
@@ -24,6 +25,18 @@ public class ShapeFactory {
             default -> throw new InvalidShapeTypeException("invalid shape type");
         };
     }
+   public Shape getShapeByDTO(ShapeDTO shapeDTO) {
+    return switch (shapeDTO.getShapeType().toLowerCase()) {
+        case "circle" -> new Circle(shapeDTO);
+        case "rectangle" -> new Rectangle(shapeDTO);
+        case "square" -> new Square(shapeDTO);
+        case "ellipse" -> new Ellipse(shapeDTO);
+        case "line" -> new Line(shapeDTO);
+        case "triangle" -> new Triangle(shapeDTO);
+        case "freehand" -> new FreeHandLine(shapeDTO);
+        default -> throw new InvalidShapeTypeException("invalid shape type");
+    };
+   }
 }
 
 

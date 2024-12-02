@@ -36,6 +36,8 @@ const Toolbar = () => {
     isEraserActive,
     setIsEraserActive,
     setIsPopupOpen,
+    isLoadPopupOpen,
+    setIsLoadPopupOpen,
     setIsDuplicateToolActive,
     setUndoRequest,
     setRedoRequest,
@@ -111,6 +113,10 @@ const Toolbar = () => {
     } else {
       setRedoRequest(response);
     }
+  };
+
+  const handleLoad = () => {
+    setIsLoadPopupOpen(true);
   };
 
   return (
@@ -266,7 +272,7 @@ const Toolbar = () => {
         />
         <ToolbarButton
           icon={<FontAwesomeIcon icon={faUpload} />}
-          onClick={() => console.log("Load action")}
+          onClick={() => handleLoad()}
           title="Load"
           label="Load"
         />

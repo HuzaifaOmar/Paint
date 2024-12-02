@@ -5,6 +5,7 @@ import "./styles/main.css";
 import Canvas from "./components/Canvas";
 import Toolbar from "./components/toolbar/Toolbar";
 import SavePagePopup from "./components/savePopup/SavePagePopup";
+import LoadPagePopup from "./components/savePopup/LoadPagePopup";
 import { DrawingProvider } from "./contexts/DrawingContext";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <div className="main-screen">
         <Toolbar />
         <SavePagePopup />
+        <LoadPagePopup />
         <Canvas />
       </div>
     </DrawingProvider>

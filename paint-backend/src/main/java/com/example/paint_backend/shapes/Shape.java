@@ -1,10 +1,11 @@
 package com.example.paint_backend.shapes;
+import java.util.Map;
+
+import com.example.paint_backend.dto.ShapeDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -36,7 +37,9 @@ public abstract class Shape {
         this.xEnd = this.xStart;
         this.yEnd = this.yStart;
     }
-
+     public Shape(ShapeDTO shapeDTO) {
+        this.shapeId = shapeDTO.getShapeId();
+    }
     // Default implementations for common methods
     public void moveTo(Double deltaX, Double deltaY) {
         this.xStart += deltaX;

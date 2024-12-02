@@ -26,6 +26,8 @@ const Canvas = () => {
     setStrokeColor,
     setLineWidth,
     setIsDuplicateToolActive,
+    shapes,
+    setShapes,
   } = useDrawingContext();
   const startX = useRef(0);
   const startY = useRef(0);
@@ -34,8 +36,6 @@ const Canvas = () => {
   const isDrawing = useRef(false);
   const currentShapeId = useRef(null);
 
-  // State management
-  const [shapes, setShapes] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedShape, setSelectedShape] = useState(null);
 

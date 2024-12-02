@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.example.paint_backend.dto.ShapeDTO;
 import com.example.paint_backend.shapes.Shape;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -14,6 +16,18 @@ public class Triangle extends Shape {
     public Triangle(Map<String, Object> attributes) {
         super(attributes);
     }
+    public Triangle(ShapeDTO shapeDTO) {
+       this.x = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault ("x", "100.0").toString() );            
+       this.y = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("y", "100.0").toString());
+       this.points = (List<Double>) shapeDTO.getAttributes().getOrDefault("points", new ArrayList<>());
+       this.scaleX = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("scaleX", "1.0").toString());
+       this.scaleY = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("scaleY", "1.0").toString());
+       this.rotation = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("rotation", "0.0").toString());
+       this.fillColor = (String) shapeDTO.getAttributes().getOrDefault("fill", "black");
+       this.strokeColor = (String) shapeDTO.getAttributes().getOrDefault("stroke", "black");
+       this.strokeWidth = (Double) Double.parseDouble(shapeDTO.getAttributes().getOrDefault("strokeWidth", "1.0").toString());
+       this.shapeId = shapeDTO.getShapeId();
+    }   
     @Override
     public void dimensionCalculate() {
         points = new ArrayList<>();
