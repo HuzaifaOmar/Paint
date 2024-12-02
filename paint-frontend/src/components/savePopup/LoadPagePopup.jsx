@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./LoadPagePopup.css"; // Optional: Add your styles
 import { useDrawingContext } from "../../contexts/DrawingContext";
+import ShapeService from "../../services/ShapeService";
 
 const API_BASE_URL = "http://localhost:8080/api/shapes/save";
 
@@ -27,210 +28,208 @@ export default function LoadPagePopup() {
   };
   const hanldeJsonKeys = (fileContent) => {
     const jsonData = JSON.parse(fileContent);
-          const mappedData = jsonData.map((item) => {
-            if (item.shapeType === "square") {
-              return {
-                fill: item.attributes.fill,
-                rotation: item.attributes.rotation,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                shapeId: item.shapeId,
-                side: item.attributes.side,
-                stroke: item.attributes.stroke,
-                strokeWidth: item.attributes.strokeWidth,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-              };
-            } else if (item.shapeType === "freehand") {
-              return {
-                strokeWidth: item.attributes.strokeWidth,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                stroke: item.attributes.stroke,
-                rotation: item.attributes.rotation,
-                points: item.attributes.points,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-              };
-            } else if (item.shapeType === "ellipse") {
-              return {
-                fill: item.attributes.fill,
-                rotation: item.attributes.rotation,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-                radiusX: item.attributes.radiusX,
-                radiusY: item.attributes.radiusY,
-                stroke: item.attributes.stroke,
-                strokeWidth: item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "line") {
-              return {
-                fill: item.attributes.fill,
-                strokeWidth: item.attributes.strokeWidth,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                stroke: item.attributes.stroke,
-                rotation: item.attributes.rotation,
-                points: item.attributes.points,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-                strokeWidth: item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "circle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: item.attributes.rotation,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-                radius: item.attributes.radius,
-                stroke: item.attributes.stroke,
-                strokeWidth: item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "rectangle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: item.attributes.rotation,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-                width: item.attributes.width,
-                height: item.attributes.height,
-                stroke: item.attributes.stroke,
-                strokeWidth: item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "triangle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: item.attributes.rotation,
-                scaleX: item.attributes.scaleX,
-                scaleY: item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: item.attributes.x,
-                y: item.attributes.y,
-                points: item.attributes.points,
-                stroke: item.attributes.stroke,
-                strokeWidth: item.attributes.strokeWidth,
-              };
-            }
-          });
-          return mappedData;
-  }
+    const mappedData = jsonData.map((item) => {
+      if (item.shapeType === "square") {
+        return {
+          fill: item.attributes.fill,
+          rotation: item.attributes.rotation,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          shapeId: item.shapeId,
+          side: item.attributes.side,
+          stroke: item.attributes.stroke,
+          strokeWidth: item.attributes.strokeWidth,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+        };
+      } else if (item.shapeType === "freehand") {
+        return {
+          strokeWidth: item.attributes.strokeWidth,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          stroke: item.attributes.stroke,
+          rotation: item.attributes.rotation,
+          points: item.attributes.points,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+        };
+      } else if (item.shapeType === "ellipse") {
+        return {
+          fill: item.attributes.fill,
+          rotation: item.attributes.rotation,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+          radiusX: item.attributes.radiusX,
+          radiusY: item.attributes.radiusY,
+          stroke: item.attributes.stroke,
+          strokeWidth: item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "line") {
+        return {
+          fill: item.attributes.fill,
+          strokeWidth: item.attributes.strokeWidth,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          stroke: item.attributes.stroke,
+          rotation: item.attributes.rotation,
+          points: item.attributes.points,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+          strokeWidth: item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "circle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: item.attributes.rotation,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+          radius: item.attributes.radius,
+          stroke: item.attributes.stroke,
+          strokeWidth: item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "rectangle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: item.attributes.rotation,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+          width: item.attributes.width,
+          height: item.attributes.height,
+          stroke: item.attributes.stroke,
+          strokeWidth: item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "triangle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: item.attributes.rotation,
+          scaleX: item.attributes.scaleX,
+          scaleY: item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: item.attributes.x,
+          y: item.attributes.y,
+          points: item.attributes.points,
+          stroke: item.attributes.stroke,
+          strokeWidth: item.attributes.strokeWidth,
+        };
+      }
+    });
+    return mappedData;
+  };
   const hanldeXmlKeys = (fileContent) => {
     // const jsonData = JSON.parse(fileContent);
-          const mappedData = fileContent.map((item) => {
-            if (item.shapeType === "square") {
-              return {
-                fill: item.attributes.fill,
-                rotation: +item.attributes.rotation,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                shapeId: item.shapeId,
-                side: +item.attributes.side,
-                stroke: item.attributes.stroke,
-                strokeWidth: +item.attributes.strokeWidth,
-                type: item.shapeType,
-                x: +item.attributes.x,
-                y: +item.attributes.y,
-              };
-            } else if (item.shapeType === "freehand") {
-              return {
-                strokeWidth: +item.attributes.strokeWidth,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                stroke: item.attributes.stroke,
-                rotation: +item.attributes.rotation,
-                points: item.attributes.points.map((point) => +point),
-                type: item.shapeType,
-               
-              };
-            } else if (item.shapeType === "ellipse") {
-              return {
-                fill: item.attributes.fill,
-                rotation: +item.attributes.rotation,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: +item.attributes.x,
-                y: +item.attributes.y,
-                radiusX: +item.attributes.radiusX,
-                radiusY: +item.attributes.radiusY,
-                stroke: item.attributes.stroke,
-                strokeWidth: +item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "line") {
-              
-              return {
-                fill: item.attributes.fill,
-                strokeWidth: +item.attributes.strokeWidth,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                stroke: item.attributes.stroke,
-                rotation: +item.attributes.rotation,
-                points: item.attributes.points.map((point) => +point),
-                type: item.shapeType,
-                strokeWidth: +item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "circle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: +item.attributes.rotation,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: +item.attributes.x,
-                y: +item.attributes.y,
-                radius: +item.attributes.radius,
-                stroke: item.attributes.stroke,
-                strokeWidth: +item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "rectangle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: +item.attributes.rotation,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                x: +item.attributes.x,
-                y: +item.attributes.y,
-                width: +item.attributes.width,
-                height: +item.attributes.height,
-                stroke: item.attributes.stroke,
-                strokeWidth: +item.attributes.strokeWidth,
-              };
-            } else if (item.shapeType === "triangle") {
-              return {
-                fill: item.attributes.fill,
-                rotation: +item.attributes.rotation,
-                scaleX: +item.attributes.scaleX,
-                scaleY: +item.attributes.scaleY,
-                shapeId: item.shapeId,
-                type: item.shapeType,
-                points: item.attributes.points.map((point) => +point),
-                stroke: item.attributes.stroke,
-                strokeWidth: + item.attributes.strokeWidth,
-              };
-            }
-          });
-          return mappedData;
-  }
+    const mappedData = fileContent.map((item) => {
+      if (item.shapeType === "square") {
+        return {
+          fill: item.attributes.fill,
+          rotation: +item.attributes.rotation,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          shapeId: item.shapeId,
+          side: +item.attributes.side,
+          stroke: item.attributes.stroke,
+          strokeWidth: +item.attributes.strokeWidth,
+          type: item.shapeType,
+          x: +item.attributes.x,
+          y: +item.attributes.y,
+        };
+      } else if (item.shapeType === "freehand") {
+        return {
+          strokeWidth: +item.attributes.strokeWidth,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          stroke: item.attributes.stroke,
+          rotation: +item.attributes.rotation,
+          points: item.attributes.points.map((point) => +point),
+          type: item.shapeType,
+        };
+      } else if (item.shapeType === "ellipse") {
+        return {
+          fill: item.attributes.fill,
+          rotation: +item.attributes.rotation,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: +item.attributes.x,
+          y: +item.attributes.y,
+          radiusX: +item.attributes.radiusX,
+          radiusY: +item.attributes.radiusY,
+          stroke: item.attributes.stroke,
+          strokeWidth: +item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "line") {
+        return {
+          fill: item.attributes.fill,
+          strokeWidth: +item.attributes.strokeWidth,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          stroke: item.attributes.stroke,
+          rotation: +item.attributes.rotation,
+          points: item.attributes.points.map((point) => +point),
+          type: item.shapeType,
+          strokeWidth: +item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "circle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: +item.attributes.rotation,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: +item.attributes.x,
+          y: +item.attributes.y,
+          radius: +item.attributes.radius,
+          stroke: item.attributes.stroke,
+          strokeWidth: +item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "rectangle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: +item.attributes.rotation,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          x: +item.attributes.x,
+          y: +item.attributes.y,
+          width: +item.attributes.width,
+          height: +item.attributes.height,
+          stroke: item.attributes.stroke,
+          strokeWidth: +item.attributes.strokeWidth,
+        };
+      } else if (item.shapeType === "triangle") {
+        return {
+          fill: item.attributes.fill,
+          rotation: +item.attributes.rotation,
+          scaleX: +item.attributes.scaleX,
+          scaleY: +item.attributes.scaleY,
+          shapeId: item.shapeId,
+          type: item.shapeType,
+          points: item.attributes.points.map((point) => +point),
+          stroke: item.attributes.stroke,
+          strokeWidth: +item.attributes.strokeWidth,
+        };
+      }
+    });
+    return mappedData;
+  };
 
   // Handle file upload
   const handleFileUpload = async () => {
@@ -261,7 +260,6 @@ export default function LoadPagePopup() {
           );
           const mappedData = hanldeJsonKeys(fileContent);
           setShapes(mappedData);
-          alert("File uploaded successfully!");
           console.log("Server response:", response.data);
           setIsLoadPopupOpen(false);
         } else if (file.name.endsWith(".xml")) {
@@ -278,17 +276,17 @@ export default function LoadPagePopup() {
           console.log("Server response:", response.data);
           const mappedData = hanldeXmlKeys(response.data);
           setShapes(mappedData);
-          alert("File uploaded successfully!");
           console.log("Server response:", response.data);
           setIsLoadPopupOpen(false);
         }
+        ShapeService.clear();
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An error occurred while uploading the file.");
       }
     };
 
-    reader.readAsText(file); // Read the file as text
+    reader.readAsText(file);
   };
 
   return (
