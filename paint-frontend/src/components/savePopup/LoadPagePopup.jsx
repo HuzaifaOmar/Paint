@@ -155,6 +155,7 @@ export default function LoadPagePopup() {
           scaleY: +item.attributes.scaleY,
           stroke: item.attributes.stroke,
           rotation: +item.attributes.rotation,
+          shapeId: item.shapeId,
           points: item.attributes.points.map((point) => +point),
           type: item.shapeType,
         };
@@ -183,7 +184,7 @@ export default function LoadPagePopup() {
           rotation: +item.attributes.rotation,
           points: item.attributes.points.map((point) => +point),
           type: item.shapeType,
-          strokeWidth: +item.attributes.strokeWidth,
+          shapeId: item.shapeId,
         };
       } else if (item.shapeType === "circle") {
         return {
@@ -247,6 +248,7 @@ export default function LoadPagePopup() {
       console.log("File content:", fileContent); // Access the file content here
 
       try {
+        ShapeService.clear();
         if (file.name.endsWith(".json")) {
           console.log("Loading JSON file", fileContent);
           const response = await axios.post(
@@ -279,7 +281,6 @@ export default function LoadPagePopup() {
           console.log("Server response:", response.data);
           setIsLoadPopupOpen(false);
         }
-        ShapeService.clear();
       } catch (error) {
         console.error("Error uploading file:", error);
         alert("An error occurred while uploading the file.");

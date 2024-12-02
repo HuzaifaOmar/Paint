@@ -43,10 +43,9 @@ public class ShapeCreationService {
         Shape shape = findShapeById(shapeId);
         shape.setFillColor(request.getFillColor());
         shape.setStrokeColor(request.getStrokeColor());
-        ShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape);
+        CreateShapeCommand createShape = new CreateShapeCommand(shapeRepository, shape);
         createShape.execute();
         commandHistory.push(createShape);
-        shapeRepository.update(shape);
         return new ShapeDTO(shape);
     }
 

@@ -198,8 +198,10 @@ const Canvas = () => {
         x: pos.x,
         y: pos.y,
       };
+      
+      console.log("shape before move request", shape);
+      
       const response = await ShapeService.moveShape(shape.shapeId, moveRequest);
-
       updateShapesState(response, shape.shapeId);
     } catch (error) {
       handleApiError("Error finalizing shape", error);

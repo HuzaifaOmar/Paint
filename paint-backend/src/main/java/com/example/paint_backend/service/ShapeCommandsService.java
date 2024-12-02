@@ -3,6 +3,7 @@ package com.example.paint_backend.service;
 
 import com.example.paint_backend.commands.ShapeCommand;
 import com.example.paint_backend.dto.UndoRedoResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.paint_backend.commands.CommandHistory;
@@ -22,15 +23,11 @@ import com.example.paint_backend.shapes.Shape;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ShapeCommandsService {
 
     private final ShapeRepository shapeRepository;
     private final CommandHistory commandHistory;
-
-    public ShapeCommandsService(ShapeRepository shapeRepository, CommandHistory commandHistory) {
-        this.shapeRepository = shapeRepository;
-        this.commandHistory = commandHistory;
-    }
 
     public ShapeDTO moveShape(Long shapeId, MoveRequest request) {
         Shape shape = findShapeById(shapeId);
@@ -38,7 +35,6 @@ public class ShapeCommandsService {
                 request.getY());
         moveShapeCommand.execute();
         commandHistory.push(moveShapeCommand);
-        shapeRepository.update(shape);
         return new ShapeDTO(shape);
     }
 
@@ -49,7 +45,6 @@ public class ShapeCommandsService {
                 request.getScaleX(), request.getScaleY(), request.getRotation());
         transformShapeCommand.execute();
         commandHistory.push(transformShapeCommand);
-        shapeRepository.update(shape);
         return new ShapeDTO(shape);
     }
 
@@ -61,13 +56,13 @@ public class ShapeCommandsService {
                 request.getStrokeWidth());
         recolorShapeCommand.execute();
         commandHistory.push(recolorShapeCommand);
-        shapeRepository.update(shape);
         return new ShapeDTO(shape);
     }
 
     public String eraseShape(Long shapeId) {
         Shape shape = findShapeById(shapeId);
         EraseShapesCommand eraseShapeCommand = new EraseShapesCommand(shape, shapeRepository);
+        eraseShapeCommand.execute();
         commandHistory.push(eraseShapeCommand);
         return "Shape erased successfully";
     }
