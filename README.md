@@ -1,6 +1,6 @@
 # Web Based Paint Application
 
-![image](Assets/Screenshot.png)
+![image](assets/Screenshot.png)
 This is Our Third Assignment in Design Patterns Course (CSED27 Alexandria University)
 
 ## `🌟`Project Objectives
@@ -109,6 +109,6 @@ A web Application that has all the features of any paint application beside savi
 
 ## Demo
 
-[Demo](https://github.com/omarzydan610/Paint/blob/main/Assets/Demo.mp4)
+[Demo](./assets/Demo.mp4)
 
 ### For more detalied information check [Project Report](https://github.com/omarzydan610/Paint/blob/main/Project%20Report.pdf)
