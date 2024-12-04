@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./LoadPagePopup.css"; // Optional: Add your styles
+import "../../styles/LoadPagePopup.css"; // Optional: Add your styles
 import { useDrawingContext } from "../../contexts/DrawingContext";
 import ShapeService from "../../services/ShapeService";
 
 const API_BASE_URL = "http://localhost:8080/api/shapes/save";
 
 export default function LoadPagePopup() {
-  const { shapes, setShapes } = useDrawingContext();
+  const { setShapes } = useDrawingContext();
   const { isLoadPopupOpen, setIsLoadPopupOpen } = useDrawingContext();
   const [file, setFile] = useState(null); // Holds the selected file
   const [error, setError] = useState(""); // Handles file validation errors
@@ -82,7 +82,6 @@ export default function LoadPagePopup() {
           type: item.shapeType,
           x: item.attributes.x,
           y: item.attributes.y,
-          strokeWidth: item.attributes.strokeWidth,
         };
       } else if (item.shapeType === "circle") {
         return {
@@ -131,7 +130,7 @@ export default function LoadPagePopup() {
     });
     return mappedData;
   };
-  const hanldeXmlKeys = (fileContent) => {
+  const handleXmlKeys = (fileContent) => {
     // const jsonData = JSON.parse(fileContent);
     const mappedData = fileContent.map((item) => {
       if (item.shapeType === "square") {
@@ -276,7 +275,7 @@ export default function LoadPagePopup() {
             }
           );
           console.log("Server response:", response.data);
-          const mappedData = hanldeXmlKeys(response.data);
+          const mappedData = handleXmlKeys(response.data);
           setShapes(mappedData);
           console.log("Server response:", response.data);
           setIsLoadPopupOpen(false);

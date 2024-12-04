@@ -189,6 +189,22 @@ class ShapeService {
   }
 
   /**
+   * Save shapes in JSON or XML format
+   * @returns {Promise} Promise resolving with save data
+   */
+  static async saveShapes() {
+    console.log("save shapes request");
+    try {
+      const response = await axios.get(`${API_BASE_URL}/save`);
+      console.log("save shapes response", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error saving shapes:", error);
+      throw error;
+    }
+  }
+  
+  /**
    * clear
    */
   static async clear() {

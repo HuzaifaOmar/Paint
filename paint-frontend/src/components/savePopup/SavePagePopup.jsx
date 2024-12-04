@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useDrawingContext } from "../../contexts/DrawingContext";
-import "./SavePagePopup.css";
-const API_BASE_URL = "http://localhost:8080/api/shapes";
+import ShapeService from "../../services/ShapeService"; // Import the centralized service
+import "../../styles/SavePagePopup.css";
 
 export default function SavePagePopup() {
   const [selectedFileType, setSelectedFileType] = useState("json");
   const { isPopupOpen, setIsPopupOpen } = useDrawingContext(); // Access context values
   const downloadFile = async () => {
-    const response = await axios.get(`${API_BASE_URL}/save`);
-    const data = response.data;
-    console.log(response.data);
-    if (!response.data || (!response.data.json && !response.data.xml)) {
-      console.error("No data available to download.");
-      alert("No data to save!");
-      return;
-    }
-
     try {
+      const response = await ShapeService.saveShapes(); // Use the service method
+      const data = response;
+
+      if (!data || (!data.json && !data.xml)) {
+        console.error("No data available to download.");
+        alert("No data to save!");
+        return;
+      }
+      
       // Select content based on the file type
       const content =
         selectedFileType === "json"
