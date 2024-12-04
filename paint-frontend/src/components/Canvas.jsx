@@ -10,7 +10,7 @@ import { useDrawingContext } from "../contexts/DrawingContext";
 import { ShapeType } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
 import ShapeService from "../services/ShapeService.js";
-import ShapesRenderer from "./ShapesRenderer.jsx";
+import ShapesRenderer from "../utils/ShapesRenderer.jsx";
 
 const Canvas = () => {
   const {

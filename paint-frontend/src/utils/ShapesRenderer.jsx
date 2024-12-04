@@ -2,13 +2,13 @@ import React from "react";
 import { ShapeType } from "../constants/shapes";
 import { useDrawingContext } from "../contexts/DrawingContext";
 
-import Freehand from "./shapes/Freehand.jsx";
-import Rectangle from "./shapes/Rectangle.jsx";
-import Square from "./shapes/Square.jsx";
-import Triangle from "./shapes/Triangle.jsx";
-import LineDraw from "./shapes/Line.jsx";
-import EllipseDraw from "./shapes/Ellipse.jsx";
-import CircleDraw from "./shapes/Circle.jsx";
+import Freehand from "../components/shapes/Freehand.jsx";
+import Rectangle from "../components/shapes/Rectangle.jsx";
+import Square from "../components/shapes/Square.jsx";
+import Triangle from "../components/shapes/Triangle.jsx";
+import LineDraw from "../components/shapes/Line.jsx";
+import EllipseDraw from "../components/shapes/Ellipse.jsx";
+import CircleDraw from "../components/shapes/Circle.jsx";
 
 /**
  * Renders shapes based on their type
@@ -26,7 +26,6 @@ const ShapeRenderer = ({
    * @returns {React.Component} Rendered shape component
    */
   const { shapes } = useDrawingContext();
-  console.log("shapes", shapes);
   const renderShape = (shape) => {
     const draggable = selectedTool === ShapeType.POINTER && !eraserOn;
 

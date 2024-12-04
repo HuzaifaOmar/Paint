@@ -1,236 +1,24 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "../../styles/LoadPagePopup.css"; // Optional: Add your styles
-import { useDrawingContext } from "../../contexts/DrawingContext";
-import ShapeService from "../../services/ShapeService";
+import { useDrawingContext } from "../../contexts/DrawingContext.jsx";
+import ShapeService from "../../services/ShapeService.js";
+import { transformShapeData } from "../../utils/ShapesTransformer.jsx";
 
-const API_BASE_URL = "http://localhost:8080/api/shapes/save";
+const ALLOWED_FILE_EXTENSIONS = ["json", "xml"];
 
 export default function LoadPagePopup() {
-  const { setShapes } = useDrawingContext();
-  const { isLoadPopupOpen, setIsLoadPopupOpen } = useDrawingContext();
-  const [file, setFile] = useState(null); // Holds the selected file
-  const [error, setError] = useState(""); // Handles file validation errors
+  const { setShapes, isLoadPopupOpen, setIsLoadPopupOpen } =
+    useDrawingContext();
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
 
-  // Handle file selection
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
-      if (fileExtension === "json" || fileExtension === "xml") {
-        setFile(selectedFile);
-        setError(""); // Clear any previous errors
-      } else {
-        setError("Only .json and .xml files are allowed.");
-        setFile(null);
-      }
-    }
-  };
-  const hanldeJsonKeys = (fileContent) => {
-    const jsonData = JSON.parse(fileContent);
-    const mappedData = jsonData.map((item) => {
-      if (item.shapeType === "square") {
-        return {
-          fill: item.attributes.fill,
-          rotation: item.attributes.rotation,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          shapeId: item.shapeId,
-          side: item.attributes.side,
-          stroke: item.attributes.stroke,
-          strokeWidth: item.attributes.strokeWidth,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-        };
-      } else if (item.shapeType === "freehand") {
-        return {
-          strokeWidth: item.attributes.strokeWidth,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          stroke: item.attributes.stroke,
-          rotation: item.attributes.rotation,
-          points: item.attributes.points,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-        };
-      } else if (item.shapeType === "ellipse") {
-        return {
-          fill: item.attributes.fill,
-          rotation: item.attributes.rotation,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-          radiusX: item.attributes.radiusX,
-          radiusY: item.attributes.radiusY,
-          stroke: item.attributes.stroke,
-          strokeWidth: item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "line") {
-        return {
-          fill: item.attributes.fill,
-          strokeWidth: item.attributes.strokeWidth,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          stroke: item.attributes.stroke,
-          rotation: item.attributes.rotation,
-          points: item.attributes.points,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-        };
-      } else if (item.shapeType === "circle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: item.attributes.rotation,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-          radius: item.attributes.radius,
-          stroke: item.attributes.stroke,
-          strokeWidth: item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "rectangle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: item.attributes.rotation,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-          width: item.attributes.width,
-          height: item.attributes.height,
-          stroke: item.attributes.stroke,
-          strokeWidth: item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "triangle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: item.attributes.rotation,
-          scaleX: item.attributes.scaleX,
-          scaleY: item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: item.attributes.x,
-          y: item.attributes.y,
-          points: item.attributes.points,
-          stroke: item.attributes.stroke,
-          strokeWidth: item.attributes.strokeWidth,
-        };
-      }
+  const readFileAsText = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
     });
-    return mappedData;
   };
-  const handleXmlKeys = (fileContent) => {
-    // const jsonData = JSON.parse(fileContent);
-    const mappedData = fileContent.map((item) => {
-      if (item.shapeType === "square") {
-        return {
-          fill: item.attributes.fill,
-          rotation: +item.attributes.rotation,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          shapeId: item.shapeId,
-          side: +item.attributes.side,
-          stroke: item.attributes.stroke,
-          strokeWidth: +item.attributes.strokeWidth,
-          type: item.shapeType,
-          x: +item.attributes.x,
-          y: +item.attributes.y,
-        };
-      } else if (item.shapeType === "freehand") {
-        return {
-          strokeWidth: +item.attributes.strokeWidth,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          stroke: item.attributes.stroke,
-          rotation: +item.attributes.rotation,
-          shapeId: item.shapeId,
-          points: item.attributes.points.map((point) => +point),
-          type: item.shapeType,
-        };
-      } else if (item.shapeType === "ellipse") {
-        return {
-          fill: item.attributes.fill,
-          rotation: +item.attributes.rotation,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: +item.attributes.x,
-          y: +item.attributes.y,
-          radiusX: +item.attributes.radiusX,
-          radiusY: +item.attributes.radiusY,
-          stroke: item.attributes.stroke,
-          strokeWidth: +item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "line") {
-        return {
-          fill: item.attributes.fill,
-          strokeWidth: +item.attributes.strokeWidth,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          stroke: item.attributes.stroke,
-          rotation: +item.attributes.rotation,
-          points: item.attributes.points.map((point) => +point),
-          type: item.shapeType,
-          shapeId: item.shapeId,
-        };
-      } else if (item.shapeType === "circle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: +item.attributes.rotation,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: +item.attributes.x,
-          y: +item.attributes.y,
-          radius: +item.attributes.radius,
-          stroke: item.attributes.stroke,
-          strokeWidth: +item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "rectangle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: +item.attributes.rotation,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          x: +item.attributes.x,
-          y: +item.attributes.y,
-          width: +item.attributes.width,
-          height: +item.attributes.height,
-          stroke: item.attributes.stroke,
-          strokeWidth: +item.attributes.strokeWidth,
-        };
-      } else if (item.shapeType === "triangle") {
-        return {
-          fill: item.attributes.fill,
-          rotation: +item.attributes.rotation,
-          scaleX: +item.attributes.scaleX,
-          scaleY: +item.attributes.scaleY,
-          shapeId: item.shapeId,
-          type: item.shapeType,
-          points: item.attributes.points.map((point) => +point),
-          stroke: item.attributes.stroke,
-          strokeWidth: +item.attributes.strokeWidth,
-        };
-      }
-    });
-    return mappedData;
-  };
-
   // Handle file upload
   const handleFileUpload = async () => {
     if (!file) {
@@ -238,56 +26,56 @@ export default function LoadPagePopup() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
+    try {
+      await ShapeService.clear();
 
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const fileContent = event.target.result;
-      console.log("File content:", fileContent); // Access the file content here
+      const fileContent = await readFileAsText(file);
+      const isJson = file.name.endsWith(".json");
 
-      try {
-        ShapeService.clear();
-        if (file.name.endsWith(".json")) {
-          console.log("Loading JSON file", fileContent);
-          const response = await axios.post(
-            `${API_BASE_URL}/load/json`,
-            fileContent,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const mappedData = hanldeJsonKeys(fileContent);
-          setShapes(mappedData);
-          console.log("Server response:", response.data);
-          setIsLoadPopupOpen(false);
-        } else if (file.name.endsWith(".xml")) {
-          console.log("Loading XML file", fileContent);
-          const response = await axios.post(
-            `${API_BASE_URL}/load/xml`,
-            fileContent,
-            {
-              headers: {
-                "Content-Type": "application/xml",
-              },
-            }
-          );
-          console.log("Server response:", response.data);
-          const mappedData = handleXmlKeys(response.data);
-          setShapes(mappedData);
-          console.log("Server response:", response.data);
-          setIsLoadPopupOpen(false);
-        }
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        alert("An error occurred while uploading the file.");
-      }
-    };
+      const loadMethod = isJson
+        ? ShapeService.loadJsonShapes
+        : ShapeService.loadXmlShapes;
 
-    reader.readAsText(file);
+      const loadedShapes = await loadMethod(fileContent);
+
+      const mappedData = transformShapeData(
+        isJson ? fileContent : loadedShapes,
+        isJson
+      );
+      setShapes(mappedData);
+      setIsLoadPopupOpen(false);
+    } catch (error) {
+      console.error("File upload error:", error);
+      setError("An error occurred while processing the file.");
+    }
   };
+
+  const validateFile = (selectedFile) => {
+    if (!selectedFile) {
+      setError("No file selected.");
+      return false;
+    }
+
+    const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
+    const isValidExtension = ALLOWED_FILE_EXTENSIONS.includes(fileExtension);
+
+    if (!isValidExtension) {
+      setError("Only .json and .xml files are allowed.");
+      setFile(null);
+      return false;
+    }
+
+    setFile(selectedFile);
+    setError("");
+    return true;
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    validateFile(selectedFile);
+  };
+
+  const handleCancel = () => setIsLoadPopupOpen(false);
 
   return (
     isLoadPopupOpen && (
@@ -300,7 +88,7 @@ export default function LoadPagePopup() {
             <button onClick={handleFileUpload} disabled={!file}>
               Upload
             </button>
-            <button onClick={() => setIsLoadPopupOpen(false)}>Cancel</button>
+            <button onClick={handleCancel}>Cancel</button>
           </div>
         </div>
       </div>

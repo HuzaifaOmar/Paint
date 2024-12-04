@@ -203,7 +203,55 @@ class ShapeService {
       throw error;
     }
   }
-  
+
+  /**
+   * Load shapes from JSON file
+   * @param {string} jsonContent - JSON file content
+   * @returns {Promise} Promise resolving with loaded shapes
+   */
+  static async loadJsonShapes(jsonContent) {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/save/load/json`,
+        jsonContent,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("JSON shapes loaded", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error loading JSON shapes:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Load shapes from XML file
+   * @param {string} xmlContent - XML file content
+   * @returns {Promise} Promise resolving with loaded shapes
+   */
+  static async loadXmlShapes(xmlContent) {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/save/load/xml`,
+        xmlContent,
+        {
+          headers: {
+            "Content-Type": "application/xml",
+          },
+        }
+      );
+      console.log("XML shapes loaded", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error loading XML shapes:", error);
+      throw error;
+    }
+  }
+
   /**
    * clear
    */
