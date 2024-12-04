@@ -1,117 +1,128 @@
-export const transformShapeData = (fileContent, isJson) => {
-  const data = isJson ? JSON.parse(fileContent) : fileContent;
+export const transformShapeData = (fileContent, isJson = true) => {
+  // Handle both JSON parsing and direct input
+  const data =
+    isJson && typeof fileContent === "string"
+      ? JSON.parse(fileContent)
+      : fileContent;
+
+  // Helper function to convert values based on input type
+  const convertValue = (value, forceConvert) => {
+    // If forceConvert is true, convert to number
+    // If it's a number string or already a number, convert
+    // Otherwise, return as-is
+    if (forceConvert) return +value;
+    return typeof value === "string" && !isNaN(Number(value)) ? +value : value;
+  };
+
+  // Individual shape transformation functions with dynamic type conversion
+  const shapeTransformers = {
+    square: (item) => ({
+      fill: item.attributes.fill,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      shapeId: item.shapeId,
+      side: convertValue(item.attributes.side, !isJson),
+      stroke: item.attributes.stroke,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+    }),
+
+    rectangle: (item) => ({
+      fill: item.attributes.fill,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      shapeId: item.shapeId,
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+      width: convertValue(item.attributes.width, !isJson),
+      height: convertValue(item.attributes.height, !isJson),
+      stroke: item.attributes.stroke,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+    }),
+
+    circle: (item) => ({
+      fill: item.attributes.fill,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      shapeId: item.shapeId,
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+      radius: convertValue(item.attributes.radius, !isJson),
+      stroke: item.attributes.stroke,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+    }),
+
+    ellipse: (item) => ({
+      fill: item.attributes.fill,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      shapeId: item.shapeId,
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+      radiusX: convertValue(item.attributes.radiusX, !isJson),
+      radiusY: convertValue(item.attributes.radiusY, !isJson),
+      stroke: item.attributes.stroke,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+    }),
+
+    line: (item) => ({
+      fill: item.attributes.fill,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      stroke: item.attributes.stroke,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      points: Array.isArray(item.attributes.points)
+        ? item.attributes.points.map((point) => convertValue(point, !isJson))
+        : item.attributes.points,
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+    }),
+
+    triangle: (item) => ({
+      fill: item.attributes.fill,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      shapeId: item.shapeId,
+      type: item.shapeType,
+      x: convertValue(item.attributes.x, !isJson),
+      y: convertValue(item.attributes.y, !isJson),
+      points: Array.isArray(item.attributes.points)
+        ? item.attributes.points.map((point) => convertValue(point, !isJson))
+        : item.attributes.points,
+      stroke: item.attributes.stroke,
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+    }),
+
+    freehand: (item) => ({
+      strokeWidth: convertValue(item.attributes.strokeWidth, !isJson),
+      scaleX: convertValue(item.attributes.scaleX, !isJson),
+      scaleY: convertValue(item.attributes.scaleY, !isJson),
+      stroke: item.attributes.stroke,
+      rotation: convertValue(item.attributes.rotation, !isJson),
+      shapeId: item.shapeId,
+      points: Array.isArray(item.attributes.points)
+        ? item.attributes.points.map((point) => convertValue(point, !isJson))
+        : item.attributes.points,
+      type: item.shapeType,
+    }),
+  };
 
   return data
     .map((item) => {
-      const shapeTransformers = {
-        square: transformSquare,
-        rectangle: transformRectangle,
-        circle: transformCircle,
-        ellipse: transformEllipse,
-        line: transformLine,
-        triangle: transformTriangle,
-        freehand: transformFreehand,
-      };
-
       const transformer = shapeTransformers[item.shapeType];
       return transformer ? transformer(item) : null;
     })
     .filter(Boolean);
 };
-
-// Individual shape transformation functions
-const transformSquare = (item) => ({
-  fill: item.attributes.fill,
-  rotation: item.attributes.rotation,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  shapeId: item.shapeId,
-  side: item.attributes.side,
-  stroke: item.attributes.stroke,
-  strokeWidth: item.attributes.strokeWidth,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-});
-
-const transformFreehand = (item) => ({
-  strokeWidth: item.attributes.strokeWidth,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  stroke: item.attributes.stroke,
-  rotation: item.attributes.rotation,
-  points: item.attributes.points,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-});
-
-const transformLine = (item) => ({
-  fill: item.attributes.fill,
-  strokeWidth: item.attributes.strokeWidth,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  stroke: item.attributes.stroke,
-  rotation: item.attributes.rotation,
-  points: item.attributes.points,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-});
-
-const transformEllipse = (item) => ({
-  fill: item.attributes.fill,
-  rotation: item.attributes.rotation,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  shapeId: item.shapeId,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-  radiusX: item.attributes.radiusX,
-  radiusY: item.attributes.radiusY,
-  stroke: item.attributes.stroke,
-  strokeWidth: item.attributes.strokeWidth,
-});
-const transformCircle = (item) => ({
-  fill: item.attributes.fill,
-  rotation: item.attributes.rotation,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  shapeId: item.shapeId,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-  radius: item.attributes.radius,
-  stroke: item.attributes.stroke,
-  strokeWidth: item.attributes.strokeWidth,
-});
-
-const transformRectangle = (item) => ({
-  fill: item.attributes.fill,
-  rotation: item.attributes.rotation,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  shapeId: item.shapeId,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-  width: item.attributes.width,
-  height: item.attributes.height,
-  stroke: item.attributes.stroke,
-  strokeWidth: item.attributes.strokeWidth,
-});
-
-const transformTriangle = (item) => ({
-  fill: item.attributes.fill,
-  rotation: item.attributes.rotation,
-  scaleX: item.attributes.scaleX,
-  scaleY: item.attributes.scaleY,
-  shapeId: item.shapeId,
-  type: item.shapeType,
-  x: item.attributes.x,
-  y: item.attributes.y,
-  points: item.attributes.points,
-  stroke: item.attributes.stroke,
-  strokeWidth: item.attributes.strokeWidth,
-});
