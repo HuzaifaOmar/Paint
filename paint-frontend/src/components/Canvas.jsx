@@ -1,16 +1,11 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { Stage, Layer, Transformer } from "react-konva";
 import { useDrawingContext } from "../contexts/DrawingContext";
-import { ShapeType } from "../constants/shapes";
+import { SHAPE_TYPES } from "../constants/shapes";
 import { generateDottedBackground } from "../utils/backgroundGenerator";
-import ShapeService from "../services/ShapeService.js";
-import ShapesRenderer from "../utils/ShapesRenderer.jsx";
+import ShapeService from "../services/ShapeService";
+import ShapesRenderer from "../utils/ShapesRenderer";
+import { useCanvasEvents } from "../hooks/useCanvasEvents";
 
 const Canvas = () => {
   const {
@@ -31,17 +26,30 @@ const Canvas = () => {
     setShapes,
     setReload,
   } = useDrawingContext();
-  const startX = useRef(0);
-  const startY = useRef(0);
-
-  const stageRef = useRef(null);
-  const isDrawing = useRef(false);
-  const currentShapeId = useRef(null);
-
   const [selectedNode, setSelectedNode] = useState(null);
+
+  const updateShapesState = useCallback(
+    (response, id) => {
+      setShapes((prevShapes) => {
+        const newShapes = [...prevShapes];
+        const shapeIndex = newShapes.findIndex((s) => s.shapeId === id);
+
+        if (shapeIndex !== -1) {
+          newShapes[shapeIndex] = {
+            ...newShapes[shapeIndex],
+            ...response.attributes,
+          };
+        }
+        return newShapes;
+      });
+    },
+    [setShapes]
+  );
   const [selectedShape, setSelectedShape] = useState(null);
 
-  // Memoized background dots to prevent unnecessary re-renders
+  const { stageRef, handleMouseDown, handleMouseMove, handleMouseUp } =
+    useCanvasEvents(setSelectedNode, setSelectedShape, updateShapesState);
+
   const backgroundDots = useMemo(
     () =>
       generateDottedBackground(
@@ -49,7 +57,7 @@ const Canvas = () => {
         window.innerHeight,
         setReload
       ),
-    []
+    [setReload]
   );
 
   useEffect(() => {
@@ -57,136 +65,6 @@ const Canvas = () => {
       ShapeService.clear();
     }
   }, [reload]);
-
-  function reduseTransperancy(rgba) {
-    const match = rgba.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*[\d.]+\)$/);
-
-    const r = match[1];
-    const g = match[2];
-    const b = match[3];
-
-    return `rgb(${r}, ${g}, ${b}, 0.3)`;
-  }
-
-  const createShapeRequest = (tool, pos, fill, stroke, width) => ({
-    shapeType: tool,
-    attributes: {
-      xStart: pos.x,
-      yStart: pos.y,
-      fillColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
-        ? fill
-        : reduseTransperancy(fill),
-      strokeColor: [ShapeType.LINE, ShapeType.FREEHAND].includes(tool)
-        ? stroke
-        : reduseTransperancy(stroke),
-      strokeWidth: width,
-    },
-  });
-
-  const handleMouseDown = useCallback(
-    async (e) => {
-      if (isEraserActive || selectedTool === ShapeType.POINTER) {
-        if (e.target === stageRef.current) {
-          setSelectedNode(null);
-          setSelectedShape(null);
-        }
-        return;
-      }
-
-      console.log("in handleMouseDown fun");
-      const pos = stageRef.current.getPointerPosition();
-      isDrawing.current = true;
-      startX.current = pos.x;
-      startY.current = pos.y;
-
-      try {
-        const shapeRequest = createShapeRequest(
-          selectedTool,
-          pos,
-          fillColor,
-          strokeColor,
-          lineWidth
-        );
-        const response = await ShapeService.createShape(shapeRequest);
-        currentShapeId.current = response.shapeId;
-        setShapes((prevShapes) => [
-          ...prevShapes,
-          {
-            type: selectedTool,
-            shapeId: response.shapeId,
-            ...response.attributes,
-          },
-        ]);
-      } catch (error) {
-        handleApiError("Error creating shape", error);
-      }
-    },
-    [
-      selectedTool,
-      fillColor,
-      strokeColor,
-      lineWidth,
-      isEraserActive,
-      setSelectedShape,
-    ]
-  );
-
-  const isValidDrawingState = () =>
-    isDrawing.current &&
-    currentShapeId.current &&
-    selectedTool !== ShapeType.POINTER &&
-    !isEraserActive;
-
-  const handleMouseMove = async () => {
-    if (!isValidDrawingState()) return;
-
-    console.log("in handleMouseMove fun");
-    const pos = stageRef.current.getPointerPosition();
-    try {
-      const updateRequest = {
-        xEnd: pos.x,
-        yEnd: pos.y,
-      };
-
-      const response = await ShapeService.updateShapeDrawing(
-        currentShapeId.current,
-        updateRequest
-      );
-
-      updateShapesState(response, currentShapeId.current);
-    } catch (error) {
-      console.error("Error updating shape:", error);
-    }
-  };
-
-  const isValidFinalizationState = () =>
-    currentShapeId.current &&
-    selectedTool !== ShapeType.POINTER &&
-    !isEraserActive;
-
-  const handleMouseUp = async () => {
-    if (!isValidFinalizationState()) return;
-
-    console.log("in handleMouseUp fun");
-    try {
-      const finalizeRequest = {
-        fillColor,
-        strokeColor,
-      };
-
-      let tempId = currentShapeId.current;
-      const response = await ShapeService.finalizeShape(
-        tempId,
-        finalizeRequest
-      );
-
-      updateShapesState(response, tempId);
-    } catch (error) {
-      handleApiError("Error finalizing shape", error);
-    } finally {
-      resetDrawingState();
-    }
-  };
 
   const handleDragEnd = async (e, shape) => {
     if (isEraserActive) return;
@@ -198,9 +76,9 @@ const Canvas = () => {
         x: pos.x,
         y: pos.y,
       };
-      
+
       console.log("shape before move request", shape);
-      
+
       const response = await ShapeService.moveShape(shape.shapeId, moveRequest);
       updateShapesState(response, shape.shapeId);
     } catch (error) {
@@ -249,7 +127,7 @@ const Canvas = () => {
     const clickedShape = shapes[e.target.index];
     if (isEraserActive) {
       await eraseShape(clickedShape);
-    } else if (selectedTool === ShapeType.POINTER) {
+    } else if (selectedTool === SHAPE_TYPES.POINTER) {
       handleShapeSelection(clickedShape, e.target);
     }
   };
@@ -283,25 +161,8 @@ const Canvas = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fillColor, strokeColor, lineWidth]);
 
-  const updateShapesState = (response, id) => {
-    setShapes((prevShapes) => {
-      const newShapes = [...prevShapes];
-      const shapeIndex = newShapes.findIndex((s) => s.shapeId === id);
-
-      if (shapeIndex !== -1) {
-        newShapes[shapeIndex] = {
-          ...newShapes[shapeIndex],
-          ...response.attributes,
-        };
-      }
-      return newShapes;
-    });
-  };
-
   const handleCopy = async () => {
-    console.log("original shape", selectedShape);
     const response = await ShapeService.copyShape(selectedShape.shapeId);
-    console.log("copied shape", response);
 
     setShapes((prevShapes) => [
       ...prevShapes,
@@ -324,10 +185,6 @@ const Canvas = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDuplicateToolActive]);
 
-  const resetDrawingState = () => {
-    isDrawing.current = false;
-    currentShapeId.current = null;
-  };
   const handleApiError = (message, error) => {
     console.error(message, error);
   };
@@ -359,7 +216,7 @@ const Canvas = () => {
       default:
         return;
     }
-  }, [undoRequest]);
+  }, [setShapes, undoRequest, updateShapesState]);
 
   useEffect(() => {
     if (redoRequest === null) return;
@@ -388,7 +245,7 @@ const Canvas = () => {
       default:
         return;
     }
-  }, [redoRequest]);
+  }, [redoRequest, setShapes, updateShapesState]);
 
   return (
     <div className="canvas-container">

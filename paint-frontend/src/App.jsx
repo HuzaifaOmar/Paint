@@ -4,8 +4,8 @@ import "./styles/main.css";
 
 import Canvas from "./components/Canvas";
 import Toolbar from "./components/toolbar/Toolbar";
-import SavePagePopup from "./components/savePopup/SavePagePopup";
-import LoadPagePopup from "./components/savePopup/LoadPagePopup";
+import SavePagePopup from "./components/save-load-pages/SavePagePopup";
+import LoadPagePopup from "./components/save-load-pages/LoadPagePopup";
 import { DrawingProvider } from "./contexts/DrawingContext";
 
 function App() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { ShapeType } from "../constants/shapes";
+import { SHAPE_TYPES } from "../constants/shapes";
 import { useDrawingContext } from "../contexts/DrawingContext";
 
 import Freehand from "../components/shapes/Freehand.jsx";
@@ -27,7 +27,7 @@ const ShapeRenderer = ({
    */
   const { shapes } = useDrawingContext();
   const renderShape = (shape) => {
-    const draggable = selectedTool === ShapeType.POINTER && !eraserOn;
+    const draggable = selectedTool === SHAPE_TYPES.POINTER && !eraserOn;
 
     const shapeProps = {
       shape,
@@ -41,13 +41,13 @@ const ShapeRenderer = ({
 
     // Shape type to component mapping
     const shapeComponents = {
-      [ShapeType.FREEHAND]: Freehand,
-      [ShapeType.LINE]: LineDraw,
-      [ShapeType.RECTANGLE]: Rectangle,
-      [ShapeType.SQUARE]: Square,
-      [ShapeType.CIRCLE]: CircleDraw,
-      [ShapeType.ELLIPSE]: EllipseDraw,
-      [ShapeType.TRIANGLE]: Triangle,
+      [SHAPE_TYPES.FREEHAND]: Freehand,
+      [SHAPE_TYPES.LINE]: LineDraw,
+      [SHAPE_TYPES.RECTANGLE]: Rectangle,
+      [SHAPE_TYPES.SQUARE]: Square,
+      [SHAPE_TYPES.CIRCLE]: CircleDraw,
+      [SHAPE_TYPES.ELLIPSE]: EllipseDraw,
+      [SHAPE_TYPES.TRIANGLE]: Triangle,
     };
 
     const ShapeComponent = shapeComponents[shape.type];

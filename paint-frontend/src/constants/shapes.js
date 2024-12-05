@@ -1,4 +1,4 @@
-export const ShapeType = {
+export const SHAPE_TYPES = {
   POINTER: "pointer",
   FREEHAND: "freehand",
   LINE: "line",
